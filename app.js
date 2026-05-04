@@ -127,6 +127,26 @@ function escapeHTML(s) {
   }[c]));
 }
 
+/* 取得單字 TTS 用文字（處理單漢字歧讀邊界 case）
+   優先序：
+   1. 作者標 tts_override → 強制使用
+   2. 單字 は/へ/を → 改用 katakana ハ/ヘ/ヲ（避免 TTS 把單字 kanji
+      讀成 on'yomi 例如「歯」→ shi，或 kana 被當助詞 wa）
+   3. 詞首 は/へ + ja 有 kanji → 用 stripRuby 漢字 form
+      （TTS 對混合詞用 kanji 比較好分詞，例如「歯磨き粉」→ はみがきこ）
+   4. 預設用 kana */
+function getVocabTts(itemJa, itemKana, override) {
+  if (override) return override;
+  const kana = itemKana || extractKana(itemJa || '');
+  if (/^[はへを]$/.test(kana)) {
+    return { 'は': 'ハ', 'へ': 'ヘ', 'を': 'ヲ' }[kana];
+  }
+  if (/^[はへ]/.test(kana) && /[一-鿿]/.test(itemJa || '')) {
+    return stripRuby(itemJa);
+  }
+  return kana;
+}
+
 /* ---------- TTS ---------- */
 const tts = {
   init() {
@@ -535,7 +555,8 @@ function renderGroupCard(g) {
           <button class="item-chip" data-id="${it.id}"
                   data-ja="${escapeHTML(it.ja)}"
                   data-kana="${escapeHTML(it.kana)}"
-                  data-zh="${escapeHTML(it.zh)}">
+                  data-zh="${escapeHTML(it.zh)}"
+                  ${it.tts_override ? `data-tts-override="${escapeHTML(it.tts_override)}"` : ''}>
             <div class="chip-ja">${parseRuby(it.ja)}</div>
             <div class="chip-zh">${escapeHTML(it.zh)}</div>
             ${it.note_zh ? `<div class="chip-note">💡 ${escapeHTML(it.note_zh)}</div>` : ''}
@@ -560,12 +581,18 @@ function attachGroupHandlers(root) {
       const counterJa = groupCard.dataset.counterJa || '';
       const counterKana = groupCard.dataset.counterKana || '';
       const counterZh = groupCard.dataset.counterZh || '';
+      const ttsOverride = chip.dataset.ttsOverride || '';
 
-      let filledKana = patternKana.replace('{X}', itemKana);
-      let filledJa = patternJa.replace('{X}', itemJa);  // 含 markup 給 TTS 用
+      // TTS 用的 item 文字（處理單字 は/へ/を 等邊界 case）
+      const itemTtsKana = getVocabTts(itemJa, itemKana, ttsOverride);
+
+      let filledKana = patternKana.replace('{X}', itemKana);     // 顯示用
+      let filledJa = patternJa.replace('{X}', itemJa);           // 備用
+      let filledTts = patternKana.replace('{X}', itemTtsKana);   // TTS 用
       if (counterJa) {
         filledKana = filledKana.replace('{C}', counterKana);
         filledJa = filledJa.replace('{C}', counterJa);
+        filledTts = filledTts.replace('{C}', counterKana);
       }
 
       // ja 側：先 parseRuby pattern（ {X} 因為沒 | 不會被 ruby regex match，保留），再把 {X} 替換成包好的 item html
@@ -582,13 +609,12 @@ function attachGroupHandlers(root) {
       if (counterZh) patternZhHtml = patternZhHtml.replace('{C}', `<span class="counter-mark">${escapeHTML(counterZh)}</span>`);
       groupCard.querySelector('.pattern-zh').innerHTML = patternZhHtml;
 
-      groupCard.dataset.currentKana = filledKana;
-      groupCard.dataset.currentJa = filledJa;  // 備用
+      groupCard.dataset.currentKana = filledTts;  // 給 play-pattern 用 TTS 版
+      groupCard.dataset.currentJa = filledJa;     // 備用
 
-      // vocab chip 點擊：直接餵 filledKana（純 kana，作者標註已套進去）
-      // 句子有完整上下文（を/ください）TTS 不會把字頭 は 當助詞，
-      // 同時避免「一巻」這種純漢字詞被讀成 default 讀音
-      if (state.ttsAvailable) tts.speak(filledKana);
+      // 餵 filledTts：item 部分已透過 getVocabTts 處理過邊界 case
+      // (歯→ハ、歯磨き粉→歯磨き粉、一巻→ひとまき)
+      if (state.ttsAvailable) tts.speak(filledTts);
       else toast('此瀏覽器無日語 TTS');
 
       groupCard.querySelectorAll('.item-chip.selected').forEach(c => c.classList.remove('selected'));

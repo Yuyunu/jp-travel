@@ -874,11 +874,11 @@ function buildQuestion(type, rec, allItems) {
       type = 'readJa';
     } else {
       promptLabel = '單位詞：';
-      // 中文句型：物品填入、單位詞挖空
+      // 中文句型：物品 + 單位詞都顯示（題目）
       const zhFilled = escapeHTML(g.pattern_zh)
         .replace('{X}', `<span class="filled">${escapeHTML(correct.zh)}</span>`)
-        .replace('{C}', '<span class="counter-blank">　　</span>');
-      // 日文句型：同樣處理（給 ruby + 物品 + 空格）
+        .replace('{C}', `<span class="counter-mark">${escapeHTML(g.counter_zh)}</span>`);
+      // 日文句型：物品填入、助數詞挖空（讓玩家從選項挑日文助數詞）
       const jaFilled = parseRuby(g.pattern_ja)
         .replace('{X}', `<span class="filled">${parseRuby(correct.ja)}</span>`)
         .replace('{C}', '<span class="counter-blank">　　</span>');
@@ -887,7 +887,7 @@ function buildQuestion(type, rec, allItems) {
       // TTS 唸完整正確句（漢字版）
       ttsText = g.pattern_ja.replace('{X}', correct.ja).replace('{C}', g.counter_full_ja);
 
-      // 選項：4 個單位詞（從 counters scenario 各 group 抽）
+      // 選項：4 個日文助數詞（從 counters scenario 各 group 抽）
       const allCounterGroups = state.scenarios
         .flatMap(sc => sc.groups)
         .filter(gr => gr.counter_zh);
@@ -895,7 +895,7 @@ function buildQuestion(type, rec, allItems) {
       const distractors = shuffle(otherCounters.slice()).slice(0, 3);
       const opts = shuffle([g, ...distractors]);
       choices = opts.map(gr => ({
-        text: `<span class="counter-zh">${escapeHTML(gr.counter_zh)}</span><span class="counter-ja">${parseRuby(gr.counter_full_ja)}</span>`,
+        text: parseRuby(gr.counter_full_ja),  // 純日文助數詞 + ruby（如 一杯 with いっぱい）
         isJa: true,
         id: gr.id,
       }));

@@ -204,7 +204,13 @@ ruby rt {
 /* === 子頁 header（返回 + 標題） === */
 .sub-head {
   display: flex; align-items: center; gap: 10px;
-  margin-bottom: 12px;
+  margin: -14px -14px 12px;       /* 抵消 .app-main padding，邊到邊 */
+  padding: 10px 14px 8px;
+  background: var(--bg-page);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid var(--bd-soft);
 }
 .back-btn {
   width: 36px; height: 36px;

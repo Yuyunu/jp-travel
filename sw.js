@@ -3,7 +3,7 @@
    - data/scenarios/*.json：stale-while-revalidate
 */
 
-const CACHE_VERSION = 'jpt-v0.6.4';
+const CACHE_VERSION = 'jpt-v0.7.0';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -24,6 +24,7 @@ const STATIC_ASSETS = [
   './data/scenarios/conbini.json',
   './data/scenarios/sightseeing.json',
   './data/scenarios/emergency.json',
+  './data/scenarios/counters.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/icon-maskable.png',

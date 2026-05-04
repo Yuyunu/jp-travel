@@ -1414,3 +1414,51 @@ ruby rt {
   .map-city .city-torii { width: 22px; height: 22px; }
   .map-city .city-name { font-size: 10px; padding: 1px 5px; }
 }
+
+/* ============================================================
+   🔢 單位詞 / 助數詞
+   ============================================================ */
+.counter-mark {
+  display: inline-block;
+  color: var(--c-shu);
+  font-weight: 700;
+  background: rgba(197, 48, 43, 0.10);
+  border-radius: 6px;
+  padding: 0 6px;
+  margin: 0 2px;
+}
+.counter-blank {
+  display: inline-block;
+  color: var(--c-shu);
+  border-bottom: 2px solid var(--c-shu);
+  padding: 0 14px;
+  min-width: 40px;
+  margin: 0 2px;
+}
+.quiz-prompt .prompt-content.counter-prompt {
+  font-size: 22px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+.quiz-prompt .prompt-content.counter-prompt .prompt-zh-hint {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--bd-soft);
+  font-family: var(--font-ja);
+  font-size: 18px;
+  color: var(--c-text-muted);
+}
+.quiz-choice .counter-zh {
+  display: inline-block;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--c-shu);
+  margin-right: 14px;
+  min-width: 38px;
+}
+.quiz-choice .counter-ja {
+  display: inline-block;
+  font-family: var(--font-ja);
+  font-size: 16px;
+  color: var(--c-text-muted);
+}

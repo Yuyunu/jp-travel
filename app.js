@@ -478,14 +478,22 @@ function renderVocabDetail(root, scenarioId) {
 function renderGroupCard(g) {
   const placeholderJa = '<span class="placeholder">◯◯</span>';
   const placeholderZh = '<span class="placeholder">◯◯</span>';
-  const patternJaHtml = parseRuby(g.pattern_ja).replace('{X}', placeholderJa);
-  const patternZhHtml = escapeHTML(g.pattern_zh).replace('{X}', placeholderZh);
+  // {C} 是 counters scenario 的助數詞 placeholder — 把它解出固定填入
+  let patternJaHtml = parseRuby(g.pattern_ja).replace('{X}', placeholderJa);
+  let patternZhHtml = escapeHTML(g.pattern_zh).replace('{X}', placeholderZh);
+  if (g.counter_full_ja && g.counter_zh) {
+    patternJaHtml = patternJaHtml.replace('{C}', `<span class="counter-mark">${parseRuby(g.counter_full_ja)}</span>`);
+    patternZhHtml = patternZhHtml.replace('{C}', `<span class="counter-mark">${escapeHTML(g.counter_zh)}</span>`);
+  }
 
   return `
     <div class="group-card" data-group-id="${g.id}"
          data-pattern-ja="${escapeHTML(g.pattern_ja)}"
          data-pattern-kana="${escapeHTML(g.pattern_kana)}"
-         data-pattern-zh="${escapeHTML(g.pattern_zh)}">
+         data-pattern-zh="${escapeHTML(g.pattern_zh)}"
+         ${g.counter_full_ja ? `data-counter-ja="${escapeHTML(g.counter_full_ja)}"` : ''}
+         ${g.counter_zh ? `data-counter-zh="${escapeHTML(g.counter_zh)}"` : ''}
+         ${g.counter_kana ? `data-counter-kana="${escapeHTML(g.counter_kana)}"` : ''}>
       <div class="group-head">
         <span class="group-cat">${escapeHTML(g.category)}</span>
         <button class="icon-btn play-pattern" title="朗讀整句">🔊</button>
@@ -520,20 +528,30 @@ function attachGroupHandlers(root) {
       const itemKana = chip.dataset.kana;
       const itemZh = chip.dataset.zh;
 
-      const filledKana = patternKana.replace('{X}', itemKana);
-      const filledJa = patternJa.replace('{X}', itemJa);  // 含 markup 給 TTS 用
+      const counterJa = groupCard.dataset.counterJa || '';
+      const counterKana = groupCard.dataset.counterKana || '';
+      const counterZh = groupCard.dataset.counterZh || '';
+
+      let filledKana = patternKana.replace('{X}', itemKana);
+      let filledJa = patternJa.replace('{X}', itemJa);  // 含 markup 給 TTS 用
+      if (counterJa) {
+        filledKana = filledKana.replace('{C}', counterKana);
+        filledJa = filledJa.replace('{C}', counterJa);
+      }
 
       // ja 側：先 parseRuby pattern（ {X} 因為沒 | 不會被 ruby regex match，保留），再把 {X} 替換成包好的 item html
       const itemJaHtml = parseRuby(itemJa);
-      const patternJaHtml = parseRuby(patternJa).replace(
+      let patternJaHtml = parseRuby(patternJa).replace(
         '{X}',
         `<span class="filled">${itemJaHtml}</span>`
       );
+      if (counterJa) patternJaHtml = patternJaHtml.replace('{C}', `<span class="counter-mark">${parseRuby(counterJa)}</span>`);
       groupCard.querySelector('.pattern-ja').innerHTML = patternJaHtml;
 
       // zh 側
-      groupCard.querySelector('.pattern-zh').innerHTML =
-        escapeHTML(patternZh).replace('{X}', `<span class="filled">${escapeHTML(itemZh)}</span>`);
+      let patternZhHtml = escapeHTML(patternZh).replace('{X}', `<span class="filled">${escapeHTML(itemZh)}</span>`);
+      if (counterZh) patternZhHtml = patternZhHtml.replace('{C}', `<span class="counter-mark">${escapeHTML(counterZh)}</span>`);
+      groupCard.querySelector('.pattern-zh').innerHTML = patternZhHtml;
 
       groupCard.dataset.currentKana = filledKana;
       groupCard.dataset.currentJa = filledJa;  // 給 play-pattern 用
@@ -738,6 +756,10 @@ function renderQuizSetup(root) {
           📖 看選中
           <span class="desc">看日文 → 選中文</span>
         </button>
+        <button class="option-pill ${setup.type==='counter'?'active':''}" data-type="counter">
+          🔢 單位詞
+          <span class="desc">填一杯／一碗／一盒</span>
+        </button>
         <button class="option-pill ${setup.type==='sushi'?'active':''}" data-type="sushi" style="grid-column:1/-1;background:linear-gradient(135deg, var(--bg-input), rgba(245,194,199,0.15));">
           🍣 流れクイズ
           <span class="desc">迴轉壽司題庫 — 限時點正確的盤子（取代填空題）</span>
@@ -803,7 +825,7 @@ function renderQuizSetup(root) {
 }
 
 function quizTypeLabel(t) {
-  return { listen: '聽選中', read: '看選日', readJa: '看選中', kanaKanji: '假名→漢字', fill: '填空', sushi: '🍣 流れ' }[t] || t;
+  return { listen: '聽選中', read: '看選日', readJa: '看選中', kanaKanji: '假名→漢字', counter: '🔢 單位詞', fill: '填空', sushi: '🍣 流れ' }[t] || t;
 }
 function scopeLabel(s) {
   if (s === 'all') return '全部';
@@ -822,7 +844,11 @@ function startQuiz({ type, scope, count }) {
   const scenarios = scope === 'all' ? state.scenarios : [state.byId.get(scope)].filter(Boolean);
   const allItems = [];
   scenarios.forEach(sc => {
-    sc.groups.forEach(g => g.items.forEach(it => allItems.push({ item: it, group: g, scenario: sc })));
+    sc.groups.forEach(g => {
+      // counter quiz：只挑有設 counter_zh 的 group
+      if (type === 'counter' && !g.counter_zh) return;
+      g.items.forEach(it => allItems.push({ item: it, group: g, scenario: sc }));
+    });
   });
   if (allItems.length === 0) { toast('題庫不足'); return; }
 
@@ -840,6 +866,53 @@ function buildQuestion(type, rec, allItems) {
 
   let prompt, choices, correctIdx, promptLabel, isJaPrompt = false, ttsText = null;
 
+  if (type === 'counter') {
+    // 中翻日 + 單位詞填空（counters scenario 限定）
+    const g = rec.group;
+    if (!g.counter_zh) {
+      // group 沒設 counter，fallback 到 readJa
+      type = 'readJa';
+    } else {
+      promptLabel = '單位詞：';
+      // 中文句型：物品填入、單位詞挖空
+      const zhFilled = escapeHTML(g.pattern_zh)
+        .replace('{X}', `<span class="filled">${escapeHTML(correct.zh)}</span>`)
+        .replace('{C}', '<span class="counter-blank">　　</span>');
+      // 日文句型：同樣處理（給 ruby + 物品 + 空格）
+      const jaFilled = parseRuby(g.pattern_ja)
+        .replace('{X}', `<span class="filled">${parseRuby(correct.ja)}</span>`)
+        .replace('{C}', '<span class="counter-blank">　　</span>');
+      prompt = zhFilled + '<div class="prompt-zh-hint ja">' + jaFilled + '</div>';
+      isJaPrompt = true;
+      // TTS 唸完整正確句（漢字版）
+      ttsText = g.pattern_ja.replace('{X}', correct.ja).replace('{C}', g.counter_full_ja);
+
+      // 選項：4 個單位詞（從 counters scenario 各 group 抽）
+      const allCounterGroups = state.scenarios
+        .flatMap(sc => sc.groups)
+        .filter(gr => gr.counter_zh);
+      const otherCounters = allCounterGroups.filter(gr => gr.counter_zh !== g.counter_zh);
+      const distractors = shuffle(otherCounters.slice()).slice(0, 3);
+      const opts = shuffle([g, ...distractors]);
+      choices = opts.map(gr => ({
+        text: `<span class="counter-zh">${escapeHTML(gr.counter_zh)}</span><span class="counter-ja">${parseRuby(gr.counter_full_ja)}</span>`,
+        isJa: true,
+        id: gr.id,
+      }));
+      correctIdx = opts.findIndex(gr => gr.id === g.id);
+      // 把 correctItem 改成「該題的單位詞」(給 result/error review 用)
+      return {
+        type: 'counter',
+        promptLabel, prompt, isJaPrompt, ttsText, choices, correctIdx,
+        correctItem: {
+          id: g.id,
+          ja: g.counter_full_ja,
+          kana: g.counter_kana,
+          zh: g.counter_zh,
+        },
+      };
+    }
+  }
   if (type === 'readJa') {
     // 看日文 → 選中文
     promptLabel = '日文：';
@@ -954,6 +1027,9 @@ function renderQuizQuestion(root) {
         ` : (cur.type === 'readJa' || cur.type === 'kanaKanji') ? `
           <div class="prompt-content ja${cur.type === 'kanaKanji' ? ' kana-only' : ''}">${cur.prompt}</div>
           <button class="play-mini" id="play-prompt">🔊 再聽一次</button>
+        ` : cur.type === 'counter' ? `
+          <div class="prompt-content counter-prompt">${cur.prompt}</div>
+          <button class="play-mini" id="play-prompt">🔊 聽正確念法</button>
         ` : `
           <div class="prompt-content ${cur.isJaPrompt ? 'ja' : ''}">${cur.isJaPrompt ? cur.prompt : escapeHTML(cur.prompt)}</div>
         `}
@@ -970,7 +1046,7 @@ function renderQuizQuestion(root) {
     </div>
   `;
 
-  if (cur.type === 'listen' || cur.type === 'readJa' || cur.type === 'kanaKanji') {
+  if (cur.type === 'listen' || cur.type === 'readJa' || cur.type === 'kanaKanji' || cur.type === 'counter') {
     const playBtn = root.querySelector('#play-prompt');
     const speakIt = () => {
       if (!state.ttsAvailable) {

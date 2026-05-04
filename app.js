@@ -160,25 +160,38 @@ const tts = {
       onerror && onerror(new Error('no-tts'));
       return null;
     }
-    // TTS 文本選擇策略：
-    // 1. 作者明確標註 ruby {kanji|kana} → 用 extracted kana（尊重作者意圖，
-    //    解決一巻 ひとまき 被誤讀成 いっかん 之類的歧讀問題）
-    // 2. 沒 ruby 標註 + 有漢字 → 用 kanji form（讓 TTS 自行判斷常用讀音）
-    // 3. 純假名/外來語 → 直接用 kana
-    // 例外：extract 出的 kana 是單一個 は/へ/を 會被當助詞唸成 wa/e/o
-    //       → 改用 kanji（如「歯」單字會被讀成 wa，回 kanji form 才念對 ha）
+    // TTS 文本選擇策略（hybrid）：
+    // 觀察：Brian Multilingual 等 TTS 引擎的處理：
+    //   - 純漢字詞（如「一巻」）：挑 default 讀音，沒上下文猜不到歧讀
+    //   - 漢字+假名混合詞（如「歯磨き粉」）：用假名當分隔符判斷詞邊界
+    //
+    // 因此：
+    // - 混合詞（kanji + hiragana）→ 用 kanji form（hiragana 幫助 TTS 分詞）
+    //   例：歯磨き粉、お茶ください → 正確
+    // - 純漢字（無假名分隔）→ 用作者標註的 kana 強制（避免歧讀）
+    //   例：一巻 ひとまき（不會被讀成 いっかん）、鉄火巻 てっかまき
+    // - 純假名/外來語 → 直接用 kana
+    // 例外：純漢字抽出的 kana 是單一 は/へ/を → 還是用 kanji
+    //   （單一は會被當助詞讀 wa；歯/辺/尾 才念對）
     const kanji = stripRuby(text).trim();
     const kana = extractKana(text).trim();
-    const hasRuby = /\{[^|}]+\|[^|}]+\}/.test(text);
+    const hasKanji = /[一-鿿]/.test(kanji);
+    const hasHiragana = /[ぁ-ん]/.test(kanji);
+
     let speakText;
-    if (hasRuby) {
+    if (hasKanji && hasHiragana) {
+      // 混合詞 → 用 kanji form
+      speakText = kanji;
+    } else if (hasKanji && !hasHiragana) {
+      // 純漢字 → 用 kana（尊重作者標註避免歧讀）
       speakText = kana;
-      // 整段只剩單一個 は/へ/を → fallback 到漢字
-      if (/^[はへを]$/.test(speakText) && /[一-鿿]/.test(kanji)) {
+      // 但單一 は/へ/を 例外：fallback 到 kanji 避免被當助詞
+      if (/^[はへを]$/.test(speakText)) {
         speakText = kanji;
       }
     } else {
-      speakText = /[一-鿿]/.test(kanji) ? kanji : kana;
+      // 純假名/外來語
+      speakText = kana || kanji;
     }
     const u = new SpeechSynthesisUtterance(speakText);
     u.lang = 'ja-JP';

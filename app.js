@@ -159,18 +159,13 @@ const tts = {
       onerror && onerror(new Error('no-tts'));
       return null;
     }
-    // 開頭是 は/へ/を 會被 TTS 當助詞唸成 wa/e/o
-    // 例：「歯」(は) → wa、「歯磨き粉」(はみがきこ) → wamigakiko
-    // → 若有漢字版本，改餵漢字（TTS 對純漢字字串不會當助詞）
-    let speakText = extractKana(text);
-    const trimmed = speakText.trim();
-    if (/^[はへを]/.test(trimmed)) {
-      const kanji = stripRuby(text).trim();
-      // 漢字版本要含 CJK 字元才用（避免換成跟 kana 一樣）
-      if (kanji && kanji !== trimmed && /[一-鿿]/.test(kanji)) {
-        speakText = kanji;
-      }
-    }
+    // 預設餵漢字 form（stripRuby）— TTS 對漢字+假名混合處理較好，
+    // 純假名會把 は/へ/を 誤判成助詞（例：歯磨き粉 はみがきこ → wamigakiko）。
+    // 只有當沒有漢字（純假名/外來語）時才回 kana extractor。
+    const kanji = stripRuby(text).trim();
+    const kana = extractKana(text).trim();
+    // 若 kanji 含 CJK 表意字元就用 kanji，否則用 kana
+    let speakText = /[一-鿿]/.test(kanji) ? kanji : kana;
     const u = new SpeechSynthesisUtterance(speakText);
     u.lang = 'ja-JP';
     u.rate = state.rate;

@@ -132,7 +132,7 @@
       "category": "買票",
       "pattern_ja": "{X}{一枚|いちまい}ください。",
       "pattern_kana": "{X}いちまいください。",
-      "pattern_zh": "請給我一張 {X}。",
+      "pattern_zh": "{X}，一張，麻煩。",
       "items": [
         {
           "id": "sg-i1",

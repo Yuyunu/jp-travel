@@ -3,7 +3,7 @@
    - data/scenarios/*.json：stale-while-revalidate
 */
 
-const CACHE_VERSION = 'jpt-v0.7.4';
+const CACHE_VERSION = 'jpt-v0.7.5';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 

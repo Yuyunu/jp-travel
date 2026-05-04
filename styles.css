@@ -204,25 +204,32 @@ ruby rt {
 /* === 子頁 header（返回 + 標題） === */
 .sub-head {
   display: flex; align-items: center; gap: 10px;
-  margin: -14px -14px 12px;       /* 抵消 .app-main padding，邊到邊 */
-  padding: 10px 14px 8px;
-  background: var(--bg-page);
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  border-bottom: 1px solid var(--bd-soft);
+  margin-bottom: 12px;
+  /* 給浮動 back-btn 預留空間 */
+  padding-left: 48px;
+  min-height: 40px;
 }
 .back-btn {
-  width: 36px; height: 36px;
-  border-radius: 10px;
-  font-size: 18px;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
   display: grid; place-items: center;
   background: var(--bg-card);
   border: 1px solid var(--bd-card);
   color: var(--c-text);
-  transition: background var(--transition);
+  transition: background var(--transition), transform var(--transition);
 }
 .back-btn:hover { background: var(--accent-soft); }
+.back-btn:active { transform: scale(0.94); }
+/* 子頁 sub-head 裡的返回鍵改浮動定位 — 不會擋標題、滑動時也跟著看得見 */
+.sub-head .back-btn {
+  position: fixed;
+  left: 10px;
+  top: calc(var(--safe-top) + 64px);
+  z-index: 25;
+  box-shadow: var(--shadow-elev);
+  background: var(--bg-card);
+}
 .sub-head .title-block { flex: 1; }
 .sub-head h2 {
   font-size: 18px; color: var(--c-text);

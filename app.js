@@ -2,7 +2,7 @@
    日本旅遊日語 PWA — app.js
    ============================================================= */
 
-const APP_VERSION = 'v0.2.0';
+const APP_VERSION = 'v0.2.1';
 const LS_KEY = 'jpt_state_v1';
 
 /* ---------- State ---------- */
@@ -912,7 +912,7 @@ function applyTheme() {
   else document.documentElement.setAttribute('data-theme', t);
   // theme-color meta
   const isDark = t === 'dark' || (t === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isDark ? '#221C16' : '#C5302B');
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isDark ? '#1A1612' : '#F4ECDC');
 }
 
 /* ---------- toast ---------- */

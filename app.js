@@ -159,7 +159,16 @@ const tts = {
       onerror && onerror(new Error('no-tts'));
       return null;
     }
-    const u = new SpeechSynthesisUtterance(extractKana(text));
+    // 單音節 は/へ/を 會被 TTS 當助詞唸成 wa/e/o
+    // → 餵漢字 form 進去（歯 = ha、辺 = he、尾 = o），讓 TTS 當單字唸
+    let speakText = extractKana(text);
+    const trimmed = speakText.trim();
+    if (trimmed === 'は' || trimmed === 'へ' || trimmed === 'を') {
+      // 改用 stripRuby 拿漢字版本（如「{歯|は}」→「歯」）
+      const kanji = stripRuby(text).trim();
+      if (kanji && kanji !== trimmed) speakText = kanji;
+    }
+    const u = new SpeechSynthesisUtterance(speakText);
     u.lang = 'ja-JP';
     u.rate = state.rate;
     const voice = state.voices.find(v => v.voiceURI === state.selectedVoiceURI);
@@ -836,7 +845,7 @@ function buildQuestion(type, rec, allItems) {
     promptLabel = '日文：';
     prompt = parseRuby(correct.ja);
     isJaPrompt = true;
-    ttsText = correct.kana || stripRuby(correct.ja);  // 同時自動播一次給聽
+    ttsText = correct.ja;  // 餵 markup，讓 speak() 處理 は→歯 fallback
     const distractorPool = allItems.filter(r => r.item.id !== correct.id).map(r => r.item);
     shuffle(distractorPool);
     const distractors = distractorPool.slice(0, 3);
@@ -848,7 +857,7 @@ function buildQuestion(type, rec, allItems) {
     promptLabel = '假名：';
     prompt = escapeHTML(correct.kana || stripRuby(correct.ja));
     isJaPrompt = true;
-    ttsText = correct.kana || stripRuby(correct.ja);
+    ttsText = correct.ja;  // 餵 markup，讓 speak() 處理 は→歯 fallback
     const distractorPool = allItems.filter(r => r.item.id !== correct.id).map(r => r.item);
     shuffle(distractorPool);
     const distractors = distractorPool.slice(0, 3);

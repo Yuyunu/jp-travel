@@ -1475,3 +1475,36 @@ ruby rt {
   font-size: 16px;
   color: var(--c-text-muted);
 }
+
+/* === note_zh 中文小知識註解 === */
+.turn-note {
+  margin-top: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-style: italic;
+  color: #7A5C3F;
+  background: rgba(212, 165, 76, 0.10);
+  border-left: 3px solid #D4A54C;
+  border-radius: 6px;
+  line-height: 1.5;
+}
+.chip-note {
+  margin-top: 4px;
+  font-size: 11px;
+  font-style: italic;
+  color: #7A5C3F;
+  text-align: left;
+  line-height: 1.4;
+}
+[data-theme="dark"] .turn-note,
+[data-theme="dark"] .chip-note {
+  color: #D4B894;
+  background: rgba(212, 165, 76, 0.18);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .turn-note,
+  :root:not([data-theme="light"]) .chip-note {
+    color: #D4B894;
+    background: rgba(212, 165, 76, 0.18);
+  }
+}

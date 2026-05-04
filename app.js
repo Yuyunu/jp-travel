@@ -363,6 +363,7 @@ function renderDialogueSection(d) {
           <div class="turn-body">
             <div class="turn-ja">${parseRuby(t.ja)}</div>
             <div class="turn-zh">${escapeHTML(t.zh)}</div>
+            ${t.note_zh ? `<div class="turn-note">💡 ${escapeHTML(t.note_zh)}</div>` : ''}
             <div class="turn-actions">
               <button class="turn-mini-btn play-one">🔊 朗讀</button>
             </div>
@@ -511,6 +512,7 @@ function renderGroupCard(g) {
                   data-zh="${escapeHTML(it.zh)}">
             <div class="chip-ja">${parseRuby(it.ja)}</div>
             <div class="chip-zh">${escapeHTML(it.zh)}</div>
+            ${it.note_zh ? `<div class="chip-note">💡 ${escapeHTML(it.note_zh)}</div>` : ''}
           </button>
         `).join('')}
       </div>

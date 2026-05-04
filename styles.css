@@ -621,6 +621,223 @@ ruby rt {
   border-bottom: 2px solid var(--c-shu);
   padding: 0 8px;
 }
+
+/* === 🍣 寿司流れクイズ === */
+.sushi-game {
+  display: flex; flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--bd-card);
+  border-radius: 14px;
+  padding: 12px;
+  min-height: 540px;
+  position: relative;
+  overflow: hidden;
+  transition: background 500ms ease;
+}
+.sushi-game.pro-mode {
+  background: linear-gradient(180deg, #FBE9A8 0%, #FFF6D9 30%, var(--bg-card) 70%);
+}
+.sushi-head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--c-text-muted);
+}
+.pro-badge {
+  background: linear-gradient(90deg, #E5B900, #FFD63A);
+  color: var(--c-sumi);
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+}
+.sushi-pattern {
+  background: var(--bg-input);
+  border: 1px dashed var(--bd-card);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.pattern-ja-game {
+  font-family: var(--font-ja);
+  font-size: 18px; line-height: 1.7;
+  color: var(--c-text);
+}
+.pattern-zh-game {
+  font-size: 12px; color: var(--c-text-muted);
+  margin-top: 4px;
+}
+.sushi-blank {
+  display: inline-block;
+  color: var(--c-shu); font-weight: 700;
+  border-bottom: 2px solid var(--c-shu);
+  padding: 0 10px;
+}
+.sushi-blank-zh {
+  display: inline-block;
+  color: var(--c-shu); font-weight: 700;
+  letter-spacing: 2px;
+}
+.conveyor-area {
+  flex: 1;
+  position: relative;
+  margin: 4px 0 8px;
+  min-height: 220px;
+}
+.cat-area {
+  position: absolute;
+  top: 4px; right: 4px;
+  width: 88px; height: 88px;
+  z-index: 5;
+  pointer-events: none;
+}
+.cat {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(42,33,24,0.18));
+  animation: cat-bob 2.4s ease-in-out infinite;
+}
+@keyframes cat-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.conveyor-track {
+  position: absolute;
+  bottom: 0; left: -10vw; right: -10vw;
+  height: 170px;
+  overflow: visible;
+  pointer-events: none;
+}
+.conveyor-track::after {
+  content: '';
+  position: absolute;
+  bottom: 24px; left: 0; right: 0;
+  height: 6px;
+  background: linear-gradient(180deg, transparent 0%, rgba(42,33,24,0.10) 50%, transparent 100%);
+  border-top: 1px solid rgba(42,33,24,0.06);
+}
+.conveyor-wrapper {
+  position: absolute;
+  bottom: 18px;
+  left: 100%;  /* start off-screen right */
+  display: flex;
+  gap: 12px;
+  pointer-events: auto;
+  animation: conveyor-flow var(--duration, 8s) linear forwards;
+  animation-play-state: paused;
+}
+.conveyor-wrapper.flowing { animation-play-state: running; }
+@keyframes conveyor-flow {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-100vw - 100% - 50px)); }
+}
+.plate-btn {
+  width: 90px; height: 130px;
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.plate-btn:active { transform: scale(0.95); }
+.plate-btn .plate-img {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 90px; height: auto;
+  object-fit: contain;
+  pointer-events: none;
+}
+.plate-btn .sushi-img {
+  position: absolute;
+  bottom: 12px; left: 50%;
+  transform: translateX(-50%);
+  width: 76px; height: 76px;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 2px rgba(42,33,24,0.20));
+}
+.plate-btn .plate-label {
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--bd-card);
+  border-radius: 8px;
+  padding: 4px 9px;
+  font-size: 11px;
+  color: var(--c-text);
+  white-space: nowrap;
+  box-shadow: 0 2px 5px rgba(42,33,24,0.12);
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+  z-index: 2;
+}
+.plate-btn.plate-correct {
+  animation: plate-fly-right 0.6s ease-out forwards;
+}
+@keyframes plate-fly-right {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(150px, -90px) scale(0.5) rotate(20deg); opacity: 0; }
+}
+.plate-btn.plate-wrong {
+  animation: plate-fall 0.6s cubic-bezier(.5,.0,.7,.5) forwards;
+}
+@keyframes plate-fall {
+  0% { transform: translate(0, 0) rotate(0); opacity: 1; }
+  100% { transform: translate(8px, 100px) rotate(50deg); opacity: 0; }
+}
+.plate-btn.plate-show-correct {
+  animation: plate-pulse 0.6s ease-in-out 2;
+}
+@keyframes plate-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); filter: drop-shadow(0 0 10px var(--c-matcha)); }
+}
+.plate-btn.plate-show-correct .plate-label {
+  background: var(--c-matcha);
+  color: white;
+  border-color: var(--c-matcha);
+}
+.sushi-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid var(--bd-soft);
+  font-size: 14px;
+}
+.hp-row {
+  letter-spacing: 4px;
+  font-size: 18px;
+  color: var(--c-shu);
+}
+.hp-row .hp-empty {
+  color: var(--c-text-faint);
+}
+.score-info {
+  display: flex; gap: 14px;
+  color: var(--c-text-muted);
+  font-size: 13px;
+}
+.score-info strong {
+  color: var(--c-shu);
+  font-variant-numeric: tabular-nums;
+  font-size: 16px;
+}
+.streak-hot { color: var(--c-shu); font-weight: 700; }
+.streak-cool { color: var(--c-text-muted); }
+.sushi-result .ochrenpyo {
+  font-size: 36px;
+  letter-spacing: 8px;
+  color: var(--c-shu);
+  margin: 8px 0;
+  font-weight: 700;
+}
 .quiz-progress-bar {
   height: 4px;
   background: var(--bd-soft);

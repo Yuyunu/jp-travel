@@ -3,7 +3,7 @@
    - data/scenarios/*.json：stale-while-revalidate
 */
 
-const CACHE_VERSION = 'jpt-v0.3.4';
+const CACHE_VERSION = 'jpt-v0.4.0';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -27,6 +27,26 @@ const STATIC_ASSETS = [
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/icon-maskable.png',
+  './icons/apple-touch-icon.png',
+  // 🍣 寿司流れクイズ assets
+  './assets/cat/cat_idle.png',
+  './assets/cat/cat_happy.png',
+  './assets/cat/cat_sad.png',
+  './assets/cat/cat_surprised.png',
+  './assets/cat/cat_pro.png',
+  './assets/cat/cat_asleep.png',
+  './assets/sushi/maguro.png',
+  './assets/sushi/sake.png',
+  './assets/sushi/tamago.png',
+  './assets/sushi/ebi.png',
+  './assets/sushi/uni.png',
+  './assets/sushi/ikura.png',
+  './assets/sushi/tekka.png',
+  './assets/sushi/inari.png',
+  './assets/sushi/ootoro.png',
+  './assets/plate/plate_white.png',
+  './assets/plate/plate_red.png',
+  './assets/plate/plate_gold.png',
 ];
 
 self.addEventListener('install', event => {

@@ -7,7 +7,27 @@
    - 右上角強制重整按鈕（清 SW cache + reload）
    ============================================================= */
 
-const APP_VERSION = 'v0.3.4';
+const APP_VERSION = 'v0.4.0';
+
+/* ---------- Sushi game assets ---------- */
+const SUSHI_NORMAL = ['maguro', 'sake', 'ebi', 'tamago', 'inari'];
+const SUSHI_PREMIUM = ['uni', 'ikura', 'tekka', 'ootoro'];
+const PLATES = ['plate_white','plate_white','plate_white','plate_white','plate_white','plate_white','plate_red','plate_red','plate_red','plate_gold'];
+const PLATE_MULT = { plate_white: 1, plate_red: 2, plate_gold: 3 };
+const PRELOAD = [
+  'cat_idle','cat_happy','cat_sad','cat_surprised','cat_pro','cat_asleep'
+].map(n => `assets/cat/${n}.png`).concat(
+  SUSHI_NORMAL.concat(SUSHI_PREMIUM).map(n => `assets/sushi/${n}.png`),
+  ['plate_white','plate_red','plate_gold'].map(n => `assets/plate/${n}.png`)
+);
+function preloadGameAssets() {
+  PRELOAD.forEach(p => { const im = new Image(); im.src = p; });
+}
+function pickPlate() { return PLATES[Math.floor(Math.random()*PLATES.length)]; }
+function pickSushi(pro) {
+  const pool = pro ? SUSHI_PREMIUM : [...SUSHI_NORMAL, ...SUSHI_PREMIUM];
+  return pool[Math.floor(Math.random()*pool.length)];
+}
 const LS_KEY = 'jpt_state_v4';
 
 const state = {
@@ -544,9 +564,13 @@ function renderQuizSetup(root) {
           👀 看選日
           <span class="desc">給中文 → 選日語</span>
         </button>
-        <button class="option-pill ${setup.type==='fill'?'active':''}" data-type="fill" style="grid-column:1/-1;">
-          ✍️ 填空（句型挖一字）
-          <span class="desc">看句型 → 選正確日語</span>
+        <button class="option-pill ${setup.type==='fill'?'active':''}" data-type="fill">
+          ✍️ 填空
+          <span class="desc">看句型 → 選日語</span>
+        </button>
+        <button class="option-pill ${setup.type==='sushi'?'active':''}" data-type="sushi" style="grid-column:1/-1;background:linear-gradient(135deg, var(--bg-input), rgba(245,194,199,0.15));">
+          🍣 流れクイズ
+          <span class="desc">迴轉壽司題庫 — 限時點正確的盤子</span>
         </button>
       </div>
     </div>
@@ -598,11 +622,14 @@ function renderQuizSetup(root) {
   root.querySelectorAll('.option-pill[data-count]').forEach(b => {
     b.addEventListener('click', () => { setup.count = parseInt(b.dataset.count, 10); renderQuizSetup(root); });
   });
-  root.querySelector('#start-quiz').addEventListener('click', () => startQuiz(setup));
+  root.querySelector('#start-quiz').addEventListener('click', () => {
+    if (setup.type === 'sushi') startSushiQuiz(setup);
+    else startQuiz(setup);
+  });
 }
 
 function quizTypeLabel(t) {
-  return { listen: '聽選中', read: '看選日', fill: '填空' }[t] || t;
+  return { listen: '聽選中', read: '看選日', fill: '填空', sushi: '🍣 流れ' }[t] || t;
 }
 function scopeLabel(s) {
   if (s === 'all') return '全部';
@@ -756,6 +783,7 @@ function confirmQuitQuiz() {
   if (confirm('確定要退出？目前進度不會儲存')) {
     tts.cancel();
     state.quizActive = null;
+    state.sushiQuiz = null;
     renderQuizView();
   }
 }
@@ -797,6 +825,253 @@ function renderQuizResult(root) {
     const setup = state._quizSetup;
     state.quizActive = null;
     startQuiz(setup);
+  });
+}
+
+/* ---------- 🍣 寿司流れクイズ ---------- */
+function startSushiQuiz({ scope, count }) {
+  const scenarios = scope === 'all' ? state.scenarios : [state.byId.get(scope)].filter(Boolean);
+  const allItems = [];
+  scenarios.forEach(sc => sc.groups.forEach(g => g.items.forEach(it => allItems.push({ item: it, group: g, scenario: sc }))));
+  if (allItems.length === 0) { toast('題庫不足'); return; }
+
+  const shuffled = shuffle(allItems.slice());
+  const picks = shuffled.slice(0, Math.min(count, allItems.length));
+  const qs = picks.map(rec => {
+    const correct = rec.item;
+    const pool = allItems.filter(r => r.item.id !== correct.id).map(r => r.item);
+    shuffle(pool);
+    const opts = shuffle([correct, ...pool.slice(0, 3)]);
+    return {
+      pattern: rec.group,
+      items: opts,
+      correctIdx: opts.findIndex(it => it.id === correct.id),
+      answered: false,
+    };
+  });
+
+  state.sushiQuiz = {
+    scope, qs, qIdx: 0, score: 0, hp: 3, streak: 0, proMode: false,
+    correctCount: 0,
+  };
+  state.quizActive = state.sushiQuiz;  // 共用 beforeunload 邏輯
+  renderSushiQuiz();
+}
+
+function renderSushiQuiz() {
+  const root = document.getElementById('quiz-view');
+  const q = state.sushiQuiz;
+  if (!q) return;
+  if (q.hp <= 0 || q.qIdx >= q.qs.length) {
+    return renderSushiResult(root);
+  }
+  const cur = q.qs[q.qIdx];
+  // pre-pick visuals so re-render keeps them
+  if (!cur._visuals) {
+    cur._visuals = cur.items.map(() => ({
+      sushi: pickSushi(q.proMode),
+      plate: pickPlate(),
+    }));
+  }
+  // duration: 8s → min 4s
+  const baseDur = 8000;
+  const minDur = 4000;
+  const duration = Math.max(minDur, baseDur * Math.pow(0.95, q.qIdx));
+
+  const patternJaHtml = parseRuby(cur.pattern.pattern_ja).replace(
+    '{X}', '<span class="sushi-blank">＿＿＿</span>'
+  );
+  const patternZhHtml = escapeHTML(cur.pattern.pattern_zh).replace(
+    '{X}', '<span class="sushi-blank-zh">◯◯</span>'
+  );
+
+  root.innerHTML = `
+    <div class="sushi-game ${q.proMode ? 'pro-mode' : ''}">
+      <div class="sushi-head">
+        <span>第 ${q.qIdx + 1} / ${q.qs.length} 題</span>
+        ${q.proMode ? '<span class="pro-badge">板前モード ×2</span>' : ''}
+        <button class="quit-quiz-btn" id="quit-quiz">✕ 退出</button>
+      </div>
+      <div class="sushi-pattern">
+        <div class="pattern-ja-game">${patternJaHtml}</div>
+        <div class="pattern-zh-game">${patternZhHtml}</div>
+      </div>
+      <div class="conveyor-area">
+        <div class="cat-area">
+          <img class="cat" src="assets/cat/cat_${q.proMode ? 'pro' : 'idle'}.png" alt="cat">
+        </div>
+        <div class="conveyor-track">
+          <div class="conveyor-wrapper" id="conveyor-wrapper" style="--duration: ${duration}ms">
+            ${cur.items.map((it, i) => {
+              const v = cur._visuals[i];
+              return `
+                <button class="plate-btn" data-i="${i}">
+                  <div class="plate-label">${escapeHTML(it.zh)}</div>
+                  <img class="sushi-img" src="assets/sushi/${v.sushi}.png" alt="">
+                  <img class="plate-img" src="assets/plate/${v.plate}.png" alt="">
+                </button>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+      <div class="sushi-bottom">
+        <div class="hp-row">${'❤'.repeat(q.hp)}<span class="hp-empty">${'♡'.repeat(3 - q.hp)}</span></div>
+        <div class="score-info">
+          <span>分數 <strong>${q.score}</strong></span>
+          <span class="streak-${q.streak >= 3 ? 'hot' : 'cool'}">連對 ${q.streak}</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const wrapper = root.querySelector('#conveyor-wrapper');
+
+  // Trigger animation after layout
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      wrapper.classList.add('flowing');
+    });
+  });
+
+  // Miss handler — animation finishes without click
+  wrapper.addEventListener('animationend', () => {
+    if (cur.answered) return;
+    cur.answered = true;
+    handleSushiAnswer(false, null, true, null);
+  }, { once: true });
+
+  // Plate click
+  root.querySelectorAll('.plate-btn').forEach(b => {
+    b.addEventListener('click', e => {
+      if (cur.answered) return;
+      cur.answered = true;
+      const i = parseInt(b.dataset.i, 10);
+      const isCorrect = i === cur.correctIdx;
+      const plateType = cur._visuals[i].plate;
+      handleSushiAnswer(isCorrect, plateType, false, b);
+    });
+  });
+
+  root.querySelector('#quit-quiz')?.addEventListener('click', confirmSushiQuit);
+}
+
+function freezeConveyor() {
+  const w = document.querySelector('#conveyor-wrapper');
+  if (!w) return;
+  w.style.animationPlayState = 'paused';
+}
+
+function handleSushiAnswer(correct, plateType, missed, btnEl) {
+  const q = state.sushiQuiz;
+  if (!q) return;
+  freezeConveyor();
+
+  let catState;
+  if (missed) {
+    q.hp--;
+    q.streak = 0;
+    catState = 'surprised';
+  } else if (correct) {
+    const mult = PLATE_MULT[plateType] || 1;
+    const proBonus = q.proMode ? 2 : 1;
+    q.score += 10 * mult * proBonus;
+    q.streak++;
+    q.correctCount++;
+    catState = 'happy';
+    if (btnEl) btnEl.classList.add('plate-correct');
+    if (q.streak >= 5 && !q.proMode) {
+      q.proMode = true;
+      catState = 'pro';
+    }
+  } else {
+    q.hp--;
+    q.streak = 0;
+    catState = 'sad';
+    if (btnEl) btnEl.classList.add('plate-wrong');
+  }
+
+  // Briefly show what was correct (highlight correct plate green outline)
+  if (!correct && !missed) {
+    const correctBtn = document.querySelector(`.plate-btn[data-i="${q.qs[q.qIdx].correctIdx}"]`);
+    if (correctBtn) correctBtn.classList.add('plate-show-correct');
+  }
+
+  const cat = document.querySelector('.cat');
+  if (cat) cat.src = `assets/cat/cat_${catState}.png`;
+
+  setTimeout(() => {
+    if (q.hp <= 0) {
+      renderSushiResult(document.getElementById('quiz-view'));
+      return;
+    }
+    q.qIdx++;
+    renderSushiQuiz();
+  }, missed ? 900 : 1300);
+}
+
+function confirmSushiQuit() {
+  if (!state.sushiQuiz) return;
+  if (confirm('確定要退出？目前進度不會儲存')) {
+    state.sushiQuiz = null;
+    state.quizActive = null;
+    renderQuizView();
+  }
+}
+
+function renderSushiResult(root) {
+  const q = state.sushiQuiz;
+  const won = q.hp > 0 && q.qIdx >= q.qs.length;
+
+  // Best score
+  const bestKey = `jpt_sushi_best_${q.scope}`;
+  let best = parseInt(localStorage.getItem(bestKey) || '0', 10);
+  const newBest = q.score > best;
+  if (newBest) {
+    best = q.score;
+    try { localStorage.setItem(bestKey, String(best)); } catch (_) {}
+  }
+
+  // History
+  state.history.push({
+    ts: Date.now(), type: 'sushi', scope: q.scope, score: q.score, total: q.qs.length
+  });
+  if (state.history.length > 50) state.history.splice(0, state.history.length - 50);
+  saveState();
+
+  const stars = q.score >= 200 ? 3 : q.score >= 100 ? 2 : q.score >= 30 ? 1 : 0;
+  const stamps = '✓'.repeat(stars) + '・'.repeat(3 - stars);
+
+  root.innerHTML = `
+    <div class="quiz-question-card sushi-result">
+      <div style="text-align:center;">
+        <div style="font-size:60px;margin-bottom:6px;">${won ? '🎴' : '😴'}</div>
+        <div class="score" style="font-size:48px;color:var(--c-shu);font-weight:700;">${q.score}</div>
+        <div class="score-label">${won ? '🎉 全部過關！' : `第 ${q.qIdx + 1} 題 game over`}</div>
+        <div class="ochrenpyo">${stamps}</div>
+        <div class="muted small" style="margin-top:6px;">
+          答對 ${q.correctCount} / ${q.qs.length} 題
+          ${newBest ? '<span style="color:var(--c-shu);font-weight:600;"> · 新紀錄！</span>' : ` · 最佳 ${best}`}
+        </div>
+        <div class="btn-row" style="justify-content:center;margin-top:18px;">
+          <button class="btn-secondary" id="quiz-back">回設定</button>
+          <button class="btn-primary" id="quiz-again">再試一次</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Cleanup state but keep scope for re-try
+  const lastScope = q.scope;
+  state.sushiQuiz = null;
+  state.quizActive = null;
+
+  root.querySelector('#quiz-back').addEventListener('click', () => {
+    renderQuizView();
+  });
+  root.querySelector('#quiz-again').addEventListener('click', () => {
+    const setup = state._quizSetup;
+    startSushiQuiz(setup);
   });
 }
 
@@ -926,6 +1201,7 @@ async function init() {
   }
 
   tts.init();
+  preloadGameAssets();
   setTab('tab-dialogues');
 
   if ('serviceWorker' in navigator) {

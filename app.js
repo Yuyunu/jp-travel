@@ -839,12 +839,44 @@ function startSushiQuiz({ scope, count }) {
   scenarios.forEach(sc => sc.groups.forEach(g => g.items.forEach(it => allItems.push({ item: it, group: g, scenario: sc }))));
   if (allItems.length === 0) { toast('題庫不足'); return; }
 
-  const shuffled = shuffle(allItems.slice());
-  const picks = shuffled.slice(0, Math.min(count, allItems.length));
+  // 先按 group 分組、平均抽，避免同 pattern 連出
+  const byGroup = new Map();
+  allItems.forEach(rec => {
+    if (!byGroup.has(rec.group.id)) byGroup.set(rec.group.id, []);
+    byGroup.get(rec.group.id).push(rec);
+  });
+  const groupBuckets = shuffle(Array.from(byGroup.values()).map(arr => shuffle(arr.slice())));
+  const picks = [];
+  let gi = 0;
+  while (picks.length < Math.min(count, allItems.length)) {
+    const bucket = groupBuckets[gi % groupBuckets.length];
+    if (bucket.length) picks.push(bucket.shift());
+    gi++;
+    if (groupBuckets.every(b => b.length === 0)) break;
+  }
+
   const qs = picks.map(rec => {
     const correct = rec.item;
-    const pool = allItems.filter(r => r.item.id !== correct.id).map(r => r.item);
-    shuffle(pool);
+    // 從同一 group（同一句型）抽擾亂選項，讓 4 個選項語意一致
+    let pool = shuffle(rec.group.items.filter(it => it.id !== correct.id));
+    // 同 group 不足 3 個 → 從同 scenario 其他 group 補
+    if (pool.length < 3) {
+      const sameSc = [];
+      rec.scenario.groups.forEach(g => {
+        if (g.id === rec.group.id) return;
+        g.items.forEach(it => {
+          if (it.id !== correct.id && !pool.find(p => p.id === it.id)) sameSc.push(it);
+        });
+      });
+      pool = pool.concat(shuffle(sameSc));
+    }
+    // 仍不足 → 全題庫補（極端情況才會走到）
+    if (pool.length < 3) {
+      const extra = allItems
+        .filter(r => r.item.id !== correct.id && !pool.find(p => p.id === r.item.id))
+        .map(r => r.item);
+      pool = pool.concat(shuffle(extra));
+    }
     const opts = shuffle([correct, ...pool.slice(0, 3)]);
     return {
       pattern: rec.group,

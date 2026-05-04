@@ -684,12 +684,13 @@ ruby rt {
 .conveyor-area {
   flex: 1;
   position: relative;
-  margin: 4px 0 8px;
+  margin: 4px -12px 8px;  /* 抵消 sushi-game 的 padding，貼齊邊緣 */
   min-height: 220px;
+  overflow: hidden;
 }
 .cat-area {
   position: absolute;
-  top: 4px; right: 4px;
+  top: 4px; right: 12px;
   width: 88px; height: 88px;
   z-index: 5;
   pointer-events: none;
@@ -706,9 +707,8 @@ ruby rt {
 }
 .conveyor-track {
   position: absolute;
-  bottom: 0; left: -10vw; right: -10vw;
+  bottom: 0; left: 0; right: 0;
   height: 170px;
-  overflow: visible;
   pointer-events: none;
 }
 .conveyor-track::after {
@@ -722,17 +722,17 @@ ruby rt {
 .conveyor-wrapper {
   position: absolute;
   bottom: 18px;
-  left: 100%;  /* start off-screen right */
+  left: 100%;          /* 起始：盤子在 conveyor-area 右邊外 */
   display: flex;
   gap: 12px;
   pointer-events: auto;
-  animation: conveyor-flow var(--duration, 8s) linear forwards;
-  animation-play-state: paused;
+  transform: translateX(0);
+  transition: transform var(--duration, 8s) linear;
+  will-change: transform;
 }
-.conveyor-wrapper.flowing { animation-play-state: running; }
-@keyframes conveyor-flow {
-  from { transform: translateX(0); }
-  to { transform: translateX(calc(-100vw - 100% - 50px)); }
+.conveyor-wrapper.flowing {
+  /* 終點：整排盤子完全移到 conveyor-area 左邊外 */
+  transform: translateX(calc(-100% - 100vw));
 }
 .plate-btn {
   width: 90px; height: 130px;

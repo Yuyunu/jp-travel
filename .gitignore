@@ -3,3 +3,7 @@
 node_modules/
 .idea/
 .vscode/
+# user 用的提示草稿
+assets/image*.png
+*_Prompts.docx
+~$*.docx

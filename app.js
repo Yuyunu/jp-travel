@@ -7,7 +7,7 @@
    - 右上角強制重整按鈕（清 SW cache + reload）
    ============================================================= */
 
-const APP_VERSION = 'v0.4.0';
+const APP_VERSION = 'v0.4.1';
 
 /* ---------- Sushi game assets ---------- */
 const SUSHI_NORMAL = ['maguro', 'sake', 'ebi', 'tamago', 'inari'];
@@ -927,15 +927,16 @@ function renderSushiQuiz() {
 
   const wrapper = root.querySelector('#conveyor-wrapper');
 
-  // Trigger animation after layout
+  // Trigger transition after layout
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       wrapper.classList.add('flowing');
     });
   });
 
-  // Miss handler — animation finishes without click
-  wrapper.addEventListener('animationend', () => {
+  // Miss handler — transition finishes without click
+  wrapper.addEventListener('transitionend', (e) => {
+    if (e.propertyName !== 'transform') return;
     if (cur.answered) return;
     cur.answered = true;
     handleSushiAnswer(false, null, true, null);
@@ -959,7 +960,10 @@ function renderSushiQuiz() {
 function freezeConveyor() {
   const w = document.querySelector('#conveyor-wrapper');
   if (!w) return;
-  w.style.animationPlayState = 'paused';
+  // 把目前 transform 凍住（停止 transition）
+  const cs = getComputedStyle(w);
+  w.style.transition = 'none';
+  w.style.transform = cs.transform;
 }
 
 function handleSushiAnswer(correct, plateType, missed, btnEl) {

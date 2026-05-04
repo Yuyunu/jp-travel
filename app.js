@@ -563,6 +563,9 @@ function renderQuizView() {
   if (state.sushiQuiz) {
     return renderSushiQuiz();
   }
+  if (state._mapView) {
+    return renderMapView(root);
+  }
   if (state.quizActive) {
     if (state.quizActive.idx >= state.quizActive.qs.length) {
       renderQuizResult(root);
@@ -574,12 +577,143 @@ function renderQuizView() {
   }
 }
 
+/* ---------- 🗾 日本旅行地圖 ---------- */
+const MAP_CITIES = [
+  { id: 'airport',     name: '札幌',   x: 290, y: 110, scenario: 'airport',     emoji: '✈️' },
+  { id: 'station',     name: '青森',   x: 245, y: 200, scenario: 'station',     emoji: '🚉' },
+  { id: 'flight',      name: '仙台',   x: 250, y: 270, scenario: 'flight',      emoji: '🛫' },
+  { id: 'restaurant',  name: '東京',   x: 240, y: 340, scenario: 'restaurant',  emoji: '🍽️' },
+  { id: 'sightseeing', name: '鎌倉',   x: 215, y: 380, scenario: 'sightseeing', emoji: '🗺️' },
+  { id: 'hotel',       name: '京都',   x: 175, y: 360, scenario: 'hotel',       emoji: '🏨' },
+  { id: 'ramen',       name: '大阪',   x: 162, y: 388, scenario: 'ramen',       emoji: '🍜' },
+  { id: 'izakaya',     name: '神戸',   x: 138, y: 388, scenario: 'izakaya',     emoji: '🏮' },
+  { id: 'conbini',     name: '福岡',   x: 78,  y: 425, scenario: 'conbini',     emoji: '🏪' },
+  { id: 'emergency',   name: '沖縄',   x: 50,  y: 545, scenario: 'emergency',   emoji: '🆘' },
+];
+function getCityStars(scenarioId) {
+  return parseInt(localStorage.getItem(`jpt_unlock_${scenarioId}`) || '0', 10);
+}
+function isMaster() {
+  return MAP_CITIES.every(c => getCityStars(c.scenario) >= 1);
+}
+
+function renderMapView(root) {
+  const totalStars = MAP_CITIES.reduce((s, c) => s + getCityStars(c.scenario), 0);
+  const cleared = MAP_CITIES.filter(c => getCityStars(c.scenario) >= 1).length;
+  const master = isMaster();
+
+  root.innerHTML = `
+    <div class="map-view">
+      <div class="map-header">
+        <button class="header-btn" id="map-back" aria-label="返回">←</button>
+        <div class="map-title">
+          <span class="map-title-zh">🗾 日本之旅</span>
+          <span class="map-title-meta">${cleared}/${MAP_CITIES.length} 城市 · ${totalStars}/30 ★</span>
+        </div>
+        ${master ? '<div class="map-master-badge" title="達人">🎴 達人</div>' : '<div style="width:40px;"></div>'}
+      </div>
+
+      <div class="map-scroll">
+        <svg class="map-svg" viewBox="0 0 360 600" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- 海 -->
+          <rect x="0" y="0" width="360" height="600" fill="url(#sea-gradient)"/>
+          <defs>
+            <linearGradient id="sea-gradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#E5EFF7"/>
+              <stop offset="100%" stop-color="#C9DEEC"/>
+            </linearGradient>
+            <filter id="island-shadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2" in="SourceAlpha"/>
+              <feOffset dx="0" dy="2"/>
+              <feComponentTransfer><feFuncA type="linear" slope="0.18"/></feComponentTransfer>
+              <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <!-- 北海道 -->
+          <path d="M 230,60 Q 280,40 320,80 Q 340,120 320,160 Q 290,180 250,165 Q 210,150 215,110 Q 215,80 230,60 Z"
+                fill="#F4ECDC" stroke="#B89B6E" stroke-width="1.5" filter="url(#island-shadow)"/>
+          <!-- 本州 -->
+          <path d="M 240,180 Q 255,200 250,225 Q 245,260 245,290 Q 240,320 235,345
+                   Q 215,375 180,375 Q 145,380 115,395 Q 90,410 75,425
+                   Q 65,420 80,400 Q 110,375 145,365 Q 175,355 195,345
+                   Q 215,330 220,300 Q 225,260 225,225 Q 220,200 235,180 Z"
+                fill="#F4ECDC" stroke="#B89B6E" stroke-width="1.5" filter="url(#island-shadow)"/>
+          <!-- 四國 -->
+          <ellipse cx="135" cy="425" rx="32" ry="14" fill="#F4ECDC" stroke="#B89B6E" stroke-width="1.5" filter="url(#island-shadow)"/>
+          <!-- 九州 -->
+          <path d="M 60,415 Q 95,415 100,440 Q 105,465 85,480 Q 60,490 45,470 Q 35,445 50,420 Q 55,415 60,415 Z"
+                fill="#F4ECDC" stroke="#B89B6E" stroke-width="1.5" filter="url(#island-shadow)"/>
+          <!-- 沖繩 -->
+          <ellipse cx="50" cy="545" rx="20" ry="8" fill="#F4ECDC" stroke="#B89B6E" stroke-width="1.5" filter="url(#island-shadow)"/>
+
+          <!-- 連線（旅行路線） -->
+          <path d="${MAP_CITIES.map((c,i) => (i===0?'M':'L')+c.x+','+c.y).join(' ')}"
+                stroke="#C5302B" stroke-width="1.5" stroke-dasharray="3,4"
+                fill="none" opacity="0.4"/>
+        </svg>
+
+        ${MAP_CITIES.map(c => {
+          const stars = getCityStars(c.scenario);
+          return `
+            <button class="map-city ${stars>=1?'unlocked':'locked'} ${stars===3?'three-star':''}"
+                    style="left:${(c.x/360)*100}%;top:${(c.y/600)*100}%;"
+                    data-scope="${c.scenario}"
+                    aria-label="${escapeHTML(c.name)} - ${stars} 星">
+              <div class="city-dot">
+                ${stars>=1
+                  ? `<img class="city-torii" src="assets/decor/mini_torii.png" alt="">`
+                  : `<span class="city-emoji">${c.emoji}</span>`}
+              </div>
+              <div class="city-name">${escapeHTML(c.name)}</div>
+              <div class="city-stars">${'★'.repeat(stars)}${'☆'.repeat(3-stars)}</div>
+            </button>
+          `;
+        }).join('')}
+      </div>
+
+      <div class="map-footer">
+        <p class="hint">${master ? '🎌 全部過關，恭喜旅程完滿！' : '點選城市開始挑戰 · 最佳分數記錄會更新城市星數'}</p>
+      </div>
+    </div>
+  `;
+
+  root.querySelector('#map-back').addEventListener('click', () => {
+    state._mapView = false;
+    renderQuizView();
+  });
+  root.querySelectorAll('.map-city').forEach(b => {
+    b.addEventListener('click', () => {
+      const scope = b.dataset.scope;
+      state._mapView = false;
+      // 用 sushi quiz 開戰，預設 10 題
+      const setup = { type: 'sushi', scope, count: 10 };
+      state._quizSetup = setup;
+      startSushiQuiz(setup);
+    });
+  });
+}
+
 function renderQuizSetup(root) {
   const setup = state._quizSetup || { type: 'listen', scope: 'all', count: 10 };
   if (setup.type === 'fill') setup.type = 'listen';  // 填空題已下架，自動轉聽選中
   state._quizSetup = setup;
 
+  const totalStars = MAP_CITIES.reduce((s, c) => s + getCityStars(c.scenario), 0);
+  const cleared = MAP_CITIES.filter(c => getCityStars(c.scenario) >= 1).length;
+
   root.innerHTML = `
+    <button class="map-entry-card" id="map-entry">
+      <div class="map-entry-left">
+        <div class="map-entry-emoji">🗾</div>
+        <div>
+          <div class="map-entry-title">日本之旅</div>
+          <div class="map-entry-sub">點地圖城市開始挑戰 · ${cleared}/${MAP_CITIES.length} 城市已過關</div>
+        </div>
+      </div>
+      <div class="map-entry-stars">${totalStars}/30 ★</div>
+    </button>
+
     <div class="quiz-setup-card">
       <h3>題型</h3>
       <div class="option-grid">
@@ -648,6 +782,10 @@ function renderQuizSetup(root) {
   root.querySelector('#start-quiz').addEventListener('click', () => {
     if (setup.type === 'sushi') startSushiQuiz(setup);
     else startQuiz(setup);
+  });
+  root.querySelector('#map-entry').addEventListener('click', () => {
+    state._mapView = true;
+    renderQuizView();
   });
 }
 

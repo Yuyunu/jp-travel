@@ -1237,3 +1237,159 @@ ruby rt {
   .scenario-grid { grid-template-columns: repeat(3, 1fr); }
   .app-main { padding: 22px 22px calc(96px + var(--safe-bottom)); }
 }
+
+/* ============================================================
+   🗾 日本旅行地圖
+   ============================================================ */
+.map-entry-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: linear-gradient(135deg, var(--bg-card), rgba(245,194,199,0.18));
+  border: 1px solid var(--bd-card);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  font-family: inherit;
+  color: var(--c-text);
+  text-align: left;
+}
+.map-entry-card:active { transform: scale(0.98); }
+.map-entry-card:hover {
+  box-shadow: 0 4px 12px rgba(42,33,24,0.12);
+}
+.map-entry-left { display: flex; gap: 12px; align-items: center; }
+.map-entry-emoji { font-size: 32px; }
+.map-entry-title { font-weight: 700; font-size: 16px; color: var(--c-text); }
+.map-entry-sub { font-size: 11px; color: var(--c-text-muted); margin-top: 2px; }
+.map-entry-stars {
+  font-size: 13px; color: var(--c-shu); font-weight: 700;
+  background: var(--bg-input);
+  padding: 4px 10px; border-radius: 14px;
+  white-space: nowrap;
+}
+
+.map-view {
+  display: flex; flex-direction: column;
+  min-height: calc(100vh - 80px);
+}
+.map-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
+}
+.map-title { text-align: center; flex: 1; }
+.map-title-zh {
+  display: block; font-weight: 700; font-size: 17px;
+  color: var(--c-text);
+}
+.map-title-meta {
+  display: block; font-size: 11px;
+  color: var(--c-text-muted); margin-top: 2px;
+}
+.map-master-badge {
+  background: linear-gradient(135deg, #D4A54C, #B8862C);
+  color: white; font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  box-shadow: 0 2px 8px rgba(212,165,76,0.4);
+}
+.map-scroll {
+  position: relative;
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--bd-card);
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 360 / 600;
+  max-height: 80vh;
+}
+.map-svg {
+  width: 100%; height: 100%;
+  display: block;
+}
+
+.map-city {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0;
+  font-family: inherit;
+  color: var(--c-text);
+  transition: transform 0.15s;
+}
+.map-city:active { transform: translate(-50%, -50%) scale(0.9); }
+.map-city .city-dot {
+  width: 32px; height: 32px;
+  background: var(--bg-card);
+  border: 2px solid var(--c-shu);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 6px rgba(42,33,24,0.25);
+  position: relative;
+}
+.map-city.locked .city-dot {
+  border-color: var(--bd-soft);
+  background: rgba(255,255,255,0.7);
+  filter: grayscale(0.6);
+}
+.map-city .city-emoji { font-size: 16px; }
+.map-city .city-torii {
+  width: 26px; height: 26px;
+  object-fit: contain;
+}
+.map-city.three-star .city-dot {
+  border-color: #D4A54C;
+  box-shadow: 0 0 0 3px rgba(212,165,76,0.35), 0 2px 6px rgba(42,33,24,0.25);
+  animation: city-shine 1.6s ease-in-out infinite;
+}
+@keyframes city-shine {
+  0%,100% { box-shadow: 0 0 0 3px rgba(212,165,76,0.35), 0 2px 6px rgba(42,33,24,0.25); }
+  50%     { box-shadow: 0 0 0 5px rgba(212,165,76,0.55), 0 2px 10px rgba(212,165,76,0.5); }
+}
+.map-city .city-name {
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--c-text);
+  background: var(--bg-card);
+  padding: 1px 6px;
+  border-radius: 8px;
+  border: 1px solid var(--bd-soft);
+  white-space: nowrap;
+}
+.map-city.locked .city-name {
+  color: var(--c-text-muted);
+}
+.map-city .city-stars {
+  margin-top: 2px;
+  font-size: 9px;
+  color: #D4A54C;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+.map-city.locked .city-stars {
+  color: var(--bd-soft);
+}
+
+.map-footer {
+  margin-top: 12px;
+  text-align: center;
+}
+.map-footer .hint {
+  font-size: 12px;
+  color: var(--c-text-muted);
+}
+
+@media (max-width: 380px) {
+  .map-city .city-dot { width: 28px; height: 28px; }
+  .map-city .city-emoji { font-size: 14px; }
+  .map-city .city-torii { width: 22px; height: 22px; }
+  .map-city .city-name { font-size: 10px; padding: 1px 5px; }
+}

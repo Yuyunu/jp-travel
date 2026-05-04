@@ -839,13 +839,14 @@ function startSushiQuiz({ scope, count }) {
   scenarios.forEach(sc => sc.groups.forEach(g => g.items.forEach(it => allItems.push({ item: it, group: g, scenario: sc }))));
   if (allItems.length === 0) { toast('題庫不足'); return; }
 
-  // 先按 group 分組、平均抽，避免同 pattern 連出
-  const byGroup = new Map();
+  // 按 pattern_ja 字串分組（不只 group.id），同 pattern 跨場景視為同一桶，避免重複出題
+  const byPattern = new Map();
   allItems.forEach(rec => {
-    if (!byGroup.has(rec.group.id)) byGroup.set(rec.group.id, []);
-    byGroup.get(rec.group.id).push(rec);
+    const key = rec.group.pattern_ja;
+    if (!byPattern.has(key)) byPattern.set(key, []);
+    byPattern.get(key).push(rec);
   });
-  const groupBuckets = shuffle(Array.from(byGroup.values()).map(arr => shuffle(arr.slice())));
+  const groupBuckets = shuffle(Array.from(byPattern.values()).map(arr => shuffle(arr.slice())));
   const picks = [];
   let gi = 0;
   while (picks.length < Math.min(count, allItems.length)) {
@@ -914,11 +915,13 @@ function renderSushiQuiz() {
   const minDur = 4000;
   const duration = Math.max(minDur, baseDur * Math.pow(0.95, q.qIdx));
 
+  // 中文句型把答案直接填進去當提示，玩家按出對應的「日文（假名）」盤
+  const correctItem = cur.items[cur.correctIdx];
   const patternJaHtml = parseRuby(cur.pattern.pattern_ja).replace(
     '{X}', '<span class="sushi-blank">＿＿＿</span>'
   );
   const patternZhHtml = escapeHTML(cur.pattern.pattern_zh).replace(
-    '{X}', '<span class="sushi-blank-zh">◯◯</span>'
+    '{X}', `<span class="sushi-answer-zh">${escapeHTML(correctItem.zh)}</span>`
   );
 
   root.innerHTML = `
@@ -942,7 +945,7 @@ function renderSushiQuiz() {
               const v = cur._visuals[i];
               return `
                 <button class="plate-btn" data-i="${i}">
-                  <div class="plate-label">${escapeHTML(it.zh)}</div>
+                  <div class="plate-label">${escapeHTML(it.kana || stripRuby(it.ja))}</div>
                   <img class="sushi-img" src="assets/sushi/${v.sushi}.png" alt="">
                   <img class="plate-img" src="assets/plate/${v.plate}.png" alt="">
                 </button>

@@ -667,8 +667,9 @@ ruby rt {
   color: var(--c-text);
 }
 .pattern-zh-game {
-  font-size: 12px; color: var(--c-text-muted);
-  margin-top: 4px;
+  font-size: 14px; color: var(--c-text);
+  margin-top: 6px;
+  font-weight: 500;
 }
 .sushi-blank {
   display: inline-block;
@@ -680,6 +681,14 @@ ruby rt {
   display: inline-block;
   color: var(--c-shu); font-weight: 700;
   letter-spacing: 2px;
+}
+.sushi-answer-zh {
+  display: inline-block;
+  color: var(--c-shu); font-weight: 700;
+  background: rgba(197, 48, 43, 0.12);
+  border-radius: 6px;
+  padding: 1px 8px;
+  margin: 0 2px;
 }
 .conveyor-area {
   flex: 1;

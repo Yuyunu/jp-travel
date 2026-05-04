@@ -160,13 +160,26 @@ const tts = {
       onerror && onerror(new Error('no-tts'));
       return null;
     }
-    // 預設餵漢字 form（stripRuby）— TTS 對漢字+假名混合處理較好，
-    // 純假名會把 は/へ/を 誤判成助詞（例：歯磨き粉 はみがきこ → wamigakiko）。
-    // 只有當沒有漢字（純假名/外來語）時才回 kana extractor。
+    // TTS 文本選擇策略：
+    // 1. 作者明確標註 ruby {kanji|kana} → 用 extracted kana（尊重作者意圖，
+    //    解決一巻 ひとまき 被誤讀成 いっかん 之類的歧讀問題）
+    // 2. 沒 ruby 標註 + 有漢字 → 用 kanji form（讓 TTS 自行判斷常用讀音）
+    // 3. 純假名/外來語 → 直接用 kana
+    // 例外：extract 出的 kana 是單一個 は/へ/を 會被當助詞唸成 wa/e/o
+    //       → 改用 kanji（如「歯」單字會被讀成 wa，回 kanji form 才念對 ha）
     const kanji = stripRuby(text).trim();
     const kana = extractKana(text).trim();
-    // 若 kanji 含 CJK 表意字元就用 kanji，否則用 kana
-    let speakText = /[一-鿿]/.test(kanji) ? kanji : kana;
+    const hasRuby = /\{[^|}]+\|[^|}]+\}/.test(text);
+    let speakText;
+    if (hasRuby) {
+      speakText = kana;
+      // 整段只剩單一個 は/へ/を → fallback 到漢字
+      if (/^[はへを]$/.test(speakText) && /[一-鿿]/.test(kanji)) {
+        speakText = kanji;
+      }
+    } else {
+      speakText = /[一-鿿]/.test(kanji) ? kanji : kana;
+    }
     const u = new SpeechSynthesisUtterance(speakText);
     u.lang = 'ja-JP';
     u.rate = state.rate;

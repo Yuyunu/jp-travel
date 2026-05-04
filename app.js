@@ -7,7 +7,7 @@
    - 右上角強制重整按鈕（清 SW cache + reload）
    ============================================================= */
 
-const APP_VERSION = 'v0.3.3';
+const APP_VERSION = 'v0.3.4';
 const LS_KEY = 'jpt_state_v4';
 
 const state = {

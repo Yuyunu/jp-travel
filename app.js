@@ -583,9 +583,12 @@ function attachGroupHandlers(root) {
       groupCard.querySelector('.pattern-zh').innerHTML = patternZhHtml;
 
       groupCard.dataset.currentKana = filledKana;
-      groupCard.dataset.currentJa = filledJa;  // 給 play-pattern 用
+      groupCard.dataset.currentJa = filledJa;  // 備用
 
-      if (state.ttsAvailable) tts.speak(filledJa);  // 餵 markup，speak() 處理 fallback
+      // vocab chip 點擊：直接餵 filledKana（純 kana，作者標註已套進去）
+      // 句子有完整上下文（を/ください）TTS 不會把字頭 は 當助詞，
+      // 同時避免「一巻」這種純漢字詞被讀成 default 讀音
+      if (state.ttsAvailable) tts.speak(filledKana);
       else toast('此瀏覽器無日語 TTS');
 
       groupCard.querySelectorAll('.item-chip.selected').forEach(c => c.classList.remove('selected'));
@@ -598,7 +601,8 @@ function attachGroupHandlers(root) {
   root.querySelectorAll('.play-pattern').forEach(b => {
     b.addEventListener('click', () => {
       const card = b.closest('.group-card');
-      let toSpeak = card.dataset.currentJa || card.dataset.currentKana;
+      // 優先用 filledKana（保留作者標註讀音）
+      let toSpeak = card.dataset.currentKana || card.dataset.currentJa;
       if (!toSpeak) {
         const firstChip = card.querySelector('.item-chip');
         if (firstChip) {

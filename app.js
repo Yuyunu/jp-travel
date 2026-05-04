@@ -1,44 +1,43 @@
 /* =============================================================
-   日本旅遊日語 PWA — app.js
+   日本旅遊日語 PWA — app.js  (v0.3.0)
+   - 句型替換組架構（pattern + items）
+   - TTS 一律讀假名版本（extractKana）
+   - 測驗加退出按鈕 + Esc 鍵
    ============================================================= */
 
-const APP_VERSION = 'v0.2.1';
-const LS_KEY = 'jpt_state_v1';
+const APP_VERSION = 'v0.3.0';
+const LS_KEY = 'jpt_state_v3';
 
 /* ---------- State ---------- */
 const state = {
-  scenarios: [],          // [{id, name_zh, name_ja, emoji, dialogues, vocab}]
-  byId: new Map(),        // id → scenario
-  vocabIndex: new Map(),  // vocabId → {vocab, scenario}
-  dialogueIndex: new Map(),// dialogueId → {dialogue, scenario}
+  scenarios: [],
+  byId: new Map(),
+  itemIndex: new Map(),     // itemId → {item, group, scenario}
+  dialogueIndex: new Map(),
 
-  // UI
   currentTab: 'tab-dialogues',
-  currentScenario: null,  // scenario id
+  currentScenario: null,
   currentVocabScenario: null,
-  vocabFilter: 'all',     // all | weak | known
-  vocabFlipMode: false,   // 翻面：先看 zh
 
   // TTS
   voices: [],
   selectedVoiceURI: null,
   rate: 0.9,
   ttsAvailable: false,
-  playingAll: null,       // {dialogueId, abort}
+  playingAll: null,
 
   // Quiz
-  quizActive: null,       // {type, scope, qs, idx, score, errors}
+  quizActive: null,
 
-  // Settings (persisted)
   prefs: {
     theme: 'auto',
     voiceURI: null,
     rate: 0.9,
   },
   progress: {
-    known: [],     // vocab IDs
+    known: [],
     weak: [],
-    quizHistory: [], // {ts, type, scope, score, total}
+    quizHistory: [],
   }
 };
 
@@ -63,17 +62,22 @@ function saveState() {
   } catch (e) { console.warn('saveState fail', e); }
 }
 
-/* ---------- Ruby parsing ---------- */
+/* ---------- Ruby / Kana helpers ---------- */
 // "{漢字|かんじ}" → <ruby>漢字<rt>かんじ</rt></ruby>
 function parseRuby(str) {
   if (!str) return '';
   return escapeHTML(str).replace(/\{([^|{}]+)\|([^|{}]+)\}/g, (_, k, r) =>
     `<ruby>${k}<rt>${r}</rt></ruby>`);
 }
-// 去掉 ruby 標記留下漢字（給 TTS 用）
+// 留下漢字（顯示用）
 function stripRuby(str) {
   if (!str) return '';
   return str.replace(/\{([^|{}]+)\|[^|{}]+\}/g, '$1');
+}
+// 取出讀音版（給 TTS 用，{漢字|讀音} → 讀音）
+function extractKana(str) {
+  if (!str) return '';
+  return str.replace(/\{([^|{}]+)\|([^|{}]+)\}/g, (_, k, r) => r);
 }
 function escapeHTML(s) {
   return String(s).replace(/[&<>"']/g, c => ({
@@ -92,7 +96,6 @@ const tts = {
       const all = window.speechSynthesis.getVoices();
       state.voices = all.filter(v => v.lang.toLowerCase().startsWith('ja'));
       state.ttsAvailable = state.voices.length > 0;
-      // 預設選 prefs 裡的，否則挑第一個
       if (state.selectedVoiceURI) {
         const found = state.voices.find(v => v.voiceURI === state.selectedVoiceURI);
         if (!found) state.selectedVoiceURI = state.voices[0]?.voiceURI || null;
@@ -110,12 +113,13 @@ const tts = {
   cancel() {
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   },
+  // text 可以是 {漢字|讀音} 標記版或純假名 — 一律 extractKana 後送出
   speak(text, { onend, onerror } = {}) {
     if (!('speechSynthesis' in window)) {
       onerror && onerror(new Error('no-tts'));
       return null;
     }
-    const u = new SpeechSynthesisUtterance(stripRuby(text));
+    const u = new SpeechSynthesisUtterance(extractKana(text));
     u.lang = 'ja-JP';
     u.rate = state.rate;
     const voice = state.voices.find(v => v.voiceURI === state.selectedVoiceURI);
@@ -139,7 +143,7 @@ function updateTtsStatus() {
     el.textContent = 'TTS：尚未偵測到日語語音（iOS 設定 → 一般 → 輔助使用 → 朗讀內容 → 語音 → 日文）';
     return;
   }
-  el.textContent = `TTS：可用（找到 ${state.voices.length} 個日語語音）`;
+  el.textContent = `TTS：可用（${state.voices.length} 個日語語音）`;
 }
 
 function renderVoiceSelect() {
@@ -171,18 +175,19 @@ async function loadScenarios() {
     fetch(`data/scenarios/${id}.json`).then(r => r.json())
   ));
   state.scenarios = results;
-  state.byId.clear(); state.vocabIndex.clear(); state.dialogueIndex.clear();
+  state.byId.clear(); state.itemIndex.clear(); state.dialogueIndex.clear();
   results.forEach(sc => {
     state.byId.set(sc.id, sc);
     sc.dialogues.forEach(d => state.dialogueIndex.set(d.id, { dialogue: d, scenario: sc }));
-    sc.vocab.forEach(v => state.vocabIndex.set(v.id, { vocab: v, scenario: sc }));
+    (sc.groups || []).forEach(g => {
+      g.items.forEach(it => state.itemIndex.set(it.id, { item: it, group: g, scenario: sc }));
+    });
   });
 }
 
 /* ---------- Tab switching ---------- */
 function setTab(tabId) {
   state.currentTab = tabId;
-  // stop any playback when switching tabs
   tts.cancel();
   state.playingAll = null;
 
@@ -217,14 +222,15 @@ function renderScenarioGrid(root, mode) {
     <div class="scenario-grid">
       ${state.scenarios.map(sc => {
         const dialogueCount = sc.dialogues.length;
-        const vocabCount = sc.vocab.length;
+        const groupCount = (sc.groups || []).length;
+        const itemCount = (sc.groups || []).reduce((s, g) => s + g.items.length, 0);
         return `
           <button class="scenario-card" data-id="${sc.id}" data-mode="${mode}">
             <span class="emoji">${sc.emoji}</span>
             <span class="name-zh">${escapeHTML(sc.name_zh)}</span>
             <span class="name-ja">${escapeHTML(sc.name_ja)}</span>
             <span class="meta">
-              ${mode === 'dialogues' ? `${dialogueCount} 段對話` : `${vocabCount} 個單字`}
+              ${mode === 'dialogues' ? `${dialogueCount} 段對話` : `${groupCount} 句型 · ${itemCount} 詞`}
             </span>
           </button>
         `;
@@ -304,33 +310,28 @@ function renderDialogueSection(d) {
 }
 
 function attachDialogueHandlers(root) {
-  // single-turn TTS
   root.querySelectorAll('.play-one').forEach(b => {
     b.addEventListener('click', () => {
       const turn = b.closest('.turn');
-      const ja = turn.querySelector('.turn-ja').textContent; // ruby tags strip naturally via textContent
-      // textContent will include rt readings — strip them by walking
-      const cleanJa = extractKanjiOnly(turn.querySelector('.turn-ja'));
-      if (!state.ttsAvailable) {
-        toast('此瀏覽器無日語 TTS');
-        return;
-      }
-      // visual feedback
+      const sectionId = b.closest('.dialogue-section').dataset.dialogueId;
+      const idx = parseInt(turn.dataset.idx, 10);
+      const entry = state.dialogueIndex.get(sectionId);
+      if (!entry) return;
+      const turnData = entry.dialogue.turns[idx];
+      if (!state.ttsAvailable) { toast('此瀏覽器無日語 TTS'); return; }
       root.querySelectorAll('.turn-mini-btn').forEach(x => x.classList.remove('playing'));
       b.classList.add('playing');
-      tts.speak(cleanJa, {
+      tts.speak(turnData.ja, {
         onend: () => b.classList.remove('playing'),
         onerror: () => b.classList.remove('playing'),
       });
     });
   });
-  // play whole dialogue
   root.querySelectorAll('.play-all').forEach(b => {
     b.addEventListener('click', () => {
       const section = b.closest('.dialogue-section');
       const dialogueId = section.dataset.dialogueId;
       if (state.playingAll && state.playingAll.dialogueId === dialogueId) {
-        // toggle stop
         stopPlayAll();
         return;
       }
@@ -340,26 +341,6 @@ function attachDialogueHandlers(root) {
       playDialogueSequence(section, entry.dialogue);
     });
   });
-}
-
-// 從 ruby DOM 取出純漢字（跳過 rt）
-function extractKanjiOnly(el) {
-  let txt = '';
-  el.childNodes.forEach(n => {
-    if (n.nodeType === Node.TEXT_NODE) txt += n.textContent;
-    else if (n.nodeType === Node.ELEMENT_NODE) {
-      if (n.tagName.toLowerCase() === 'rt') return;
-      if (n.tagName.toLowerCase() === 'ruby') {
-        n.childNodes.forEach(c => {
-          if (c.nodeType === Node.TEXT_NODE) txt += c.textContent;
-          else if (c.nodeType === Node.ELEMENT_NODE && c.tagName.toLowerCase() !== 'rt') txt += c.textContent;
-        });
-      } else {
-        txt += extractKanjiOnly(n);
-      }
-    }
-  });
-  return txt;
 }
 
 function stopPlayAll() {
@@ -390,7 +371,7 @@ function playDialogueSequence(section, dialogue) {
     const turnEl = turns[i];
     turnEl.classList.add('now-playing');
     turnEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    const text = stripRuby(dialogue.turns[i].ja);
+    const text = dialogue.turns[i].ja;
     i++;
     tts.speak(text, {
       onend: () => setTimeout(next, 350),
@@ -400,7 +381,7 @@ function playDialogueSequence(section, dialogue) {
   next();
 }
 
-/* ---------- Tab 2: 單字 ---------- */
+/* ---------- Tab 2: 句型替換組 ---------- */
 function renderVocabView() {
   const root = document.getElementById('vocab-view');
   if (state.currentVocabScenario) {
@@ -413,132 +394,139 @@ function renderVocabView() {
 function renderVocabDetail(root, scenarioId) {
   const sc = state.byId.get(scenarioId);
   if (!sc) { state.currentVocabScenario = null; renderVocabView(); return; }
-  let vocab = sc.vocab.slice();
-  // filter
-  if (state.vocabFilter === 'weak') vocab = vocab.filter(v => state.progress.weak.includes(v.id));
-  else if (state.vocabFilter === 'known') vocab = vocab.filter(v => state.progress.known.includes(v.id));
-  // 排序：weak 優先（all 模式時）
-  if (state.vocabFilter === 'all') {
-    vocab.sort((a, b) => {
-      const aw = state.progress.weak.includes(a.id) ? 0 : 1;
-      const bw = state.progress.weak.includes(b.id) ? 0 : 1;
-      return aw - bw;
-    });
-  }
-  const totalCount = sc.vocab.length;
-  const knownCount = sc.vocab.filter(v => state.progress.known.includes(v.id)).length;
-  const weakCount = sc.vocab.filter(v => state.progress.weak.includes(v.id)).length;
+  const totalItems = sc.groups.reduce((s, g) => s + g.items.length, 0);
+  const knownCount = sc.groups.reduce((s, g) =>
+    s + g.items.filter(it => state.progress.known.includes(it.id)).length, 0);
+  const weakCount = sc.groups.reduce((s, g) =>
+    s + g.items.filter(it => state.progress.weak.includes(it.id)).length, 0);
 
   root.innerHTML = `
     <div class="sub-head">
       <button class="back-btn" id="back-vocab" aria-label="返回">←</button>
       <div class="title-block">
         <h2>${sc.emoji} ${escapeHTML(sc.name_zh)}</h2>
-        <span class="ja-sub">${escapeHTML(sc.name_ja)} 單字</span>
+        <span class="ja-sub">${sc.groups.length} 句型 · ${totalItems} 替換詞 · 已會 ${knownCount} · 待加強 ${weakCount}</span>
       </div>
     </div>
-    <div class="vocab-toolbar">
-      <button class="filter-pill ${state.vocabFilter==='all'?'active':''}" data-f="all">全部 ${totalCount}</button>
-      <button class="filter-pill ${state.vocabFilter==='weak'?'active':''}" data-f="weak">待加強 ${weakCount}</button>
-      <button class="filter-pill ${state.vocabFilter==='known'?'active':''}" data-f="known">已會 ${knownCount}</button>
-      <button class="filter-pill" id="flip-mode">${state.vocabFlipMode ? '中→日' : '日→中'}</button>
-    </div>
-    ${vocab.length === 0 ? `
-      <div class="empty-state">
-        <span class="big">📭</span>
-        ${state.vocabFilter === 'weak' ? '太棒了！沒有待加強的單字。' : '這個篩選下沒有單字。'}
-      </div>
-    ` : `
-      <div class="vocab-grid">
-        ${vocab.map(v => renderVocabCard(v)).join('')}
-      </div>
-    `}
+    ${sc.groups.map(g => renderGroupCard(g)).join('')}
   `;
-
   root.querySelector('#back-vocab').addEventListener('click', () => {
     state.currentVocabScenario = null; renderVocabView();
   });
-  root.querySelectorAll('.filter-pill[data-f]').forEach(b => {
-    b.addEventListener('click', () => {
-      state.vocabFilter = b.dataset.f;
-      renderVocabView();
-    });
-  });
-  root.querySelector('#flip-mode')?.addEventListener('click', () => {
-    state.vocabFlipMode = !state.vocabFlipMode;
-    renderVocabView();
-  });
-
-  attachVocabCardHandlers(root);
+  attachGroupHandlers(root);
 }
 
-function renderVocabCard(v) {
-  const isKnown = state.progress.known.includes(v.id);
-  const isWeak = state.progress.weak.includes(v.id);
-  const mastery = isKnown ? 'known' : (isWeak ? 'weak' : 'none');
-  const exampleEntry = v.example_id ? state.dialogueIndex.get(v.example_id) : null;
-  let exampleHTML = '';
-  if (exampleEntry) {
-    // 取對話中第一個包含這個單字（kana 或 ja）的句子
-    const kanaForm = stripRuby(v.ja);
-    const turn = exampleEntry.dialogue.turns.find(t => stripRuby(t.ja).includes(kanaForm)) || exampleEntry.dialogue.turns[0];
-    exampleHTML = `<div class="vocab-example">「${parseRuby(turn.ja)}」<br><span class="muted small">${escapeHTML(turn.zh)}</span></div>`;
-  }
-
-  if (state.vocabFlipMode) {
-    return `
-      <div class="vocab-card" data-id="${v.id}" data-mastery="${mastery}">
-        <span class="vocab-pos">${escapeHTML(v.pos || '')}</span>
-        <div class="vocab-zh" style="font-size:18px;">${escapeHTML(v.zh)}</div>
-        <details>
-          <summary class="muted small">點開看日文</summary>
-          <div class="vocab-ja" style="margin-top:6px;">${parseRuby(v.ja)}</div>
-          <div class="vocab-kana">${escapeHTML(v.kana)}</div>
-          ${exampleHTML}
-        </details>
-        <div class="vocab-actions">
-          <button class="icon-btn play" title="朗讀">🔊</button>
-          <button class="icon-btn mark-known ${isKnown?'active':''}" title="已會">✓</button>
-          <button class="icon-btn mark-weak ${isWeak?'active':''}" title="待加強">✗</button>
-        </div>
-      </div>
-    `;
-  }
+function renderGroupCard(g) {
+  // 用 placeholder 表示未選詞時的呈現
+  const placeholderJa = '<span class="placeholder">◯◯</span>';
+  const placeholderZh = '<span class="placeholder">◯◯</span>';
+  const patternJaHtml = parseRuby(g.pattern_ja).replace('{X}', placeholderJa);
+  const patternZhHtml = escapeHTML(g.pattern_zh).replace('{X}', placeholderZh);
 
   return `
-    <div class="vocab-card" data-id="${v.id}" data-mastery="${mastery}">
-      <span class="vocab-pos">${escapeHTML(v.pos || '')}</span>
-      <div class="vocab-ja">${parseRuby(v.ja)}</div>
-      <div class="vocab-kana">${escapeHTML(v.kana)}</div>
-      <div class="vocab-zh">${escapeHTML(v.zh)}</div>
-      ${exampleHTML}
-      <div class="vocab-actions">
-        <button class="icon-btn play" title="朗讀">🔊</button>
-        <button class="icon-btn mark-known ${isKnown?'active':''}" title="已會">✓</button>
-        <button class="icon-btn mark-weak ${isWeak?'active':''}" title="待加強">✗</button>
+    <div class="group-card" data-group-id="${g.id}"
+         data-pattern-ja="${escapeHTML(g.pattern_ja)}"
+         data-pattern-kana="${escapeHTML(g.pattern_kana)}"
+         data-pattern-zh="${escapeHTML(g.pattern_zh)}">
+      <div class="group-head">
+        <span class="group-cat">${escapeHTML(g.category)}</span>
+        <button class="icon-btn play-pattern" title="朗讀整句（會用第一個或剛點的詞）">🔊</button>
+      </div>
+      <div class="pattern-display">
+        <div class="pattern-ja">${patternJaHtml}</div>
+        <div class="pattern-zh">${patternZhHtml}</div>
+      </div>
+      <div class="item-chips">
+        ${g.items.map(it => {
+          const isKnown = state.progress.known.includes(it.id);
+          const isWeak = state.progress.weak.includes(it.id);
+          const masteryCls = isKnown ? 'known' : (isWeak ? 'weak' : '');
+          return `
+            <div class="chip-wrap">
+              <button class="item-chip ${masteryCls}" data-id="${it.id}"
+                      data-ja="${escapeHTML(it.ja)}"
+                      data-kana="${escapeHTML(it.kana)}"
+                      data-zh="${escapeHTML(it.zh)}">
+                <div class="chip-ja">${parseRuby(it.ja)}</div>
+                <div class="chip-zh">${escapeHTML(it.zh)}</div>
+              </button>
+              <div class="chip-mastery">
+                <button class="mastery-btn known ${isKnown?'active':''}" data-id="${it.id}" data-mark="known" title="已會">✓</button>
+                <button class="mastery-btn weak ${isWeak?'active':''}" data-id="${it.id}" data-mark="weak" title="待加強">✗</button>
+              </div>
+            </div>
+          `;
+        }).join('')}
       </div>
     </div>
   `;
 }
 
-function attachVocabCardHandlers(root) {
-  root.querySelectorAll('.vocab-card').forEach(card => {
-    const id = card.dataset.id;
-    card.querySelector('.play')?.addEventListener('click', () => {
-      const entry = state.vocabIndex.get(id);
-      if (!entry) return;
-      if (!state.ttsAvailable) { toast('此瀏覽器無日語 TTS'); return; }
-      tts.speak(stripRuby(entry.vocab.ja));
+function attachGroupHandlers(root) {
+  root.querySelectorAll('.item-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const groupCard = chip.closest('.group-card');
+      const patternJa = groupCard.dataset.patternJa;
+      const patternKana = groupCard.dataset.patternKana;
+      const patternZh = groupCard.dataset.patternZh;
+      const itemJa = chip.dataset.ja;
+      const itemKana = chip.dataset.kana;
+      const itemZh = chip.dataset.zh;
+
+      // 替換並渲染
+      const filledJa = patternJa.replace('{X}', itemJa);
+      const filledZh = patternZh.replace('{X}', itemZh);
+      const filledKana = patternKana.replace('{X}', itemKana);
+
+      groupCard.querySelector('.pattern-ja').innerHTML = parseRuby(filledJa);
+      groupCard.querySelector('.pattern-zh').innerHTML =
+        escapeHTML(patternZh).replace('{X}', `<span class="filled">${escapeHTML(itemZh)}</span>`);
+
+      // 暫存當前選擇（給 play-pattern 用）
+      groupCard.dataset.currentKana = filledKana;
+      groupCard.dataset.currentJa = filledJa;
+
+      // TTS
+      if (state.ttsAvailable) tts.speak(filledKana);
+      else toast('此瀏覽器無日語 TTS');
+
+      // 視覺 flash
+      groupCard.querySelectorAll('.item-chip.selected').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      chip.classList.add('flash');
+      setTimeout(() => chip.classList.remove('flash'), 800);
     });
-    card.querySelector('.mark-known')?.addEventListener('click', () => {
-      toggleListItem(state.progress.known, id);
-      removeFromList(state.progress.weak, id);
-      saveState();
-      renderVocabView();
+  });
+
+  root.querySelectorAll('.play-pattern').forEach(b => {
+    b.addEventListener('click', () => {
+      const card = b.closest('.group-card');
+      let toSpeak = card.dataset.currentKana;
+      if (!toSpeak) {
+        // 預設用第一個 item 念
+        const firstChip = card.querySelector('.item-chip');
+        if (firstChip) {
+          firstChip.click();
+          return;
+        }
+      }
+      if (state.ttsAvailable && toSpeak) tts.speak(toSpeak);
+      else if (!state.ttsAvailable) toast('此瀏覽器無日語 TTS');
     });
-    card.querySelector('.mark-weak')?.addEventListener('click', () => {
-      toggleListItem(state.progress.weak, id);
-      removeFromList(state.progress.known, id);
+  });
+
+  root.querySelectorAll('.mastery-btn').forEach(b => {
+    b.addEventListener('click', e => {
+      e.stopPropagation();
+      const id = b.dataset.id;
+      const mark = b.dataset.mark;
+      if (mark === 'known') {
+        toggleListItem(state.progress.known, id);
+        removeFromList(state.progress.weak, id);
+      } else {
+        toggleListItem(state.progress.weak, id);
+        removeFromList(state.progress.known, id);
+      }
       saveState();
       renderVocabView();
     });
@@ -585,8 +573,8 @@ function renderQuizSetup(root) {
           <span class="desc">給中文 → 選日語</span>
         </button>
         <button class="option-pill ${setup.type==='fill'?'active':''}" data-type="fill" style="grid-column:1/-1;">
-          ✍️ 填空（對話挖一字）
-          <span class="desc">看對話 → 選正確日語</span>
+          ✍️ 填空（句型挖一字）
+          <span class="desc">看句型 → 選正確日語</span>
         </button>
       </div>
     </div>
@@ -621,7 +609,7 @@ function renderQuizSetup(root) {
           ${state.progress.quizHistory.slice(-5).reverse().map(h => `
             <li class="muted small" style="display:flex;justify-content:space-between;">
               <span>${formatTime(h.ts)} · ${quizTypeLabel(h.type)} · ${scopeLabel(h.scope)}</span>
-              <span class="strong" style="color:var(--c-shu);font-weight:600;">${h.score}/${h.total}</span>
+              <span style="color:var(--c-shu);font-weight:600;">${h.score}/${h.total}</span>
             </li>
           `).join('')}
         </ul>
@@ -658,57 +646,41 @@ function formatTime(ts) {
 }
 
 function startQuiz({ type, scope, count }) {
-  let pool = [];
   const scenarios = scope === 'all' ? state.scenarios : [state.byId.get(scope)].filter(Boolean);
-
-  if (type === 'fill') {
-    // pool = turns of role A or B containing at least one vocab word
-    scenarios.forEach(sc => {
-      sc.dialogues.forEach(d => {
-        d.turns.forEach(t => {
-          // 找出此句中出現的單字
-          const matched = sc.vocab.filter(v => stripRuby(t.ja).includes(stripRuby(v.ja)) && stripRuby(v.ja).length >= 2);
-          if (matched.length > 0) {
-            pool.push({ scenario: sc, dialogue: d, turn: t, vocab: matched[Math.floor(Math.random()*matched.length)] });
-          }
-        });
-      });
-    });
-  } else {
-    scenarios.forEach(sc => sc.vocab.forEach(v => pool.push({ scenario: sc, vocab: v })));
-  }
-
-  if (pool.length === 0) { toast('題庫不足'); return; }
-
-  // 加權：weak 出現機率較高
-  const weighted = pool.flatMap(item => {
-    const id = item.vocab.id;
-    if (state.progress.weak.includes(id)) return [item, item, item];
-    if (state.progress.known.includes(id)) return Math.random() < 0.5 ? [item] : [];
-    return [item];
+  // 收集所有 items + 對應 group（給 fill 用）
+  const allItems = [];
+  scenarios.forEach(sc => {
+    sc.groups.forEach(g => g.items.forEach(it => allItems.push({ item: it, group: g, scenario: sc })));
   });
-  const finalPool = weighted.length >= count ? weighted : pool;
+  if (allItems.length === 0) { toast('題庫不足'); return; }
+
+  // 加權：weak 三倍、known 半數
+  const weighted = allItems.flatMap(rec => {
+    const id = rec.item.id;
+    if (state.progress.weak.includes(id)) return [rec, rec, rec];
+    if (state.progress.known.includes(id)) return Math.random() < 0.5 ? [rec] : [];
+    return [rec];
+  });
+  const finalPool = weighted.length >= count ? weighted : allItems;
 
   const qs = [];
-  const used = new Set();
-  while (qs.length < count && qs.length < finalPool.length) {
-    const item = finalPool[Math.floor(Math.random() * finalPool.length)];
-    const key = (item.vocab?.id || '') + '|' + (item.turn?.ja || '');
-    if (used.has(key)) continue;
-    used.add(key);
-    qs.push(buildQuestion(type, item, scenarios));
+  const usedIds = new Set();
+  let safety = 0;
+  while (qs.length < count && safety < count * 10) {
+    safety++;
+    const rec = finalPool[Math.floor(Math.random() * finalPool.length)];
+    if (usedIds.has(rec.item.id)) continue;
+    usedIds.add(rec.item.id);
+    qs.push(buildQuestion(type, rec, allItems));
   }
 
   state.quizActive = { type, scope, qs, idx: 0, score: 0, errors: [] };
   renderQuizView();
 }
 
-function buildQuestion(type, item, scenarios) {
-  const allVocab = scenarios.flatMap(sc => sc.vocab);
-  const correct = item.vocab;
-
-  // 抓 3 個 distractor
-  const distractorPool = allVocab.filter(v => v.id !== correct.id);
+function buildQuestion(type, rec, allItems) {
+  const correct = rec.item;
+  const distractorPool = allItems.filter(r => r.item.id !== correct.id).map(r => r.item);
   shuffle(distractorPool);
   const distractors = distractorPool.slice(0, 3);
 
@@ -716,42 +688,29 @@ function buildQuestion(type, item, scenarios) {
 
   if (type === 'listen') {
     promptLabel = '請聽：';
-    prompt = stripRuby(correct.ja);
-    ttsText = stripRuby(correct.ja);
+    prompt = '';
+    ttsText = correct.ja;  // {漢字|讀音} 標記版 → tts.speak 內 extractKana
     const opts = shuffle([correct, ...distractors]);
-    choices = opts.map(v => ({ text: v.zh, isJa: false, id: v.id }));
-    correctIdx = opts.findIndex(v => v.id === correct.id);
+    choices = opts.map(it => ({ text: it.zh, isJa: false, id: it.id }));
+    correctIdx = opts.findIndex(it => it.id === correct.id);
   } else if (type === 'read') {
     promptLabel = '中文：';
     prompt = correct.zh;
     const opts = shuffle([correct, ...distractors]);
-    choices = opts.map(v => ({ text: parseRuby(v.ja), isJa: true, id: v.id, plain: stripRuby(v.ja) }));
-    correctIdx = opts.findIndex(v => v.id === correct.id);
+    choices = opts.map(it => ({ text: parseRuby(it.ja), isJa: true, id: it.id }));
+    correctIdx = opts.findIndex(it => it.id === correct.id);
   } else {
-    // fill
-    promptLabel = '完成這句：';
-    const fullJa = item.turn.ja;
-    const target = correct.ja;
-    // 在 fullJa 裡把 target 的 stripped 形式換成 ___
-    const targetPlain = stripRuby(target);
-    const fullPlain = stripRuby(fullJa);
-    let promptHTML;
-    if (fullPlain.includes(targetPlain)) {
-      // 顯示挖空：保留其他 ruby，挖空處顯示 ____
-      promptHTML = parseRuby(fullJa).replace(parseRuby(target), '<span style="color:var(--c-shu);font-weight:700;border-bottom:2px solid var(--c-shu);padding:0 6px;">＿＿＿</span>');
-      // fallback: 如果 ruby parse 後 replace 失敗，用 stripped 版本
-      if (!promptHTML.includes('＿＿＿')) {
-        promptHTML = escapeHTML(fullPlain.replace(targetPlain, '＿＿＿')).replace('＿＿＿', '<span style="color:var(--c-shu);font-weight:700;border-bottom:2px solid var(--c-shu);padding:0 6px;">＿＿＿</span>');
-      }
-    } else {
-      promptHTML = parseRuby(fullJa);
-    }
-    prompt = promptHTML; isJaPrompt = true;
+    // fill: 用 group 的 pattern 挖空
+    const g = rec.group;
+    const promptHTML = parseRuby(g.pattern_ja).replace('{X}',
+      '<span class="blank">＿＿＿</span>');
+    prompt = promptHTML;
+    isJaPrompt = true;
     const opts = shuffle([correct, ...distractors]);
-    choices = opts.map(v => ({ text: parseRuby(v.ja), isJa: true, id: v.id, plain: stripRuby(v.ja) }));
-    correctIdx = opts.findIndex(v => v.id === correct.id);
+    choices = opts.map(it => ({ text: parseRuby(it.ja), isJa: true, id: it.id }));
+    correctIdx = opts.findIndex(it => it.id === correct.id);
   }
-  return { type, promptLabel, prompt, isJaPrompt, ttsText, choices, correctIdx, correctVocab: correct, sourceItem: item };
+  return { type, promptLabel, prompt, isJaPrompt, ttsText, choices, correctIdx, correctItem: correct };
 }
 
 function shuffle(arr) {
@@ -770,7 +729,10 @@ function renderQuizQuestion(root) {
     <div class="quiz-question-card">
       <div class="quiz-progress">
         <span>第 ${q.idx + 1} / ${q.qs.length} 題</span>
-        <span>得分 ${q.score}</span>
+        <div class="progress-actions">
+          <span class="score-display">得分 ${q.score}</span>
+          <button class="quit-quiz-btn" id="quit-quiz" title="退出測驗">✕ 退出</button>
+        </div>
       </div>
       <div class="quiz-progress-bar"><span style="width:${pct}%"></span></div>
       <div class="quiz-prompt">
@@ -789,7 +751,6 @@ function renderQuizQuestion(root) {
       </div>
       <div class="quiz-feedback hidden" id="quiz-feedback"></div>
       <div class="btn-row hidden" id="next-row" style="margin-top:14px;">
-        <button class="btn-secondary" id="quit-quiz">結束</button>
         <button class="btn-primary" id="next-q" style="flex:1;">下一題 →</button>
       </div>
     </div>
@@ -802,7 +763,6 @@ function renderQuizQuestion(root) {
       tts.speak(cur.ttsText);
     };
     playBtn.addEventListener('click', speakIt);
-    // auto-play 一次（在 user gesture 內，因為這個 render 是接續 click 觸發）
     setTimeout(speakIt, 250);
   }
 
@@ -810,7 +770,6 @@ function renderQuizQuestion(root) {
     b.addEventListener('click', () => {
       const i = parseInt(b.dataset.i, 10);
       const correct = i === cur.correctIdx;
-      // disable all
       root.querySelectorAll('.quiz-choice').forEach((x, xi) => {
         x.disabled = true;
         if (xi === cur.correctIdx) x.classList.add('correct');
@@ -818,20 +777,18 @@ function renderQuizQuestion(root) {
       });
       if (correct) {
         q.score++;
-        // 答對且原本是 weak → 移除
-        removeFromList(state.progress.weak, cur.correctVocab.id);
+        removeFromList(state.progress.weak, cur.correctItem.id);
       } else {
         q.errors.push({ q: cur, picked: i });
-        // 答錯 → 加入 weak
-        if (!state.progress.weak.includes(cur.correctVocab.id)) state.progress.weak.push(cur.correctVocab.id);
+        if (!state.progress.weak.includes(cur.correctItem.id)) state.progress.weak.push(cur.correctItem.id);
       }
       saveState();
 
       const fb = root.querySelector('#quiz-feedback');
       fb.classList.remove('hidden');
       fb.innerHTML = correct
-        ? `<strong style="color:var(--c-matcha);">✓ 答對了！</strong> <span class="ja">${parseRuby(cur.correctVocab.ja)}</span> · ${escapeHTML(cur.correctVocab.kana)} · ${escapeHTML(cur.correctVocab.zh)}`
-        : `<strong style="color:var(--c-shu);">✗ 正解：</strong> <span class="ja">${parseRuby(cur.correctVocab.ja)}</span> · ${escapeHTML(cur.correctVocab.kana)} · ${escapeHTML(cur.correctVocab.zh)}`;
+        ? `<strong style="color:var(--c-matcha);">✓ 答對了！</strong> <span class="ja">${parseRuby(cur.correctItem.ja)}</span> · ${escapeHTML(cur.correctItem.kana)} · ${escapeHTML(cur.correctItem.zh)}`
+        : `<strong style="color:var(--c-shu);">✗ 正解：</strong> <span class="ja">${parseRuby(cur.correctItem.ja)}</span> · ${escapeHTML(cur.correctItem.kana)} · ${escapeHTML(cur.correctItem.zh)}`;
       root.querySelector('#next-row').classList.remove('hidden');
     });
   });
@@ -839,17 +796,20 @@ function renderQuizQuestion(root) {
     q.idx++;
     renderQuizView();
   });
-  root.querySelector('#quit-quiz')?.addEventListener('click', () => {
-    if (confirm('確定要結束這次測驗？')) {
-      state.quizActive = null;
-      renderQuizView();
-    }
-  });
+  root.querySelector('#quit-quiz')?.addEventListener('click', confirmQuitQuiz);
+}
+
+function confirmQuitQuiz() {
+  if (!state.quizActive) return;
+  if (confirm('確定要退出？目前進度不會儲存')) {
+    tts.cancel();
+    state.quizActive = null;
+    renderQuizView();
+  }
 }
 
 function renderQuizResult(root) {
   const q = state.quizActive;
-  // 紀錄歷史
   state.progress.quizHistory.push({
     ts: Date.now(), type: q.type, scope: q.scope, score: q.score, total: q.qs.length
   });
@@ -870,8 +830,8 @@ function renderQuizResult(root) {
         <h3 style="margin-top:18px;font-size:14px;color:var(--c-text-muted);">錯題回顧 (${q.errors.length})</h3>
         ${q.errors.map(e => `
           <div class="error-review-card">
-            <div class="err-q">${e.q.promptLabel} ${e.q.type === 'listen' ? `🔊 ${escapeHTML(stripRuby(e.q.correctVocab.ja))}` : (e.q.isJaPrompt ? e.q.prompt : escapeHTML(e.q.prompt))}</div>
-            <div>正解：<span class="err-correct">${parseRuby(e.q.correctVocab.ja)}</span> · ${escapeHTML(e.q.correctVocab.zh)}</div>
+            <div class="err-q">${e.q.promptLabel} ${e.q.type === 'listen' ? `🔊 ${escapeHTML(stripRuby(e.q.correctItem.ja))}` : (e.q.isJaPrompt ? e.q.prompt : escapeHTML(e.q.prompt))}</div>
+            <div>正解：<span class="err-correct">${parseRuby(e.q.correctItem.ja)}</span> · ${escapeHTML(e.q.correctItem.zh)}</div>
             <div class="muted small">你選了：${e.q.choices[e.picked].isJa ? `<span class="err-wrong">${e.q.choices[e.picked].text}</span>` : escapeHTML(e.q.choices[e.picked].text)}</div>
           </div>
         `).join('')}
@@ -891,7 +851,6 @@ function renderQuizResult(root) {
 /* ---------- Settings modal ---------- */
 function openSettings() {
   document.getElementById('settings-modal').classList.remove('hidden');
-  // sync radio
   document.querySelectorAll('input[name="theme"]').forEach(r => {
     r.checked = (r.value === state.prefs.theme);
   });
@@ -910,7 +869,6 @@ function applyTheme() {
   const t = state.prefs.theme;
   if (t === 'auto') document.documentElement.removeAttribute('data-theme');
   else document.documentElement.setAttribute('data-theme', t);
-  // theme-color meta
   const isDark = t === 'dark' || (t === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isDark ? '#1A1612' : '#F4ECDC');
 }
@@ -935,17 +893,14 @@ function toast(msg) {
 async function init() {
   loadState();
   applyTheme();
-  // listen system theme change for auto mode
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
     if (state.prefs.theme === 'auto') applyTheme();
   });
 
-  // tab nav
   document.querySelectorAll('.tab-btn').forEach(b => {
     b.addEventListener('click', () => setTab(b.dataset.tab));
   });
 
-  // header buttons
   document.getElementById('settings-btn').addEventListener('click', openSettings);
   document.getElementById('settings-close').addEventListener('click', closeSettings);
   document.getElementById('settings-modal').addEventListener('click', e => {
@@ -958,7 +913,6 @@ async function init() {
     saveState(); applyTheme();
   });
 
-  // settings handlers
   document.querySelectorAll('input[name="theme"]').forEach(r => {
     r.addEventListener('change', () => {
       state.prefs.theme = r.value; saveState(); applyTheme();
@@ -977,7 +931,7 @@ async function init() {
   });
   document.getElementById('voice-test').addEventListener('click', () => {
     if (!state.ttsAvailable) { toast('此瀏覽器無日語 TTS'); return; }
-    tts.speak('こんにちは、今日もいい天気ですね。');
+    tts.speak('こんにちは、{今日|きょう}もいい{天気|てんき}ですね。');
   });
   document.getElementById('reset-progress').addEventListener('click', () => {
     if (!confirm('要清掉「已會」「待加強」標記跟測驗歷史嗎？')) return;
@@ -988,7 +942,25 @@ async function init() {
     if (state.currentTab === 'tab-quiz') renderQuizView();
   });
 
-  // load data + initial render
+  // Esc 鍵：測驗中退出 / 關設定
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      if (!document.getElementById('settings-modal').classList.contains('hidden')) {
+        closeSettings();
+      } else if (state.quizActive && state.currentTab === 'tab-quiz') {
+        confirmQuitQuiz();
+      }
+    }
+  });
+
+  // beforeunload：測驗中提示
+  window.addEventListener('beforeunload', e => {
+    if (state.quizActive) {
+      e.preventDefault();
+      e.returnValue = '測驗進行中，離開會失去進度。';
+    }
+  });
+
   try {
     await loadScenarios();
   } catch (e) {
@@ -1004,7 +976,6 @@ async function init() {
   tts.init();
   setTab('tab-dialogues');
 
-  // service worker
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW reg fail', err));
   }

@@ -52,52 +52,76 @@
       ]
     }
   ],
-  "vocab": [
-    { "id": "iz-v1", "ja": "{居酒屋|いざかや}", "kana": "いざかや", "zh": "居酒屋", "pos": "名詞", "example_id": "izakaya-seat" },
-    { "id": "iz-v2", "ja": "カウンター", "kana": "かうんたー", "zh": "吧檯", "pos": "名詞", "example_id": "izakaya-seat" },
-    { "id": "iz-v3", "ja": "テーブル", "kana": "てーぶる", "zh": "桌位", "pos": "名詞", "example_id": "izakaya-seat" },
-    { "id": "iz-v4", "ja": "{座敷|ざしき}", "kana": "ざしき", "zh": "和式座位（榻榻米）", "pos": "名詞", "example_id": "izakaya-seat" },
-    { "id": "iz-v5", "ja": "お{通|とお}し", "kana": "おとおし", "zh": "小菜（必收費）", "pos": "名詞", "example_id": "izakaya-seat" },
-    { "id": "iz-v6", "ja": "{生|なま}ビール", "kana": "なまびーる", "zh": "生啤酒", "pos": "名詞", "example_id": "izakaya-seat" },
-    { "id": "iz-v7", "ja": "{瓶|びん}ビール", "kana": "びんびーる", "zh": "瓶裝啤酒", "pos": "名詞", "example_id": "izakaya-seat" },
-    { "id": "iz-v8", "ja": "{中|ちゅう}ジョッキ", "kana": "ちゅうじょっき", "zh": "中杯（啤酒）", "pos": "名詞", "example_id": "izakaya-seat" },
-    { "id": "iz-v9", "ja": "{小|こ}ジョッキ", "kana": "こじょっき", "zh": "小杯（啤酒）", "pos": "名詞", "example_id": "izakaya-seat" },
-    { "id": "iz-v10", "ja": "ハイボール", "kana": "はいぼーる", "zh": "Highball（威士忌蘇打）", "pos": "名詞", "example_id": "izakaya-checkout" },
-    { "id": "iz-v11", "ja": "レモンサワー", "kana": "れもんさわー", "zh": "檸檬沙瓦", "pos": "名詞", "example_id": "izakaya-checkout" },
-    { "id": "iz-v12", "ja": "{日本酒|にほんしゅ}", "kana": "にほんしゅ", "zh": "日本酒", "pos": "名詞", "example_id": "izakaya-checkout" },
-    { "id": "iz-v13", "ja": "{熱燗|あつかん}", "kana": "あつかん", "zh": "熱清酒", "pos": "名詞", "example_id": "izakaya-checkout" },
-    { "id": "iz-v14", "ja": "{冷酒|れいしゅ}", "kana": "れいしゅ", "zh": "冷清酒", "pos": "名詞", "example_id": "izakaya-checkout" },
-    { "id": "iz-v15", "ja": "{焼酎|しょうちゅう}", "kana": "しょうちゅう", "zh": "燒酎（蒸餾酒）", "pos": "名詞", "example_id": "izakaya-checkout" },
-    { "id": "iz-v16", "ja": "{水割|みずわ}り", "kana": "みずわり", "zh": "加水（兌水酒）", "pos": "名詞", "example_id": "izakaya-checkout" },
-    { "id": "iz-v17", "ja": "ロック", "kana": "ろっく", "zh": "On the rocks（加冰塊）", "pos": "名詞", "example_id": "izakaya-checkout" },
-    { "id": "iz-v18", "ja": "ノンアル", "kana": "のんある", "zh": "無酒精飲料", "pos": "名詞", "example_id": "izakaya-checkout" },
-    { "id": "iz-v19", "ja": "{枝豆|えだまめ}", "kana": "えだまめ", "zh": "毛豆", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v20", "ja": "{唐揚|からあ}げ", "kana": "からあげ", "zh": "炸雞塊", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v21", "ja": "{刺身|さしみ}", "kana": "さしみ", "zh": "生魚片", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v22", "ja": "{盛|も}り{合|あ}わせ", "kana": "もりあわせ", "zh": "綜合拼盤", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v23", "ja": "{焼|や}き{鳥|とり}", "kana": "やきとり", "zh": "烤雞串", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v24", "ja": "{串焼|くしや}き", "kana": "くしやき", "zh": "串燒", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v25", "ja": "もも", "kana": "もも", "zh": "雞腿肉（串燒）", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v26", "ja": "ねぎま", "kana": "ねぎま", "zh": "蔥肉串", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v27", "ja": "つくね", "kana": "つくね", "zh": "雞肉丸串", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v28", "ja": "{皮|かわ}", "kana": "かわ", "zh": "雞皮串", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v29", "ja": "{砂肝|すなぎも}", "kana": "すなぎも", "zh": "雞胗", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v30", "ja": "タレ", "kana": "たれ", "zh": "醬汁（沾／刷）", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v31", "ja": "{塩|しお}", "kana": "しお", "zh": "鹽（調味）", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v32", "ja": "{出汁|だし}{巻|ま}き{卵|たまご}", "kana": "だしまきたまご", "zh": "高湯玉子燒", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v33", "ja": "ポテトフライ", "kana": "ぽてとふらい", "zh": "薯條", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v34", "ja": "おでん", "kana": "おでん", "zh": "關東煮", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v35", "ja": "{何人前|なんにんまえ}", "kana": "なんにんまえ", "zh": "幾人份", "pos": "疑問詞", "example_id": "izakaya-order" },
-    { "id": "iz-v36", "ja": "{二人前|ににんまえ}", "kana": "ににんまえ", "zh": "兩人份", "pos": "量詞", "example_id": "izakaya-order" },
-    { "id": "iz-v37", "ja": "{一杯|いっぱい}", "kana": "いっぱい", "zh": "一杯", "pos": "量詞", "example_id": "izakaya-checkout" },
-    { "id": "iz-v38", "ja": "{二杯|にはい}", "kana": "にはい", "zh": "兩杯", "pos": "量詞", "example_id": "izakaya-checkout" },
-    { "id": "iz-v39", "ja": "{一本|いっぽん}", "kana": "いっぽん", "zh": "一支／一瓶／一串（細長物）", "pos": "量詞", "example_id": "izakaya-order" },
-    { "id": "iz-v40", "ja": "{二本|にほん}", "kana": "にほん", "zh": "兩支／兩瓶／兩串", "pos": "量詞", "example_id": "izakaya-order" },
-    { "id": "iz-v41", "ja": "おかわり", "kana": "おかわり", "zh": "再來一杯／一份（同樣的）", "pos": "名詞", "example_id": "izakaya-checkout" },
-    { "id": "iz-v42", "ja": "{別々|べつべつ}", "kana": "べつべつ", "zh": "分開（算）", "pos": "名詞", "example_id": "izakaya-checkout" },
-    { "id": "iz-v43", "ja": "{一緒|いっしょ}", "kana": "いっしょ", "zh": "一起", "pos": "名詞", "example_id": "izakaya-checkout" },
-    { "id": "iz-v44", "ja": "{合計|ごうけい}", "kana": "ごうけい", "zh": "總計、合計", "pos": "名詞", "example_id": "izakaya-checkout" },
-    { "id": "iz-v45", "ja": "{以上|いじょう}", "kana": "いじょう", "zh": "以上、就這樣", "pos": "名詞", "example_id": "izakaya-order" },
-    { "id": "iz-v46", "ja": "{乾杯|かんぱい}", "kana": "かんぱい", "zh": "乾杯", "pos": "名詞", "example_id": "izakaya-seat" }
+  "groups": [
+    {
+      "id": "izakaya-drink",
+      "category": "飲料",
+      "pattern_ja": "{X}を{一杯|いっぱい}ください。",
+      "pattern_kana": "{X}をいっぱいください。",
+      "pattern_zh": "請給我一杯 {X}。",
+      "items": [
+        { "id": "iz-i1", "ja": "{生|なま}ビール", "kana": "なまビール", "zh": "生啤酒" },
+        { "id": "iz-i2", "ja": "{中|ちゅう}ジョッキ", "kana": "ちゅうジョッキ", "zh": "中杯啤酒" },
+        { "id": "iz-i3", "ja": "{瓶|びん}ビール", "kana": "びんビール", "zh": "瓶裝啤酒" },
+        { "id": "iz-i4", "ja": "ハイボール", "kana": "ハイボール", "zh": "Highball" },
+        { "id": "iz-i5", "ja": "レモンサワー", "kana": "レモンサワー", "zh": "檸檬沙瓦" },
+        { "id": "iz-i6", "ja": "{日本酒|にほんしゅ}", "kana": "にほんしゅ", "zh": "日本酒" },
+        { "id": "iz-i7", "ja": "{熱燗|あつかん}", "kana": "あつかん", "zh": "熱清酒" },
+        { "id": "iz-i8", "ja": "{冷酒|れいしゅ}", "kana": "れいしゅ", "zh": "冷清酒" },
+        { "id": "iz-i9", "ja": "{焼酎|しょうちゅう}", "kana": "しょうちゅう", "zh": "燒酎" },
+        { "id": "iz-i10", "ja": "{水割|みずわ}り", "kana": "みずわり", "zh": "兌水酒" },
+        { "id": "iz-i11", "ja": "ウーロン{茶|ちゃ}", "kana": "ウーロンちゃ", "zh": "烏龍茶" },
+        { "id": "iz-i12", "ja": "ノンアル", "kana": "ノンアル", "zh": "無酒精" }
+      ]
+    },
+    {
+      "id": "izakaya-food",
+      "category": "食物（一份）",
+      "pattern_ja": "{X}を{一|ひと}つください。",
+      "pattern_kana": "{X}をひとつください。",
+      "pattern_zh": "請給我一份 {X}。",
+      "items": [
+        { "id": "iz-i13", "ja": "{枝豆|えだまめ}", "kana": "えだまめ", "zh": "毛豆" },
+        { "id": "iz-i14", "ja": "{唐揚|からあ}げ", "kana": "からあげ", "zh": "炸雞塊" },
+        { "id": "iz-i15", "ja": "{刺身|さしみ}の{盛|も}り{合|あ}わせ", "kana": "さしみのもりあわせ", "zh": "綜合生魚片" },
+        { "id": "iz-i16", "ja": "{焼|や}き{鳥|とり}{盛|も}り{合|あ}わせ", "kana": "やきとりもりあわせ", "zh": "綜合烤雞串" },
+        { "id": "iz-i17", "ja": "{出汁巻|だしま}き{卵|たまご}", "kana": "だしまきたまご", "zh": "高湯玉子燒" },
+        { "id": "iz-i18", "ja": "おでん", "kana": "おでん", "zh": "關東煮" },
+        { "id": "iz-i19", "ja": "ポテトフライ", "kana": "ポテトフライ", "zh": "薯條" },
+        { "id": "iz-i20", "ja": "{餃子|ぎょうざ}", "kana": "ぎょうざ", "zh": "餃子" }
+      ]
+    },
+    {
+      "id": "izakaya-skewer",
+      "category": "串燒（按串／本）",
+      "pattern_ja": "{X}を{二|に}{本|ほん}ください。",
+      "pattern_kana": "{X}をにほんください。",
+      "pattern_zh": "請給我兩串 {X}。",
+      "items": [
+        { "id": "iz-i21", "ja": "もも", "kana": "もも", "zh": "雞腿肉" },
+        { "id": "iz-i22", "ja": "ねぎま", "kana": "ねぎま", "zh": "蔥肉串" },
+        { "id": "iz-i23", "ja": "つくね", "kana": "つくね", "zh": "雞肉丸串" },
+        { "id": "iz-i24", "ja": "{皮|かわ}", "kana": "かわ", "zh": "雞皮" },
+        { "id": "iz-i25", "ja": "{砂肝|すなぎも}", "kana": "すなぎも", "zh": "雞胗" },
+        { "id": "iz-i26", "ja": "ハツ", "kana": "ハツ", "zh": "雞心" }
+      ]
+    },
+    {
+      "id": "izakaya-checkout-pat",
+      "category": "入座／結帳",
+      "pattern_ja": "{X}でお{願|ねが}いします。",
+      "pattern_kana": "{X}でおねがいします。",
+      "pattern_zh": "麻煩 {X}。",
+      "items": [
+        { "id": "iz-i27", "ja": "カウンター", "kana": "カウンター", "zh": "吧檯" },
+        { "id": "iz-i28", "ja": "テーブル", "kana": "テーブル", "zh": "桌位" },
+        { "id": "iz-i29", "ja": "{座敷|ざしき}", "kana": "ざしき", "zh": "和式座位" },
+        { "id": "iz-i30", "ja": "{二人|ふたり}", "kana": "ふたり", "zh": "兩個人" },
+        { "id": "iz-i31", "ja": "{別々|べつべつ}", "kana": "べつべつ", "zh": "分開算" },
+        { "id": "iz-i32", "ja": "{一緒|いっしょ}", "kana": "いっしょ", "zh": "一起算" },
+        { "id": "iz-i33", "ja": "{現金|げんきん}", "kana": "げんきん", "zh": "現金" },
+        { "id": "iz-i34", "ja": "カード", "kana": "カード", "zh": "刷卡" }
+      ]
+    }
   ]
 }

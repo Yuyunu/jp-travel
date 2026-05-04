@@ -45,45 +45,74 @@
         { "role": "A", "ja": "{荷物|にもつ}を{夕方|ゆうがた}まで{預|あず}かってもらえますか。", "zh": "可以幫我寄放行李到傍晚嗎？" },
         { "role": "B", "ja": "はい、こちらの{番号札|ばんごうふだ}をお{持|も}ちください。", "zh": "可以，請拿好這張號碼牌。" },
         { "role": "A", "ja": "{領収書|りょうしゅうしょ}をお{願|ねが}いします。", "zh": "請給我收據。" },
-        { "role": "B", "ja": "かしこまりました。{少々|しょうしょう}お{待|ま}ちください。", "zh": "好的，請稍等。" },
-        { "role": "A", "ja": "{部屋|へや}に{忘|わす}れ{物|もの}はありませんか。", "zh": "（自言自語）房間有沒有忘了什麼？" },
-        { "role": "B", "ja": "{何|なに}かございましたら、フロントへどうぞ。", "zh": "有任何問題請到櫃台。" }
+        { "role": "B", "ja": "かしこまりました。{少々|しょうしょう}お{待|ま}ちください。", "zh": "好的，請稍等。" }
       ]
     }
   ],
-  "vocab": [
-    { "id": "ht-v1", "ja": "チェックイン", "kana": "ちぇっくいん", "zh": "Check-in", "pos": "名詞", "example_id": "hotel-checkin" },
-    { "id": "ht-v2", "ja": "チェックアウト", "kana": "ちぇっくあうと", "zh": "Check-out", "pos": "名詞", "example_id": "hotel-checkout" },
-    { "id": "ht-v3", "ja": "フロント", "kana": "ふろんと", "zh": "（飯店）櫃台", "pos": "名詞", "example_id": "hotel-checkout" },
-    { "id": "ht-v4", "ja": "{予約|よやく}", "kana": "よやく", "zh": "預約", "pos": "名詞／他動詞", "example_id": "hotel-checkin" },
-    { "id": "ht-v5", "ja": "{確認|かくにん}", "kana": "かくにん", "zh": "確認", "pos": "名詞／他動詞", "example_id": "hotel-checkin" },
-    { "id": "ht-v6", "ja": "パスポート", "kana": "ぱすぽーと", "zh": "護照", "pos": "名詞", "example_id": "hotel-checkin" },
-    { "id": "ht-v7", "ja": "{二泊|にはく}", "kana": "にはく", "zh": "兩晚", "pos": "名詞", "example_id": "hotel-checkin" },
-    { "id": "ht-v8", "ja": "{禁煙室|きんえんしつ}", "kana": "きんえんしつ", "zh": "禁菸房", "pos": "名詞", "example_id": "hotel-checkin" },
-    { "id": "ht-v9", "ja": "ツイン", "kana": "ついん", "zh": "雙床房", "pos": "名詞", "example_id": "hotel-checkin" },
-    { "id": "ht-v10", "ja": "ダブル", "kana": "だぶる", "zh": "雙人床房", "pos": "名詞", "example_id": "hotel-checkin" },
-    { "id": "ht-v11", "ja": "シングル", "kana": "しんぐる", "zh": "單人房", "pos": "名詞", "example_id": "hotel-checkin" },
-    { "id": "ht-v12", "ja": "{合|あ}っています", "kana": "あっています", "zh": "（資訊）對的、相符", "pos": "片語", "example_id": "hotel-checkin" },
-    { "id": "ht-v13", "ja": "{部屋|へや}", "kana": "へや", "zh": "房間", "pos": "名詞", "example_id": "hotel-checkin" },
-    { "id": "ht-v14", "ja": "{鍵|かぎ}", "kana": "かぎ", "zh": "鑰匙", "pos": "名詞", "example_id": "hotel-checkin" },
-    { "id": "ht-v15", "ja": "カードキー", "kana": "かーどきー", "zh": "房卡", "pos": "名詞", "example_id": "hotel-checkin" },
-    { "id": "ht-v16", "ja": "{朝食|ちょうしょく}", "kana": "ちょうしょく", "zh": "早餐", "pos": "名詞", "example_id": "hotel-checkin" },
-    { "id": "ht-v17", "ja": "{何時|なんじ}", "kana": "なんじ", "zh": "幾點", "pos": "疑問詞", "example_id": "hotel-checkin" },
-    { "id": "ht-v18", "ja": "{二階|にかい}", "kana": "にかい", "zh": "二樓", "pos": "名詞", "example_id": "hotel-checkin" },
-    { "id": "ht-v19", "ja": "{枕|まくら}", "kana": "まくら", "zh": "枕頭", "pos": "名詞", "example_id": "hotel-complaint" },
-    { "id": "ht-v20", "ja": "{毛布|もうふ}", "kana": "もうふ", "zh": "毛毯", "pos": "名詞", "example_id": "hotel-complaint" },
-    { "id": "ht-v21", "ja": "エアコン", "kana": "えあこん", "zh": "冷氣", "pos": "名詞", "example_id": "hotel-complaint" },
-    { "id": "ht-v22", "ja": "{効|き}きません", "kana": "ききません", "zh": "（冷氣／藥）沒效", "pos": "動詞", "example_id": "hotel-complaint" },
-    { "id": "ht-v23", "ja": "{申|もう}し{訳|わけ}ございません", "kana": "もうしわけございません", "zh": "非常抱歉（敬語）", "pos": "套語", "example_id": "hotel-complaint" },
-    { "id": "ht-v24", "ja": "{変|か}える", "kana": "かえる", "zh": "更換、改變", "pos": "他動詞", "example_id": "hotel-complaint" },
-    { "id": "ht-v25", "ja": "{空|あ}いている", "kana": "あいている", "zh": "空著的、有空位", "pos": "片語", "example_id": "hotel-complaint" },
-    { "id": "ht-v26", "ja": "{預|あず}かる", "kana": "あずかる", "zh": "（替人）保管", "pos": "他動詞", "example_id": "hotel-checkout" },
-    { "id": "ht-v27", "ja": "{預|あず}ける", "kana": "あずける", "zh": "寄放、托放", "pos": "他動詞", "example_id": "hotel-checkout" },
-    { "id": "ht-v28", "ja": "{夕方|ゆうがた}", "kana": "ゆうがた", "zh": "傍晚", "pos": "名詞", "example_id": "hotel-checkout" },
-    { "id": "ht-v29", "ja": "{番号札|ばんごうふだ}", "kana": "ばんごうふだ", "zh": "號碼牌", "pos": "名詞", "example_id": "hotel-checkout" },
-    { "id": "ht-v30", "ja": "{領収書|りょうしゅうしょ}", "kana": "りょうしゅうしょ", "zh": "收據", "pos": "名詞", "example_id": "hotel-checkout" },
-    { "id": "ht-v31", "ja": "{忘|わす}れ{物|もの}", "kana": "わすれもの", "zh": "遺忘的東西", "pos": "名詞", "example_id": "hotel-checkout" },
-    { "id": "ht-v32", "ja": "{暑|あつ}い", "kana": "あつい", "zh": "熱的", "pos": "い形容詞", "example_id": "hotel-complaint" },
-    { "id": "ht-v33", "ja": "{寒|さむ}い", "kana": "さむい", "zh": "冷的", "pos": "い形容詞", "example_id": "hotel-complaint" }
+  "groups": [
+    {
+      "id": "hotel-need",
+      "category": "要房間用品",
+      "pattern_ja": "{X}をもう{一|ひと}つください。",
+      "pattern_kana": "{X}をもうひとつください。",
+      "pattern_zh": "請再給我一個 {X}。",
+      "items": [
+        { "id": "ht-i1", "ja": "{枕|まくら}", "kana": "まくら", "zh": "枕頭" },
+        { "id": "ht-i2", "ja": "{毛布|もうふ}", "kana": "もうふ", "zh": "毛毯" },
+        { "id": "ht-i3", "ja": "タオル", "kana": "タオル", "zh": "毛巾" },
+        { "id": "ht-i4", "ja": "ハンガー", "kana": "ハンガー", "zh": "衣架" },
+        { "id": "ht-i5", "ja": "スリッパ", "kana": "スリッパ", "zh": "拖鞋" },
+        { "id": "ht-i6", "ja": "{歯|は}ブラシ", "kana": "はブラシ", "zh": "牙刷" },
+        { "id": "ht-i7", "ja": "シャンプー", "kana": "シャンプー", "zh": "洗髮精" }
+      ]
+    },
+    {
+      "id": "hotel-broken",
+      "category": "客訴（壞掉／不通）",
+      "pattern_ja": "{X}が{効|き}きません。",
+      "pattern_kana": "{X}がききません。",
+      "pattern_zh": "{X} 不通／壞了。",
+      "items": [
+        { "id": "ht-i8", "ja": "エアコン", "kana": "エアコン", "zh": "冷氣" },
+        { "id": "ht-i9", "ja": "{暖房|だんぼう}", "kana": "だんぼう", "zh": "暖氣" },
+        { "id": "ht-i10", "ja": "シャワー", "kana": "シャワー", "zh": "蓮蓬頭" },
+        { "id": "ht-i11", "ja": "お{湯|ゆ}", "kana": "おゆ", "zh": "熱水" },
+        { "id": "ht-i12", "ja": "{鍵|かぎ}", "kana": "かぎ", "zh": "鑰匙" },
+        { "id": "ht-i13", "ja": "テレビ", "kana": "テレビ", "zh": "電視" },
+        { "id": "ht-i14", "ja": "{電気|でんき}", "kana": "でんき", "zh": "燈／電" },
+        { "id": "ht-i15", "ja": "WiFi", "kana": "ワイファイ", "zh": "WiFi" }
+      ]
+    },
+    {
+      "id": "hotel-when",
+      "category": "詢問營業時間",
+      "pattern_ja": "{X}は{何時|なんじ}からですか。",
+      "pattern_kana": "{X}はなんじからですか。",
+      "pattern_zh": "{X} 幾點開始？",
+      "items": [
+        { "id": "ht-i16", "ja": "{朝食|ちょうしょく}", "kana": "ちょうしょく", "zh": "早餐" },
+        { "id": "ht-i17", "ja": "チェックイン", "kana": "チェックイン", "zh": "Check-in" },
+        { "id": "ht-i18", "ja": "チェックアウト", "kana": "チェックアウト", "zh": "Check-out" },
+        { "id": "ht-i19", "ja": "プール", "kana": "プール", "zh": "游泳池" },
+        { "id": "ht-i20", "ja": "{大浴場|だいよくじょう}", "kana": "だいよくじょう", "zh": "大眾浴池" },
+        { "id": "ht-i21", "ja": "レストラン", "kana": "レストラン", "zh": "餐廳" }
+      ]
+    },
+    {
+      "id": "hotel-room",
+      "category": "房型／期間",
+      "pattern_ja": "{X}でお{願|ねが}いします。",
+      "pattern_kana": "{X}でおねがいします。",
+      "pattern_zh": "麻煩 {X}。",
+      "items": [
+        { "id": "ht-i22", "ja": "シングル", "kana": "シングル", "zh": "單人房" },
+        { "id": "ht-i23", "ja": "ツイン", "kana": "ツイン", "zh": "雙床房" },
+        { "id": "ht-i24", "ja": "ダブル", "kana": "ダブル", "zh": "雙人床房" },
+        { "id": "ht-i25", "ja": "{禁煙室|きんえんしつ}", "kana": "きんえんしつ", "zh": "禁菸房" },
+        { "id": "ht-i26", "ja": "{喫煙室|きつえんしつ}", "kana": "きつえんしつ", "zh": "吸菸房" },
+        { "id": "ht-i27", "ja": "{二泊|にはく}", "kana": "にはく", "zh": "兩晚" },
+        { "id": "ht-i28", "ja": "{三泊|さんぱく}", "kana": "さんぱく", "zh": "三晚" }
+      ]
+    }
   ]
 }

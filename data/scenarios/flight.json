@@ -47,42 +47,58 @@
       ]
     }
   ],
-  "vocab": [
-    { "id": "fl-v1", "ja": "{機内|きない}", "kana": "きない", "zh": "機內", "pos": "名詞", "example_id": "flight-service" },
-    { "id": "fl-v2", "ja": "{毛布|もうふ}", "kana": "もうふ", "zh": "毛毯", "pos": "名詞", "example_id": "flight-service" },
-    { "id": "fl-v3", "ja": "{枕|まくら}", "kana": "まくら", "zh": "枕頭", "pos": "名詞", "example_id": "flight-service" },
-    { "id": "fl-v4", "ja": "アイマスク", "kana": "あいますく", "zh": "眼罩", "pos": "名詞", "example_id": "flight-service" },
-    { "id": "fl-v5", "ja": "イヤホン", "kana": "いやほん", "zh": "耳機", "pos": "名詞", "example_id": "flight-service" },
-    { "id": "fl-v6", "ja": "お{水|みず}", "kana": "おみず", "zh": "水", "pos": "名詞", "example_id": "flight-service" },
-    { "id": "fl-v7", "ja": "お{茶|ちゃ}", "kana": "おちゃ", "zh": "茶", "pos": "名詞", "example_id": "flight-service" },
-    { "id": "fl-v8", "ja": "コーヒー", "kana": "こーひー", "zh": "咖啡", "pos": "名詞", "example_id": "flight-service" },
-    { "id": "fl-v9", "ja": "りんごジュース", "kana": "りんごじゅーす", "zh": "蘋果汁", "pos": "名詞", "example_id": "flight-service" },
-    { "id": "fl-v10", "ja": "オレンジジュース", "kana": "おれんじじゅーす", "zh": "柳橙汁", "pos": "名詞", "example_id": "flight-service" },
-    { "id": "fl-v11", "ja": "{冷|つめ}たい", "kana": "つめたい", "zh": "冰的、冷的", "pos": "い形容詞", "example_id": "flight-service" },
-    { "id": "fl-v12", "ja": "{温|あたた}かい", "kana": "あたたかい", "zh": "溫的", "pos": "い形容詞", "example_id": "flight-service" },
-    { "id": "fl-v13", "ja": "{機内食|きないしょく}", "kana": "きないしょく", "zh": "機內餐", "pos": "名詞", "example_id": "flight-meal" },
-    { "id": "fl-v14", "ja": "{牛肉|ぎゅうにく}", "kana": "ぎゅうにく", "zh": "牛肉", "pos": "名詞", "example_id": "flight-meal" },
-    { "id": "fl-v15", "ja": "{鶏肉|とりにく}", "kana": "とりにく", "zh": "雞肉", "pos": "名詞", "example_id": "flight-meal" },
-    { "id": "fl-v16", "ja": "{豚肉|ぶたにく}", "kana": "ぶたにく", "zh": "豬肉", "pos": "名詞", "example_id": "flight-meal" },
-    { "id": "fl-v17", "ja": "{魚|さかな}", "kana": "さかな", "zh": "魚", "pos": "名詞", "example_id": "flight-meal" },
-    { "id": "fl-v18", "ja": "パン", "kana": "ぱん", "zh": "麵包", "pos": "名詞", "example_id": "flight-meal" },
-    { "id": "fl-v19", "ja": "ライス", "kana": "らいす", "zh": "飯", "pos": "名詞", "example_id": "flight-meal" },
-    { "id": "fl-v20", "ja": "トレイ", "kana": "とれい", "zh": "餐盤、托盤", "pos": "名詞", "example_id": "flight-meal" },
-    { "id": "fl-v21", "ja": "{下|さ}げる", "kana": "さげる", "zh": "收走、放下", "pos": "他動詞", "example_id": "flight-meal" },
-    { "id": "fl-v22", "ja": "{気分|きぶん}が{悪|わる}い", "kana": "きぶんがわるい", "zh": "不舒服", "pos": "片語", "example_id": "flight-meal" },
-    { "id": "fl-v23", "ja": "エチケット{袋|ぶくろ}", "kana": "えちけっとぶくろ", "zh": "嘔吐袋", "pos": "名詞", "example_id": "flight-meal" },
-    { "id": "fl-v24", "ja": "{入国|にゅうこく}カード", "kana": "にゅうこくかーど", "zh": "入境卡", "pos": "名詞", "example_id": "flight-form" },
-    { "id": "fl-v25", "ja": "ペン", "kana": "ぺん", "zh": "筆", "pos": "名詞", "example_id": "flight-form" },
-    { "id": "fl-v26", "ja": "{一枚|いちまい}", "kana": "いちまい", "zh": "一張（紙、卡）", "pos": "量詞", "example_id": "flight-form" },
-    { "id": "fl-v27", "ja": "{二枚|にまい}", "kana": "にまい", "zh": "兩張", "pos": "量詞", "example_id": "flight-form" },
-    { "id": "fl-v28", "ja": "{書|か}き{方|かた}", "kana": "かきかた", "zh": "寫法、怎麼寫", "pos": "名詞", "example_id": "flight-form" },
-    { "id": "fl-v29", "ja": "{分|わ}かりません", "kana": "わかりません", "zh": "不知道、不懂", "pos": "片語", "example_id": "flight-form" },
-    { "id": "fl-v30", "ja": "{見本|みほん}", "kana": "みほん", "zh": "範本、樣本", "pos": "名詞", "example_id": "flight-form" },
-    { "id": "fl-v31", "ja": "{座席|ざせき}", "kana": "ざせき", "zh": "座位", "pos": "名詞", "example_id": "flight-service" },
-    { "id": "fl-v32", "ja": "{窓側|まどがわ}", "kana": "まどがわ", "zh": "靠窗", "pos": "名詞", "example_id": "flight-service" },
-    { "id": "fl-v33", "ja": "{通路側|つうろがわ}", "kana": "つうろがわ", "zh": "靠走道", "pos": "名詞", "example_id": "flight-service" },
-    { "id": "fl-v34", "ja": "シートベルト", "kana": "しーとべると", "zh": "安全帶", "pos": "名詞", "example_id": "flight-service" },
-    { "id": "fl-v35", "ja": "{乗|の}り{換|か}え", "kana": "のりかえ", "zh": "轉機、換乘", "pos": "名詞", "example_id": "flight-service" },
-    { "id": "fl-v36", "ja": "{遅|おく}れる", "kana": "おくれる", "zh": "誤點、遲到", "pos": "自動詞", "example_id": "flight-service" }
+  "groups": [
+    {
+      "id": "flight-give",
+      "category": "要東西",
+      "pattern_ja": "{X}をください。",
+      "pattern_kana": "{X}をください。",
+      "pattern_zh": "請給我 {X}。",
+      "items": [
+        { "id": "fl-i1", "ja": "{毛布|もうふ}", "kana": "もうふ", "zh": "毛毯" },
+        { "id": "fl-i2", "ja": "{枕|まくら}", "kana": "まくら", "zh": "枕頭" },
+        { "id": "fl-i3", "ja": "アイマスク", "kana": "アイマスク", "zh": "眼罩" },
+        { "id": "fl-i4", "ja": "イヤホン", "kana": "イヤホン", "zh": "耳機" },
+        { "id": "fl-i5", "ja": "お{水|みず}", "kana": "おみず", "zh": "水" },
+        { "id": "fl-i6", "ja": "お{茶|ちゃ}", "kana": "おちゃ", "zh": "茶" },
+        { "id": "fl-i7", "ja": "コーヒー", "kana": "コーヒー", "zh": "咖啡" },
+        { "id": "fl-i8", "ja": "りんごジュース", "kana": "りんごジュース", "zh": "蘋果汁" },
+        { "id": "fl-i9", "ja": "オレンジジュース", "kana": "オレンジジュース", "zh": "柳橙汁" },
+        { "id": "fl-i10", "ja": "{入国|にゅうこく}カード", "kana": "にゅうこくカード", "zh": "入境卡" },
+        { "id": "fl-i11", "ja": "ペン", "kana": "ペン", "zh": "筆" }
+      ]
+    },
+    {
+      "id": "flight-meal-pick",
+      "category": "點機內餐／選擇",
+      "pattern_ja": "{X}でお{願|ねが}いします。",
+      "pattern_kana": "{X}でおねがいします。",
+      "pattern_zh": "麻煩 {X}。",
+      "items": [
+        { "id": "fl-i12", "ja": "{牛肉|ぎゅうにく}", "kana": "ぎゅうにく", "zh": "牛肉" },
+        { "id": "fl-i13", "ja": "{鶏肉|とりにく}", "kana": "とりにく", "zh": "雞肉" },
+        { "id": "fl-i14", "ja": "{豚肉|ぶたにく}", "kana": "ぶたにく", "zh": "豬肉" },
+        { "id": "fl-i15", "ja": "{魚|さかな}", "kana": "さかな", "zh": "魚" },
+        { "id": "fl-i16", "ja": "パン", "kana": "パン", "zh": "麵包" },
+        { "id": "fl-i17", "ja": "ライス", "kana": "ライス", "zh": "飯" },
+        { "id": "fl-i18", "ja": "{窓側|まどがわ}", "kana": "まどがわ", "zh": "靠窗" },
+        { "id": "fl-i19", "ja": "{通路側|つうろがわ}", "kana": "つうろがわ", "zh": "靠走道" },
+        { "id": "fl-i20", "ja": "{冷|つめ}たいの", "kana": "つめたいの", "zh": "冰的" },
+        { "id": "fl-i21", "ja": "{温|あたた}かいの", "kana": "あたたかいの", "zh": "溫的" }
+      ]
+    },
+    {
+      "id": "flight-bad",
+      "category": "不舒服",
+      "pattern_ja": "{X}が{悪|わる}いです。",
+      "pattern_kana": "{X}がわるいです。",
+      "pattern_zh": "{X} 不太好／不舒服。",
+      "items": [
+        { "id": "fl-i22", "ja": "{気分|きぶん}", "kana": "きぶん", "zh": "心情／狀態" },
+        { "id": "fl-i23", "ja": "{体|からだ}{調|ちょう}{子|し}", "kana": "からだのちょうし", "zh": "身體狀況" },
+        { "id": "fl-i24", "ja": "{頭|あたま}", "kana": "あたま", "zh": "頭" },
+        { "id": "fl-i25", "ja": "お{腹|なか}", "kana": "おなか", "zh": "肚子" }
+      ]
+    }
   ]
 }

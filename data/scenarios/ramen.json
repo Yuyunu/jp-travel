@@ -48,44 +48,79 @@
       ]
     }
   ],
-  "vocab": [
-    { "id": "rm-v1", "ja": "ラーメン", "kana": "らーめん", "zh": "拉麵", "pos": "名詞", "example_id": "ramen-order" },
-    { "id": "rm-v2", "ja": "{豚骨|とんこつ}", "kana": "とんこつ", "zh": "豚骨（湯底）", "pos": "名詞", "example_id": "ramen-order" },
-    { "id": "rm-v3", "ja": "{醤油|しょうゆ}", "kana": "しょうゆ", "zh": "醬油（湯底）", "pos": "名詞", "example_id": "ramen-order" },
-    { "id": "rm-v4", "ja": "{味噌|みそ}", "kana": "みそ", "zh": "味噌（湯底）", "pos": "名詞", "example_id": "ramen-order" },
-    { "id": "rm-v5", "ja": "{塩|しお}", "kana": "しお", "zh": "鹽味（湯底）", "pos": "名詞", "example_id": "ramen-order" },
-    { "id": "rm-v6", "ja": "{麺|めん}", "kana": "めん", "zh": "麵", "pos": "名詞", "example_id": "ramen-order" },
-    { "id": "rm-v7", "ja": "{硬|かた}め", "kana": "かため", "zh": "硬一點（麵）", "pos": "名詞", "example_id": "ramen-order" },
-    { "id": "rm-v8", "ja": "{普通|ふつう}", "kana": "ふつう", "zh": "普通（程度）", "pos": "名詞", "example_id": "ramen-order" },
-    { "id": "rm-v9", "ja": "{柔|やわ}らかめ", "kana": "やわらかめ", "zh": "軟一點（麵）", "pos": "名詞", "example_id": "ramen-order" },
-    { "id": "rm-v10", "ja": "バリカタ", "kana": "ばりかた", "zh": "超硬麵（拉麵術語）", "pos": "名詞", "example_id": "ramen-topping" },
-    { "id": "rm-v11", "ja": "{味|あじ}", "kana": "あじ", "zh": "味道", "pos": "名詞", "example_id": "ramen-order" },
-    { "id": "rm-v12", "ja": "{濃|こ}いめ", "kana": "こいめ", "zh": "濃一點", "pos": "名詞", "example_id": "ramen-order" },
-    { "id": "rm-v13", "ja": "{薄|うす}め", "kana": "うすめ", "zh": "淡一點", "pos": "名詞", "example_id": "ramen-order" },
-    { "id": "rm-v14", "ja": "{脂|あぶら}", "kana": "あぶら", "zh": "（湯的）油", "pos": "名詞", "example_id": "ramen-order" },
-    { "id": "rm-v15", "ja": "{多|おお}め", "kana": "おおめ", "zh": "多一點", "pos": "名詞", "example_id": "ramen-order" },
-    { "id": "rm-v16", "ja": "{少|すく}なめ", "kana": "すくなめ", "zh": "少一點", "pos": "名詞", "example_id": "ramen-order" },
-    { "id": "rm-v17", "ja": "{替玉|かえだま}", "kana": "かえだま", "zh": "加麵（替玉）", "pos": "名詞", "example_id": "ramen-topping" },
-    { "id": "rm-v18", "ja": "トッピング", "kana": "とっぴんぐ", "zh": "配料、加料", "pos": "名詞", "example_id": "ramen-topping" },
-    { "id": "rm-v19", "ja": "チャーシュー", "kana": "ちゃーしゅー", "zh": "叉燒", "pos": "名詞", "example_id": "ramen-topping" },
-    { "id": "rm-v20", "ja": "{煮卵|にたまご}", "kana": "にたまご", "zh": "溏心蛋", "pos": "名詞", "example_id": "ramen-topping" },
-    { "id": "rm-v21", "ja": "{海苔|のり}", "kana": "のり", "zh": "海苔", "pos": "名詞", "example_id": "ramen-topping" },
-    { "id": "rm-v22", "ja": "メンマ", "kana": "めんま", "zh": "筍乾（拉麵配料）", "pos": "名詞", "example_id": "ramen-topping" },
-    { "id": "rm-v23", "ja": "ねぎ", "kana": "ねぎ", "zh": "蔥", "pos": "名詞", "example_id": "ramen-topping" },
-    { "id": "rm-v24", "ja": "もやし", "kana": "もやし", "zh": "豆芽", "pos": "名詞", "example_id": "ramen-topping" },
-    { "id": "rm-v25", "ja": "コーン", "kana": "こーん", "zh": "玉米粒", "pos": "名詞", "example_id": "ramen-topping" },
-    { "id": "rm-v26", "ja": "バター", "kana": "ばたー", "zh": "奶油", "pos": "名詞", "example_id": "ramen-topping" },
-    { "id": "rm-v27", "ja": "{餃子|ぎょうざ}", "kana": "ぎょうざ", "zh": "煎餃", "pos": "名詞", "example_id": "ramen-set" },
-    { "id": "rm-v28", "ja": "セット", "kana": "せっと", "zh": "套餐", "pos": "名詞", "example_id": "ramen-set" },
-    { "id": "rm-v29", "ja": "{半|はん}ライス", "kana": "はんらいす", "zh": "半碗飯", "pos": "名詞", "example_id": "ramen-set" },
-    { "id": "rm-v30", "ja": "{大盛|おおも}り", "kana": "おおもり", "zh": "大碗、加大", "pos": "名詞", "example_id": "ramen-set" },
-    { "id": "rm-v31", "ja": "{小盛|こも}り", "kana": "こもり", "zh": "小碗", "pos": "名詞", "example_id": "ramen-set" },
-    { "id": "rm-v32", "ja": "{追加|ついか}", "kana": "ついか", "zh": "加點、追加", "pos": "名詞／他動詞", "example_id": "ramen-set" },
-    { "id": "rm-v33", "ja": "{食券|しょっけん}", "kana": "しょっけん", "zh": "餐券", "pos": "名詞", "example_id": "ramen-set" },
-    { "id": "rm-v34", "ja": "{券売機|けんばいき}", "kana": "けんばいき", "zh": "點餐機（售券機）", "pos": "名詞", "example_id": "ramen-set" },
-    { "id": "rm-v35", "ja": "{一|ひと}つ", "kana": "ひとつ", "zh": "一個（通用）", "pos": "量詞", "example_id": "ramen-order" },
-    { "id": "rm-v36", "ja": "{二|ふた}つ", "kana": "ふたつ", "zh": "兩個", "pos": "量詞", "example_id": "ramen-order" },
-    { "id": "rm-v37", "ja": "{五個|ごこ}", "kana": "ごこ", "zh": "5 個（小東西）", "pos": "量詞", "example_id": "ramen-set" },
-    { "id": "rm-v38", "ja": "{単品|たんぴん}", "kana": "たんぴん", "zh": "單點", "pos": "名詞", "example_id": "ramen-set" }
+  "groups": [
+    {
+      "id": "ramen-soup",
+      "category": "選湯底",
+      "pattern_ja": "{X}ラーメン{一|ひと}つください。",
+      "pattern_kana": "{X}ラーメンひとつください。",
+      "pattern_zh": "請給我一碗 {X} 拉麵。",
+      "items": [
+        { "id": "rm-i1", "ja": "{豚骨|とんこつ}", "kana": "とんこつ", "zh": "豚骨" },
+        { "id": "rm-i2", "ja": "{醤油|しょうゆ}", "kana": "しょうゆ", "zh": "醬油" },
+        { "id": "rm-i3", "ja": "{味噌|みそ}", "kana": "みそ", "zh": "味噌" },
+        { "id": "rm-i4", "ja": "{塩|しお}", "kana": "しお", "zh": "鹽味" },
+        { "id": "rm-i5", "ja": "{担々麺|たんたんめん}", "kana": "たんたんめん", "zh": "擔擔麵" },
+        { "id": "rm-i6", "ja": "つけ{麺|めん}", "kana": "つけめん", "zh": "沾麵" }
+      ]
+    },
+    {
+      "id": "ramen-noodle",
+      "category": "麵硬度",
+      "pattern_ja": "{麺|めん}の{硬|かた}さは{X}でお{願|ねが}いします。",
+      "pattern_kana": "めんのかたさは{X}でおねがいします。",
+      "pattern_zh": "麵硬度要 {X}。",
+      "items": [
+        { "id": "rm-i7", "ja": "{硬|かた}め", "kana": "かため", "zh": "硬一點" },
+        { "id": "rm-i8", "ja": "{普通|ふつう}", "kana": "ふつう", "zh": "普通" },
+        { "id": "rm-i9", "ja": "{柔|やわ}らかめ", "kana": "やわらかめ", "zh": "軟一點" },
+        { "id": "rm-i10", "ja": "バリカタ", "kana": "バリカタ", "zh": "超硬麵" }
+      ]
+    },
+    {
+      "id": "ramen-taste",
+      "category": "湯濃度",
+      "pattern_ja": "{味|あじ}は{X}でお{願|ねが}いします。",
+      "pattern_kana": "あじは{X}でおねがいします。",
+      "pattern_zh": "味道要 {X}。",
+      "items": [
+        { "id": "rm-i11", "ja": "{濃|こ}いめ", "kana": "こいめ", "zh": "濃一點" },
+        { "id": "rm-i12", "ja": "{普通|ふつう}", "kana": "ふつう", "zh": "普通" },
+        { "id": "rm-i13", "ja": "{薄|うす}め", "kana": "うすめ", "zh": "淡一點" }
+      ]
+    },
+    {
+      "id": "ramen-oil",
+      "category": "油量",
+      "pattern_ja": "{脂|あぶら}は{X}でお{願|ねが}いします。",
+      "pattern_kana": "あぶらは{X}でおねがいします。",
+      "pattern_zh": "油要 {X}。",
+      "items": [
+        { "id": "rm-i14", "ja": "{多|おお}め", "kana": "おおめ", "zh": "多一點" },
+        { "id": "rm-i15", "ja": "{普通|ふつう}", "kana": "ふつう", "zh": "普通" },
+        { "id": "rm-i16", "ja": "{少|すく}なめ", "kana": "すくなめ", "zh": "少一點" }
+      ]
+    },
+    {
+      "id": "ramen-add",
+      "category": "加配料／加點",
+      "pattern_ja": "{X}を{追加|ついか}でお{願|ねが}いします。",
+      "pattern_kana": "{X}をついかでおねがいします。",
+      "pattern_zh": "請加點 {X}。",
+      "items": [
+        { "id": "rm-i17", "ja": "チャーシュー", "kana": "チャーシュー", "zh": "叉燒" },
+        { "id": "rm-i18", "ja": "{煮卵|にたまご}", "kana": "にたまご", "zh": "溏心蛋" },
+        { "id": "rm-i19", "ja": "{海苔|のり}", "kana": "のり", "zh": "海苔" },
+        { "id": "rm-i20", "ja": "メンマ", "kana": "メンマ", "zh": "筍乾" },
+        { "id": "rm-i21", "ja": "ねぎ", "kana": "ねぎ", "zh": "蔥" },
+        { "id": "rm-i22", "ja": "もやし", "kana": "もやし", "zh": "豆芽" },
+        { "id": "rm-i23", "ja": "コーン", "kana": "コーン", "zh": "玉米粒" },
+        { "id": "rm-i24", "ja": "バター", "kana": "バター", "zh": "奶油" },
+        { "id": "rm-i25", "ja": "{替玉|かえだま}", "kana": "かえだま", "zh": "加麵" },
+        { "id": "rm-i26", "ja": "{餃子|ぎょうざ}", "kana": "ぎょうざ", "zh": "餃子" },
+        { "id": "rm-i27", "ja": "ライス", "kana": "ライス", "zh": "飯" },
+        { "id": "rm-i28", "ja": "{大盛|おおも}り", "kana": "おおもり", "zh": "大碗" }
+      ]
+    }
   ]
 }

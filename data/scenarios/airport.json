@@ -50,36 +50,77 @@
       ]
     }
   ],
-  "vocab": [
-    { "id": "ap-v1", "ja": "{空港|くうこう}", "kana": "くうこう", "zh": "機場", "pos": "名詞", "example_id": "airport-bus" },
-    { "id": "ap-v2", "ja": "パスポート", "kana": "ぱすぽーと", "zh": "護照", "pos": "名詞", "example_id": "airport-immigration" },
-    { "id": "ap-v3", "ja": "{搭乗券|とうじょうけん}", "kana": "とうじょうけん", "zh": "登機證", "pos": "名詞", "example_id": "airport-baggage" },
-    { "id": "ap-v4", "ja": "{入国審査|にゅうこくしんさ}", "kana": "にゅうこくしんさ", "zh": "入境審查", "pos": "名詞", "example_id": "airport-immigration" },
-    { "id": "ap-v5", "ja": "{観光|かんこう}", "kana": "かんこう", "zh": "觀光", "pos": "名詞", "example_id": "airport-immigration" },
-    { "id": "ap-v6", "ja": "{仕事|しごと}", "kana": "しごと", "zh": "工作", "pos": "名詞", "example_id": "airport-immigration" },
-    { "id": "ap-v7", "ja": "{滞在|たいざい}", "kana": "たいざい", "zh": "停留、住宿", "pos": "名詞／自動詞", "example_id": "airport-immigration" },
-    { "id": "ap-v8", "ja": "{何日間|なんにちかん}", "kana": "なんにちかん", "zh": "幾天（期間）", "pos": "疑問詞", "example_id": "airport-immigration" },
-    { "id": "ap-v9", "ja": "{泊|と}まる", "kana": "とまる", "zh": "住宿、過夜", "pos": "自動詞", "example_id": "airport-immigration" },
-    { "id": "ap-v10", "ja": "{荷物|にもつ}", "kana": "にもつ", "zh": "行李", "pos": "名詞", "example_id": "airport-baggage" },
-    { "id": "ap-v11", "ja": "{名前|なまえ}", "kana": "なまえ", "zh": "姓名", "pos": "名詞", "example_id": "airport-baggage" },
-    { "id": "ap-v12", "ja": "{便名|びんめい}", "kana": "びんめい", "zh": "班機號碼", "pos": "名詞", "example_id": "airport-baggage" },
-    { "id": "ap-v13", "ja": "{確認|かくにん}", "kana": "かくにん", "zh": "確認", "pos": "名詞／他動詞", "example_id": "airport-baggage" },
-    { "id": "ap-v14", "ja": "{少々|しょうしょう}お{待|ま}ちください", "kana": "しょうしょうおまちください", "zh": "請稍等一下（敬語）", "pos": "套語", "example_id": "airport-baggage" },
-    { "id": "ap-v15", "ja": "{調|しら}べる", "kana": "しらべる", "zh": "查、調查", "pos": "他動詞", "example_id": "airport-baggage" },
-    { "id": "ap-v16", "ja": "{住所|じゅうしょ}", "kana": "じゅうしょ", "zh": "地址", "pos": "名詞", "example_id": "airport-baggage" },
-    { "id": "ap-v17", "ja": "{届|とど}ける", "kana": "とどける", "zh": "送達、寄送", "pos": "他動詞", "example_id": "airport-baggage" },
-    { "id": "ap-v18", "ja": "リムジンバス", "kana": "りむじんばす", "zh": "利木津巴士（機場接駁）", "pos": "名詞", "example_id": "airport-bus" },
-    { "id": "ap-v19", "ja": "{乗|の}り{場|ば}", "kana": "のりば", "zh": "乘車（搭乘）處", "pos": "名詞", "example_id": "airport-bus" },
-    { "id": "ap-v20", "ja": "{切符|きっぷ}", "kana": "きっぷ", "zh": "票", "pos": "名詞", "example_id": "airport-bus" },
-    { "id": "ap-v21", "ja": "{自動販売機|じどうはんばいき}", "kana": "じどうはんばいき", "zh": "自動販賣機", "pos": "名詞", "example_id": "airport-bus" },
-    { "id": "ap-v22", "ja": "{次|つぎ}", "kana": "つぎ", "zh": "下一個、下次", "pos": "名詞", "example_id": "airport-bus" },
-    { "id": "ap-v23", "ja": "{何時|なんじ}", "kana": "なんじ", "zh": "幾點", "pos": "疑問詞", "example_id": "airport-bus" },
-    { "id": "ap-v24", "ja": "{発|はつ}", "kana": "はつ", "zh": "出發、發車", "pos": "名詞接尾", "example_id": "airport-bus" },
-    { "id": "ap-v25", "ja": "{両替|りょうがえ}", "kana": "りょうがえ", "zh": "換錢、兌換貨幣", "pos": "名詞／他動詞", "example_id": "airport-bus" },
-    { "id": "ap-v26", "ja": "{案内所|あんないじょ}", "kana": "あんないじょ", "zh": "服務處、詢問處", "pos": "名詞", "example_id": "airport-bus" },
-    { "id": "ap-v27", "ja": "{税関|ぜいかん}", "kana": "ぜいかん", "zh": "海關", "pos": "名詞", "example_id": "airport-immigration" },
-    { "id": "ap-v28", "ja": "{申告|しんこく}", "kana": "しんこく", "zh": "申報（海關）", "pos": "名詞／他動詞", "example_id": "airport-immigration" },
-    { "id": "ap-v29", "ja": "{免税|めんぜい}", "kana": "めんぜい", "zh": "免稅", "pos": "名詞", "example_id": "airport-immigration" },
-    { "id": "ap-v30", "ja": "{手荷物|てにもつ}", "kana": "てにもつ", "zh": "手提行李", "pos": "名詞", "example_id": "airport-baggage" }
+  "groups": [
+    {
+      "id": "airport-where",
+      "category": "找設施",
+      "pattern_ja": "すみません、{X}はどこですか。",
+      "pattern_kana": "すみません、{X}はどこですか。",
+      "pattern_zh": "不好意思，請問 {X} 在哪裡？",
+      "items": [
+        { "id": "ap-i1", "ja": "{両替所|りょうがえじょ}", "kana": "りょうがえじょ", "zh": "兌幣處" },
+        { "id": "ap-i2", "ja": "{案内所|あんないじょ}", "kana": "あんないじょ", "zh": "服務處" },
+        { "id": "ap-i3", "ja": "{税関|ぜいかん}", "kana": "ぜいかん", "zh": "海關" },
+        { "id": "ap-i4", "ja": "{出口|でぐち}", "kana": "でぐち", "zh": "出口" },
+        { "id": "ap-i5", "ja": "{入口|いりぐち}", "kana": "いりぐち", "zh": "入口" },
+        { "id": "ap-i6", "ja": "{自動販売機|じどうはんばいき}", "kana": "じどうはんばいき", "zh": "自動販賣機" },
+        { "id": "ap-i7", "ja": "リムジンバスの{乗|の}り{場|ば}", "kana": "りむじんばすののりば", "zh": "利木津巴士乘車處" },
+        { "id": "ap-i8", "ja": "トイレ", "kana": "トイレ", "zh": "廁所" }
+      ]
+    },
+    {
+      "id": "airport-give",
+      "category": "要文件／物品",
+      "pattern_ja": "{X}をください。",
+      "pattern_kana": "{X}をください。",
+      "pattern_zh": "請給我 {X}。",
+      "items": [
+        { "id": "ap-i9", "ja": "{入国|にゅうこく}カード", "kana": "にゅうこくカード", "zh": "入境卡" },
+        { "id": "ap-i10", "ja": "{申告書|しんこくしょ}", "kana": "しんこくしょ", "zh": "申報書" },
+        { "id": "ap-i11", "ja": "ペン", "kana": "ペン", "zh": "筆" },
+        { "id": "ap-i12", "ja": "{案内|あんない}{地図|ちず}", "kana": "あんないちず", "zh": "導覽地圖" },
+        { "id": "ap-i13", "ja": "{切符|きっぷ}", "kana": "きっぷ", "zh": "票" }
+      ]
+    },
+    {
+      "id": "airport-purpose",
+      "category": "回答身分／目的",
+      "pattern_ja": "{X}です。",
+      "pattern_kana": "{X}です。",
+      "pattern_zh": "我是來 {X} 的。",
+      "items": [
+        { "id": "ap-i14", "ja": "{観光|かんこう}", "kana": "かんこう", "zh": "觀光" },
+        { "id": "ap-i15", "ja": "{仕事|しごと}", "kana": "しごと", "zh": "工作" },
+        { "id": "ap-i16", "ja": "{出張|しゅっちょう}", "kana": "しゅっちょう", "zh": "出差" },
+        { "id": "ap-i17", "ja": "{留学|りゅうがく}", "kana": "りゅうがく", "zh": "留學" },
+        { "id": "ap-i18", "ja": "{帰国|きこく}", "kana": "きこく", "zh": "回國" }
+      ]
+    },
+    {
+      "id": "airport-duration",
+      "category": "停留期間",
+      "pattern_ja": "{X}{滞在|たいざい}します。",
+      "pattern_kana": "{X}たいざいします。",
+      "pattern_zh": "停留 {X}。",
+      "items": [
+        { "id": "ap-i19", "ja": "{三日間|みっかかん}", "kana": "みっかかん", "zh": "三天" },
+        { "id": "ap-i20", "ja": "{五日間|いつかかん}", "kana": "いつかかん", "zh": "五天" },
+        { "id": "ap-i21", "ja": "{一週間|いっしゅうかん}", "kana": "いっしゅうかん", "zh": "一週" },
+        { "id": "ap-i22", "ja": "{二週間|にしゅうかん}", "kana": "にしゅうかん", "zh": "兩週" },
+        { "id": "ap-i23", "ja": "{一|いっ}ヶ{月|げつ}", "kana": "いっかげつ", "zh": "一個月" }
+      ]
+    },
+    {
+      "id": "airport-baggage-issue",
+      "category": "行李問題",
+      "pattern_ja": "{X}が{出|で}てきません。",
+      "pattern_kana": "{X}がでてきません。",
+      "pattern_zh": "{X} 沒出來。",
+      "items": [
+        { "id": "ap-i24", "ja": "{荷物|にもつ}", "kana": "にもつ", "zh": "行李" },
+        { "id": "ap-i25", "ja": "スーツケース", "kana": "スーツケース", "zh": "行李箱" },
+        { "id": "ap-i26", "ja": "{手荷物|てにもつ}", "kana": "てにもつ", "zh": "手提行李" }
+      ]
+    }
   ]
 }

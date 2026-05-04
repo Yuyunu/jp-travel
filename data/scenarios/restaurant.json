@@ -52,38 +52,69 @@
       ]
     }
   ],
-  "vocab": [
-    { "id": "rs-v1", "ja": "いらっしゃいませ", "kana": "いらっしゃいませ", "zh": "歡迎光臨（敬語）", "pos": "套語", "example_id": "rest-seating" },
-    { "id": "rs-v2", "ja": "{何名様|なんめいさま}", "kana": "なんめいさま", "zh": "幾位（敬語）", "pos": "疑問詞", "example_id": "rest-seating" },
-    { "id": "rs-v3", "ja": "{二人|ふたり}", "kana": "ふたり", "zh": "兩個人", "pos": "名詞", "example_id": "rest-seating" },
-    { "id": "rs-v4", "ja": "{予約|よやく}", "kana": "よやく", "zh": "預約、訂位", "pos": "名詞／他動詞", "example_id": "rest-seating" },
-    { "id": "rs-v5", "ja": "{禁煙席|きんえんせき}", "kana": "きんえんせき", "zh": "禁菸席（區）", "pos": "名詞", "example_id": "rest-seating" },
-    { "id": "rs-v6", "ja": "{喫煙席|きつえんせき}", "kana": "きつえんせき", "zh": "吸菸席", "pos": "名詞", "example_id": "rest-seating" },
-    { "id": "rs-v7", "ja": "メニュー", "kana": "めにゅー", "zh": "菜單", "pos": "名詞", "example_id": "rest-seating" },
-    { "id": "rs-v8", "ja": "{注文|ちゅうもん}", "kana": "ちゅうもん", "zh": "點餐、訂購", "pos": "名詞／他動詞", "example_id": "rest-order" },
-    { "id": "rs-v9", "ja": "おすすめ", "kana": "おすすめ", "zh": "推薦", "pos": "名詞", "example_id": "rest-order" },
-    { "id": "rs-v10", "ja": "{定食|ていしょく}", "kana": "ていしょく", "zh": "定食、套餐", "pos": "名詞", "example_id": "rest-order" },
-    { "id": "rs-v11", "ja": "{人気|にんき}", "kana": "にんき", "zh": "人氣、受歡迎", "pos": "名詞", "example_id": "rest-order" },
-    { "id": "rs-v12", "ja": "{飲|の}み{物|もの}", "kana": "のみもの", "zh": "飲料", "pos": "名詞", "example_id": "rest-order" },
-    { "id": "rs-v13", "ja": "{水|みず}", "kana": "みず", "zh": "水", "pos": "名詞", "example_id": "rest-order" },
-    { "id": "rs-v14", "ja": "{結構|けっこう}です", "kana": "けっこうです", "zh": "（夠了）就好、不用了", "pos": "片語", "example_id": "rest-order" },
-    { "id": "rs-v15", "ja": "アレルギー", "kana": "あれるぎー", "zh": "過敏", "pos": "名詞", "example_id": "rest-order" },
-    { "id": "rs-v16", "ja": "{卵|たまご}", "kana": "たまご", "zh": "蛋", "pos": "名詞", "example_id": "rest-order" },
-    { "id": "rs-v17", "ja": "{抜|ぬ}き", "kana": "ぬき", "zh": "去掉、不加", "pos": "名詞接尾", "example_id": "rest-order" },
-    { "id": "rs-v18", "ja": "かしこまりました", "kana": "かしこまりました", "zh": "我明白了（敬語）", "pos": "套語", "example_id": "rest-order" },
-    { "id": "rs-v19", "ja": "ビール", "kana": "びーる", "zh": "啤酒", "pos": "名詞", "example_id": "rest-checkout" },
-    { "id": "rs-v20", "ja": "もう{一|ひと}つ", "kana": "もうひとつ", "zh": "再一個", "pos": "片語", "example_id": "rest-checkout" },
-    { "id": "rs-v21", "ja": "お{会計|かいけい}", "kana": "おかいけい", "zh": "結帳", "pos": "名詞", "example_id": "rest-checkout" },
-    { "id": "rs-v22", "ja": "{全部|ぜんぶ}で", "kana": "ぜんぶで", "zh": "總共", "pos": "片語", "example_id": "rest-checkout" },
-    { "id": "rs-v23", "ja": "カード", "kana": "かーど", "zh": "信用卡", "pos": "名詞", "example_id": "rest-checkout" },
-    { "id": "rs-v24", "ja": "サイン", "kana": "さいん", "zh": "簽名", "pos": "名詞", "example_id": "rest-checkout" },
-    { "id": "rs-v25", "ja": "{領収書|りょうしゅうしょ}", "kana": "りょうしゅうしょ", "zh": "收據", "pos": "名詞", "example_id": "rest-checkout" },
-    { "id": "rs-v26", "ja": "ご{馳走様|ちそうさま}でした", "kana": "ごちそうさまでした", "zh": "謝謝招待（吃完飯說的）", "pos": "套語", "example_id": "rest-checkout" },
-    { "id": "rs-v27", "ja": "{箸|はし}", "kana": "はし", "zh": "筷子", "pos": "名詞", "example_id": "rest-order" },
-    { "id": "rs-v28", "ja": "おしぼり", "kana": "おしぼり", "zh": "濕毛巾", "pos": "名詞", "example_id": "rest-seating" },
-    { "id": "rs-v29", "ja": "お{持|も}ち{帰|かえ}り", "kana": "おもちかえり", "zh": "外帶", "pos": "名詞", "example_id": "rest-checkout" },
-    { "id": "rs-v30", "ja": "{追加|ついか}", "kana": "ついか", "zh": "追加、加點", "pos": "名詞／他動詞", "example_id": "rest-checkout" },
-    { "id": "rs-v31", "ja": "{辛|から}い", "kana": "からい", "zh": "辣的", "pos": "い形容詞", "example_id": "rest-order" },
-    { "id": "rs-v32", "ja": "{甘|あま}い", "kana": "あまい", "zh": "甜的", "pos": "い形容詞", "example_id": "rest-order" }
+  "groups": [
+    {
+      "id": "rest-give",
+      "category": "要桌上物品",
+      "pattern_ja": "{X}をください。",
+      "pattern_kana": "{X}をください。",
+      "pattern_zh": "請給我 {X}。",
+      "items": [
+        { "id": "rs-i1", "ja": "メニュー", "kana": "メニュー", "zh": "菜單" },
+        { "id": "rs-i2", "ja": "お{水|みず}", "kana": "おみず", "zh": "水" },
+        { "id": "rs-i3", "ja": "お{茶|ちゃ}", "kana": "おちゃ", "zh": "茶" },
+        { "id": "rs-i4", "ja": "{箸|はし}", "kana": "はし", "zh": "筷子" },
+        { "id": "rs-i5", "ja": "スプーン", "kana": "スプーン", "zh": "湯匙" },
+        { "id": "rs-i6", "ja": "フォーク", "kana": "フォーク", "zh": "叉子" },
+        { "id": "rs-i7", "ja": "おしぼり", "kana": "おしぼり", "zh": "濕毛巾" },
+        { "id": "rs-i8", "ja": "{取|と}り{皿|ざら}", "kana": "とりざら", "zh": "小盤子" }
+      ]
+    },
+    {
+      "id": "rest-allergy",
+      "category": "過敏／禁忌",
+      "pattern_ja": "{X}{抜|ぬ}きでお{願|ねが}いします。",
+      "pattern_kana": "{X}ぬきでおねがいします。",
+      "pattern_zh": "請去掉 {X}。",
+      "items": [
+        { "id": "rs-i9", "ja": "{卵|たまご}", "kana": "たまご", "zh": "蛋" },
+        { "id": "rs-i10", "ja": "{牛乳|ぎゅうにゅう}", "kana": "ぎゅうにゅう", "zh": "牛奶" },
+        { "id": "rs-i11", "ja": "{小麦|こむぎ}", "kana": "こむぎ", "zh": "小麥" },
+        { "id": "rs-i12", "ja": "エビ", "kana": "エビ", "zh": "蝦" },
+        { "id": "rs-i13", "ja": "{海鮮|かいせん}", "kana": "かいせん", "zh": "海鮮" },
+        { "id": "rs-i14", "ja": "ピーナッツ", "kana": "ピーナッツ", "zh": "花生" },
+        { "id": "rs-i15", "ja": "にんにく", "kana": "にんにく", "zh": "大蒜" },
+        { "id": "rs-i16", "ja": "パクチー", "kana": "パクチー", "zh": "香菜" }
+      ]
+    },
+    {
+      "id": "rest-seat",
+      "category": "入座／人數",
+      "pattern_ja": "{X}でお{願|ねが}いします。",
+      "pattern_kana": "{X}でおねがいします。",
+      "pattern_zh": "麻煩 {X}。",
+      "items": [
+        { "id": "rs-i17", "ja": "{二人|ふたり}", "kana": "ふたり", "zh": "兩個人" },
+        { "id": "rs-i18", "ja": "{三人|さんにん}", "kana": "さんにん", "zh": "三個人" },
+        { "id": "rs-i19", "ja": "{四人|よにん}", "kana": "よにん", "zh": "四個人" },
+        { "id": "rs-i20", "ja": "{禁煙席|きんえんせき}", "kana": "きんえんせき", "zh": "禁菸席" },
+        { "id": "rs-i21", "ja": "{喫煙席|きつえんせき}", "kana": "きつえんせき", "zh": "吸菸席" },
+        { "id": "rs-i22", "ja": "カウンター", "kana": "カウンター", "zh": "吧檯" },
+        { "id": "rs-i23", "ja": "テーブル", "kana": "テーブル", "zh": "桌位" }
+      ]
+    },
+    {
+      "id": "rest-checkout-pat",
+      "category": "結帳／服務",
+      "pattern_ja": "お{X}お{願|ねが}いします。",
+      "pattern_kana": "お{X}おねがいします。",
+      "pattern_zh": "麻煩 {X}。",
+      "items": [
+        { "id": "rs-i24", "ja": "{会計|かいけい}", "kana": "かいけい", "zh": "結帳" },
+        { "id": "rs-i25", "ja": "{持|も}ち{帰|かえ}り", "kana": "もちかえり", "zh": "外帶" },
+        { "id": "rs-i26", "ja": "{代|か}わり", "kana": "かわり", "zh": "再來一份" },
+        { "id": "rs-i27", "ja": "{箸|はし}", "kana": "はし", "zh": "筷子（追加）" }
+      ]
+    }
   ]
 }

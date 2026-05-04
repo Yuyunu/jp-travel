@@ -420,6 +420,121 @@ ruby rt {
 .vocab-card .vocab-back { display: none; }
 .vocab-card.flipped .vocab-back { display: block; }
 
+/* === 句型替換組 === */
+.group-card {
+  background: var(--bg-card);
+  border: 1px solid var(--bd-card);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-card);
+}
+.group-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.group-cat {
+  font-size: 12px; font-weight: 700;
+  color: var(--c-kon);
+  background: var(--accent-soft);
+  padding: 4px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+}
+.pattern-display {
+  background: var(--bg-input);
+  border: 1px dashed var(--bd-card);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+.pattern-ja {
+  font-family: var(--font-ja);
+  font-size: 19px;
+  line-height: 1.7;
+  color: var(--c-text);
+  word-break: break-all;
+}
+.pattern-zh {
+  font-size: 13px;
+  color: var(--c-text-muted);
+  margin-top: 6px;
+}
+.pattern-display .placeholder {
+  display: inline-block;
+  color: var(--c-shu);
+  font-weight: 700;
+  border-bottom: 2px dashed var(--c-shu);
+  padding: 0 6px;
+  margin: 0 2px;
+}
+.pattern-display .filled {
+  display: inline-block;
+  color: var(--c-shu);
+  font-weight: 700;
+  background: rgba(197, 48, 43, 0.10);
+  padding: 0 6px;
+  border-radius: 4px;
+}
+.item-chips {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+}
+.chip-wrap { position: relative; }
+.item-chip {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1.5px solid var(--bd-card);
+  border-radius: 10px;
+  padding: 10px 8px 28px;
+  text-align: center;
+  display: flex; flex-direction: column; gap: 2px;
+  transition: all 180ms ease-out;
+  min-height: 64px;
+}
+.item-chip .chip-ja {
+  font-family: var(--font-ja);
+  font-size: 15px; font-weight: 500;
+  color: var(--c-text);
+  line-height: 1.4;
+}
+.item-chip .chip-zh {
+  font-size: 11px;
+  color: var(--c-text-muted);
+}
+.item-chip:hover { border-color: var(--c-shu); }
+.item-chip.selected {
+  border-color: var(--c-shu);
+  background: rgba(197, 48, 43, 0.06);
+}
+.item-chip.flash {
+  background: rgba(122, 139, 92, 0.22);
+  border-color: var(--c-matcha);
+}
+.item-chip.known { border-left: 3px solid var(--c-matcha); }
+.item-chip.weak { border-left: 3px solid var(--c-shu); }
+.chip-mastery {
+  position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 3px;
+}
+.mastery-btn {
+  width: 22px; height: 20px;
+  border-radius: 6px;
+  font-size: 11px;
+  border: 1px solid var(--bd-soft);
+  background: transparent;
+  color: var(--c-text-faint);
+  display: grid; place-items: center;
+  transition: all 150ms;
+}
+.mastery-btn.known.active {
+  background: var(--c-matcha); color: white; border-color: var(--c-matcha);
+}
+.mastery-btn.weak.active {
+  background: var(--c-shu); color: white; border-color: var(--c-shu);
+}
+
 /* === 測驗 === */
 .quiz-setup-card {
   background: var(--bg-card);
@@ -481,9 +596,31 @@ ruby rt {
   box-shadow: var(--shadow-card);
 }
 .quiz-progress {
-  display: flex; justify-content: space-between;
+  display: flex; justify-content: space-between; align-items: center;
   font-size: 12px; color: var(--c-text-muted);
   margin-bottom: 10px;
+}
+.progress-actions { display: flex; align-items: center; gap: 10px; }
+.score-display { font-weight: 600; color: var(--c-kon); }
+.quit-quiz-btn {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid var(--bd-card);
+  color: var(--c-text-muted);
+  transition: all var(--transition);
+  min-height: 28px;
+}
+.quit-quiz-btn:hover {
+  background: var(--c-shu); color: white; border-color: var(--c-shu);
+}
+.quiz-prompt .blank {
+  display: inline-block;
+  color: var(--c-shu);
+  font-weight: 700;
+  border-bottom: 2px solid var(--c-shu);
+  padding: 0 8px;
 }
 .quiz-progress-bar {
   height: 4px;

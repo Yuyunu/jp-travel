@@ -1016,6 +1016,13 @@ ruby rt {
   font-family: var(--font-ja);
   font-size: 24px;
 }
+.quiz-prompt .prompt-content.ja.kana-only {
+  font-family: var(--font-ja-serif);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--c-shu);
+}
 .quiz-prompt .play-big {
   width: 56px; height: 56px;
   border-radius: 50%;

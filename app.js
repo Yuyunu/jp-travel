@@ -686,8 +686,8 @@ function renderMapView(root) {
     b.addEventListener('click', () => {
       const scope = b.dataset.scope;
       state._mapView = false;
-      // 城市旅 = 看日文 → 選中文（10 題）
-      const setup = { type: 'readJa', scope, count: 10 };
+      // 城市旅 = 看假名 → 選漢字（10 題）
+      const setup = { type: 'kanaKanji', scope, count: 10 };
       state._quizSetup = setup;
       startQuiz(setup);
     });
@@ -708,7 +708,7 @@ function renderQuizSetup(root) {
         <div class="map-entry-emoji">🗾</div>
         <div>
           <div class="map-entry-title">日本之旅</div>
-          <div class="map-entry-sub">看日文選中文 · ${cleared}/${MAP_CITIES.length} 城市已過關</div>
+          <div class="map-entry-sub">看假名選漢字 · ${cleared}/${MAP_CITIES.length} 城市已過關</div>
         </div>
       </div>
       <div class="map-entry-stars">${totalStars}/30 ★</div>
@@ -794,7 +794,7 @@ function renderQuizSetup(root) {
 }
 
 function quizTypeLabel(t) {
-  return { listen: '聽選中', read: '看選日', readJa: '看選中', fill: '填空', sushi: '🍣 流れ' }[t] || t;
+  return { listen: '聽選中', read: '看選日', readJa: '看選中', kanaKanji: '假名→漢字', fill: '填空', sushi: '🍣 流れ' }[t] || t;
 }
 function scopeLabel(s) {
   if (s === 'all') return '全部';
@@ -842,6 +842,22 @@ function buildQuestion(type, rec, allItems) {
     const distractors = distractorPool.slice(0, 3);
     const opts = shuffle([correct, ...distractors]);
     choices = opts.map(it => ({ text: it.zh, isJa: false, id: it.id }));
+    correctIdx = opts.findIndex(it => it.id === correct.id);
+  } else if (type === 'kanaKanji') {
+    // 看假名 → 選漢字（地圖城市用）
+    promptLabel = '假名：';
+    prompt = escapeHTML(correct.kana || stripRuby(correct.ja));
+    isJaPrompt = true;
+    ttsText = correct.kana || stripRuby(correct.ja);
+    const distractorPool = allItems.filter(r => r.item.id !== correct.id).map(r => r.item);
+    shuffle(distractorPool);
+    const distractors = distractorPool.slice(0, 3);
+    const opts = shuffle([correct, ...distractors]);
+    choices = opts.map(it => ({
+      text: escapeHTML(stripRuby(it.ja)),  // 漢字版本（ruby furigana 拿掉）
+      isJa: true,
+      id: it.id,
+    }));
     correctIdx = opts.findIndex(it => it.id === correct.id);
   } else if (type === 'fill') {
     // 填空題：擾亂選項從同 group（同句型）抽，玩家靠中文提示挑正解
@@ -926,8 +942,8 @@ function renderQuizQuestion(root) {
         ${cur.type === 'listen' ? `
           <button class="play-big" id="play-prompt">🔊</button>
           <div class="muted small" style="margin-top:8px;">點按聽題目</div>
-        ` : cur.type === 'readJa' ? `
-          <div class="prompt-content ja">${cur.prompt}</div>
+        ` : (cur.type === 'readJa' || cur.type === 'kanaKanji') ? `
+          <div class="prompt-content ja${cur.type === 'kanaKanji' ? ' kana-only' : ''}">${cur.prompt}</div>
           <button class="play-mini" id="play-prompt">🔊 再聽一次</button>
         ` : `
           <div class="prompt-content ${cur.isJaPrompt ? 'ja' : ''}">${cur.isJaPrompt ? cur.prompt : escapeHTML(cur.prompt)}</div>
@@ -945,7 +961,7 @@ function renderQuizQuestion(root) {
     </div>
   `;
 
-  if (cur.type === 'listen' || cur.type === 'readJa') {
+  if (cur.type === 'listen' || cur.type === 'readJa' || cur.type === 'kanaKanji') {
     const playBtn = root.querySelector('#play-prompt');
     const speakIt = () => {
       if (!state.ttsAvailable) {
@@ -1005,9 +1021,9 @@ function renderQuizResult(root) {
   });
   if (state.history.length > 50) state.history.splice(0, state.history.length - 50);
 
-  // 城市星數解鎖：看選中（readJa）達到分數門檻就算過關
+  // 城市星數解鎖：看選中（readJa）/ 看假名選漢字（kanaKanji）達到分數門檻就算過關
   const pct = Math.round((q.score / q.qs.length) * 100);
-  if (q.type === 'readJa' && q.scope !== 'all') {
+  if ((q.type === 'readJa' || q.type === 'kanaKanji') && q.scope !== 'all') {
     const stars = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 50 ? 1 : 0;
     if (stars >= 1) {
       const unlockKey = `jpt_unlock_${q.scope}`;

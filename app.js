@@ -931,12 +931,19 @@ function renderSushiQuiz() {
 
   const wrapper = root.querySelector('#conveyor-wrapper');
 
-  // Trigger transition after layout
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      wrapper.classList.add('flowing');
-    });
-  });
+  // 直接 JS 控制 transition（避免 RAF/class 競態）
+  // 1. 確保起始 transform=0、無 transition
+  wrapper.style.transition = 'none';
+  wrapper.style.transform = 'translateX(0)';
+  void wrapper.offsetWidth;  // force reflow
+  // 2. 下一個 tick 套上 transition + 終點 transform
+  setTimeout(() => {
+    if (!wrapper.isConnected) return;
+    wrapper.style.transition = `transform ${duration}ms linear`;
+    // 動態算終點：跨完整個 viewport + wrapper 自身寬
+    const endX = -(window.innerWidth + wrapper.offsetWidth + 50);
+    wrapper.style.transform = `translateX(${endX}px)`;
+  }, 30);
 
   // Miss handler — transition finishes without click
   wrapper.addEventListener('transitionend', (e) => {

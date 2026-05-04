@@ -686,10 +686,10 @@ function renderMapView(root) {
     b.addEventListener('click', () => {
       const scope = b.dataset.scope;
       state._mapView = false;
-      // 用 sushi quiz 開戰，預設 10 題
-      const setup = { type: 'sushi', scope, count: 10 };
+      // 城市旅 = 看日文 → 選中文（10 題）
+      const setup = { type: 'readJa', scope, count: 10 };
       state._quizSetup = setup;
-      startSushiQuiz(setup);
+      startQuiz(setup);
     });
   });
 }
@@ -708,7 +708,7 @@ function renderQuizSetup(root) {
         <div class="map-entry-emoji">🗾</div>
         <div>
           <div class="map-entry-title">日本之旅</div>
-          <div class="map-entry-sub">點地圖城市開始挑戰 · ${cleared}/${MAP_CITIES.length} 城市已過關</div>
+          <div class="map-entry-sub">看日文選中文 · ${cleared}/${MAP_CITIES.length} 城市已過關</div>
         </div>
       </div>
       <div class="map-entry-stars">${totalStars}/30 ★</div>
@@ -790,7 +790,7 @@ function renderQuizSetup(root) {
 }
 
 function quizTypeLabel(t) {
-  return { listen: '聽選中', read: '看選日', fill: '填空', sushi: '🍣 流れ' }[t] || t;
+  return { listen: '聽選中', read: '看選日', readJa: '看選中', fill: '填空', sushi: '🍣 流れ' }[t] || t;
 }
 function scopeLabel(s) {
   if (s === 'all') return '全部';
@@ -827,7 +827,19 @@ function buildQuestion(type, rec, allItems) {
 
   let prompt, choices, correctIdx, promptLabel, isJaPrompt = false, ttsText = null;
 
-  if (type === 'fill') {
+  if (type === 'readJa') {
+    // 看日文 → 選中文
+    promptLabel = '日文：';
+    prompt = parseRuby(correct.ja);
+    isJaPrompt = true;
+    ttsText = correct.kana || stripRuby(correct.ja);  // 同時自動播一次給聽
+    const distractorPool = allItems.filter(r => r.item.id !== correct.id).map(r => r.item);
+    shuffle(distractorPool);
+    const distractors = distractorPool.slice(0, 3);
+    const opts = shuffle([correct, ...distractors]);
+    choices = opts.map(it => ({ text: it.zh, isJa: false, id: it.id }));
+    correctIdx = opts.findIndex(it => it.id === correct.id);
+  } else if (type === 'fill') {
     // 填空題：擾亂選項從同 group（同句型）抽，玩家靠中文提示挑正解
     const g = rec.group;
     let pool = shuffle(g.items.filter(it => it.id !== correct.id));
@@ -910,6 +922,9 @@ function renderQuizQuestion(root) {
         ${cur.type === 'listen' ? `
           <button class="play-big" id="play-prompt">🔊</button>
           <div class="muted small" style="margin-top:8px;">點按聽題目</div>
+        ` : cur.type === 'readJa' ? `
+          <div class="prompt-content ja">${cur.prompt}</div>
+          <button class="play-mini" id="play-prompt">🔊 再聽一次</button>
         ` : `
           <div class="prompt-content ${cur.isJaPrompt ? 'ja' : ''}">${cur.isJaPrompt ? cur.prompt : escapeHTML(cur.prompt)}</div>
         `}
@@ -926,13 +941,16 @@ function renderQuizQuestion(root) {
     </div>
   `;
 
-  if (cur.type === 'listen') {
+  if (cur.type === 'listen' || cur.type === 'readJa') {
     const playBtn = root.querySelector('#play-prompt');
     const speakIt = () => {
-      if (!state.ttsAvailable) { toast('此瀏覽器無日語 TTS'); return; }
+      if (!state.ttsAvailable) {
+        if (cur.type === 'listen') toast('此瀏覽器無日語 TTS');
+        return;
+      }
       tts.speak(cur.ttsText);
     };
-    playBtn.addEventListener('click', speakIt);
+    if (playBtn) playBtn.addEventListener('click', speakIt);
     setTimeout(speakIt, 250);
   }
 
@@ -982,8 +1000,20 @@ function renderQuizResult(root) {
     ts: Date.now(), type: q.type, scope: q.scope, score: q.score, total: q.qs.length
   });
   if (state.history.length > 50) state.history.splice(0, state.history.length - 50);
-  saveState();
+
+  // 城市星數解鎖：看選中（readJa）達到分數門檻就算過關
   const pct = Math.round((q.score / q.qs.length) * 100);
+  if (q.type === 'readJa' && q.scope !== 'all') {
+    const stars = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 50 ? 1 : 0;
+    if (stars >= 1) {
+      const unlockKey = `jpt_unlock_${q.scope}`;
+      const prev = parseInt(localStorage.getItem(unlockKey) || '0', 10);
+      if (stars > prev) {
+        try { localStorage.setItem(unlockKey, String(stars)); } catch (_) {}
+      }
+    }
+  }
+  saveState();
   root.innerHTML = `
     <div class="quiz-question-card">
       <div class="quiz-result">

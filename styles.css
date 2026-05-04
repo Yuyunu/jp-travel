@@ -1027,6 +1027,20 @@ ruby rt {
   transition: transform var(--transition);
 }
 .quiz-prompt .play-big:active { transform: scale(0.94); }
+.quiz-prompt .play-mini {
+  display: inline-flex;
+  align-items: center; gap: 4px;
+  margin-top: 10px;
+  padding: 5px 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--bd-soft);
+  border-radius: 14px;
+  font-size: 12px;
+  color: var(--c-text-muted);
+  transition: background var(--transition);
+}
+.quiz-prompt .play-mini:hover { background: var(--accent-soft); }
+.quiz-prompt .play-mini:active { transform: scale(0.96); }
 
 .quiz-choices {
   display: flex; flex-direction: column; gap: 8px;

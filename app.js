@@ -159,14 +159,17 @@ const tts = {
       onerror && onerror(new Error('no-tts'));
       return null;
     }
-    // 單音節 は/へ/を 會被 TTS 當助詞唸成 wa/e/o
-    // → 餵漢字 form 進去（歯 = ha、辺 = he、尾 = o），讓 TTS 當單字唸
+    // 開頭是 は/へ/を 會被 TTS 當助詞唸成 wa/e/o
+    // 例：「歯」(は) → wa、「歯磨き粉」(はみがきこ) → wamigakiko
+    // → 若有漢字版本，改餵漢字（TTS 對純漢字字串不會當助詞）
     let speakText = extractKana(text);
     const trimmed = speakText.trim();
-    if (trimmed === 'は' || trimmed === 'へ' || trimmed === 'を') {
-      // 改用 stripRuby 拿漢字版本（如「{歯|は}」→「歯」）
+    if (/^[はへを]/.test(trimmed)) {
       const kanji = stripRuby(text).trim();
-      if (kanji && kanji !== trimmed) speakText = kanji;
+      // 漢字版本要含 CJK 字元才用（避免換成跟 kana 一樣）
+      if (kanji && kanji !== trimmed && /[一-鿿]/.test(kanji)) {
+        speakText = kanji;
+      }
     }
     const u = new SpeechSynthesisUtterance(speakText);
     u.lang = 'ja-JP';
@@ -523,6 +526,7 @@ function attachGroupHandlers(root) {
       const itemZh = chip.dataset.zh;
 
       const filledKana = patternKana.replace('{X}', itemKana);
+      const filledJa = patternJa.replace('{X}', itemJa);  // 含 markup 給 TTS 用
 
       // ja 側：先 parseRuby pattern（ {X} 因為沒 | 不會被 ruby regex match，保留），再把 {X} 替換成包好的 item html
       const itemJaHtml = parseRuby(itemJa);
@@ -537,8 +541,9 @@ function attachGroupHandlers(root) {
         escapeHTML(patternZh).replace('{X}', `<span class="filled">${escapeHTML(itemZh)}</span>`);
 
       groupCard.dataset.currentKana = filledKana;
+      groupCard.dataset.currentJa = filledJa;  // 給 play-pattern 用
 
-      if (state.ttsAvailable) tts.speak(filledKana);
+      if (state.ttsAvailable) tts.speak(filledJa);  // 餵 markup，speak() 處理 fallback
       else toast('此瀏覽器無日語 TTS');
 
       groupCard.querySelectorAll('.item-chip.selected').forEach(c => c.classList.remove('selected'));
@@ -551,7 +556,7 @@ function attachGroupHandlers(root) {
   root.querySelectorAll('.play-pattern').forEach(b => {
     b.addEventListener('click', () => {
       const card = b.closest('.group-card');
-      let toSpeak = card.dataset.currentKana;
+      let toSpeak = card.dataset.currentJa || card.dataset.currentKana;
       if (!toSpeak) {
         const firstChip = card.querySelector('.item-chip');
         if (firstChip) {

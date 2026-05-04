@@ -1081,6 +1081,10 @@ function renderQuizQuestion(root) {
         ? `<strong style="color:var(--c-matcha);">✓ 答對了！</strong> <span class="ja">${parseRuby(cur.correctItem.ja)}</span> · ${escapeHTML(cur.correctItem.kana)} · ${escapeHTML(cur.correctItem.zh)}`
         : `<strong style="color:var(--c-shu);">✗ 正解：</strong> <span class="ja">${parseRuby(cur.correctItem.ja)}</span> · ${escapeHTML(cur.correctItem.kana)} · ${escapeHTML(cur.correctItem.zh)}`;
       root.querySelector('#next-row').classList.remove('hidden');
+      // counter 題答完後自動播完整正確日語句
+      if (cur.type === 'counter' && state.ttsAvailable && cur.ttsText) {
+        setTimeout(() => tts.speak(cur.ttsText), 200);
+      }
     });
   });
   root.querySelector('#next-q')?.addEventListener('click', () => {

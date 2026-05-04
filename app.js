@@ -690,7 +690,7 @@ function buildQuestion(type, rec, allItems) {
     const distractors = pool.slice(0, 3);
 
     const jaBlank = parseRuby(g.pattern_ja).replace('{X}',
-      '<span class="blank">＿＿＿</span>');
+      '<span class="blank">　　　</span>');
     const zhFilled = escapeHTML(g.pattern_zh).replace('{X}',
       `<span class="filled">${escapeHTML(correct.zh)}</span>`);
     prompt = `${jaBlank}<div class="prompt-zh-hint">${zhFilled}</div>`;
@@ -942,7 +942,7 @@ function renderSushiQuiz() {
   // 中文句型把答案直接填進去當提示，玩家按出對應的「日文（假名）」盤
   const correctItem = cur.items[cur.correctIdx];
   const patternJaHtml = parseRuby(cur.pattern.pattern_ja).replace(
-    '{X}', '<span class="sushi-blank">＿＿＿</span>'
+    '{X}', '<span class="sushi-blank">　　　</span>'
   );
   const patternZhHtml = escapeHTML(cur.pattern.pattern_zh).replace(
     '{X}', `<span class="sushi-answer-zh">${escapeHTML(correctItem.zh)}</span>`

@@ -1,32 +1,31 @@
 /* =============================================================
-   日本旅遊日語 PWA — app.js  (v0.3.0)
+   日本旅遊日語 PWA — app.js  (v0.3.2)
    - 句型替換組架構（pattern + items）
    - TTS 一律讀假名版本（extractKana）
-   - 測驗加退出按鈕 + Esc 鍵
+   - 測驗加退出按鈕 + Esc
+   - 移除已會/待加強 mastery 功能
+   - 右上角強制重整按鈕（清 SW cache + reload）
    ============================================================= */
 
-const APP_VERSION = 'v0.3.0';
-const LS_KEY = 'jpt_state_v3';
+const APP_VERSION = 'v0.3.2';
+const LS_KEY = 'jpt_state_v4';
 
-/* ---------- State ---------- */
 const state = {
   scenarios: [],
   byId: new Map(),
-  itemIndex: new Map(),     // itemId → {item, group, scenario}
+  itemIndex: new Map(),
   dialogueIndex: new Map(),
 
   currentTab: 'tab-dialogues',
   currentScenario: null,
   currentVocabScenario: null,
 
-  // TTS
   voices: [],
   selectedVoiceURI: null,
   rate: 0.9,
   ttsAvailable: false,
   playingAll: null,
 
-  // Quiz
   quizActive: null,
 
   prefs: {
@@ -34,11 +33,7 @@ const state = {
     voiceURI: null,
     rate: 0.9,
   },
-  progress: {
-    known: [],
-    weak: [],
-    quizHistory: [],
-  }
+  history: [],  // quiz history
 };
 
 /* ---------- Storage ---------- */
@@ -48,33 +43,37 @@ function loadState() {
     if (!raw) return;
     const data = JSON.parse(raw);
     if (data.prefs) Object.assign(state.prefs, data.prefs);
-    if (data.progress) Object.assign(state.progress, data.progress);
+    if (Array.isArray(data.history)) state.history = data.history;
     state.rate = state.prefs.rate ?? 0.9;
     state.selectedVoiceURI = state.prefs.voiceURI ?? null;
   } catch (e) { console.warn('loadState fail', e); }
+  // 清掉舊版 mastery key（如果存在）
+  try {
+    localStorage.removeItem('jpt_state_v3');
+    localStorage.removeItem('jpt_state_v1');
+    localStorage.removeItem('mastered_ids');
+    localStorage.removeItem('weak_ids');
+  } catch (_) {}
 }
 function saveState() {
   try {
     localStorage.setItem(LS_KEY, JSON.stringify({
       prefs: state.prefs,
-      progress: state.progress,
+      history: state.history,
     }));
   } catch (e) { console.warn('saveState fail', e); }
 }
 
 /* ---------- Ruby / Kana helpers ---------- */
-// "{漢字|かんじ}" → <ruby>漢字<rt>かんじ</rt></ruby>
 function parseRuby(str) {
   if (!str) return '';
   return escapeHTML(str).replace(/\{([^|{}]+)\|([^|{}]+)\}/g, (_, k, r) =>
     `<ruby>${k}<rt>${r}</rt></ruby>`);
 }
-// 留下漢字（顯示用）
 function stripRuby(str) {
   if (!str) return '';
   return str.replace(/\{([^|{}]+)\|[^|{}]+\}/g, '$1');
 }
-// 取出讀音版（給 TTS 用，{漢字|讀音} → 讀音）
 function extractKana(str) {
   if (!str) return '';
   return str.replace(/\{([^|{}]+)\|([^|{}]+)\}/g, (_, k, r) => r);
@@ -113,7 +112,6 @@ const tts = {
   cancel() {
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   },
-  // text 可以是 {漢字|讀音} 標記版或純假名 — 一律 extractKana 後送出
   speak(text, { onend, onerror } = {}) {
     if (!('speechSynthesis' in window)) {
       onerror && onerror(new Error('no-tts'));
@@ -165,6 +163,22 @@ function renderVoiceSelect() {
     if (v.voiceURI === state.selectedVoiceURI) opt.selected = true;
     sel.appendChild(opt);
   });
+}
+
+/* ---------- Force refresh: unregister SW + clear caches + reload ---------- */
+async function forceRefresh() {
+  try {
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister()));
+    }
+    if ('caches' in window) {
+      const names = await caches.keys();
+      await Promise.all(names.map(n => caches.delete(n)));
+    }
+  } catch (e) { console.warn('force refresh err', e); }
+  // bypass cache
+  location.reload();
 }
 
 /* ---------- Data loading ---------- */
@@ -395,17 +409,13 @@ function renderVocabDetail(root, scenarioId) {
   const sc = state.byId.get(scenarioId);
   if (!sc) { state.currentVocabScenario = null; renderVocabView(); return; }
   const totalItems = sc.groups.reduce((s, g) => s + g.items.length, 0);
-  const knownCount = sc.groups.reduce((s, g) =>
-    s + g.items.filter(it => state.progress.known.includes(it.id)).length, 0);
-  const weakCount = sc.groups.reduce((s, g) =>
-    s + g.items.filter(it => state.progress.weak.includes(it.id)).length, 0);
 
   root.innerHTML = `
     <div class="sub-head">
       <button class="back-btn" id="back-vocab" aria-label="返回">←</button>
       <div class="title-block">
         <h2>${sc.emoji} ${escapeHTML(sc.name_zh)}</h2>
-        <span class="ja-sub">${sc.groups.length} 句型 · ${totalItems} 替換詞 · 已會 ${knownCount} · 待加強 ${weakCount}</span>
+        <span class="ja-sub">${sc.groups.length} 句型 · ${totalItems} 替換詞</span>
       </div>
     </div>
     ${sc.groups.map(g => renderGroupCard(g)).join('')}
@@ -417,7 +427,6 @@ function renderVocabDetail(root, scenarioId) {
 }
 
 function renderGroupCard(g) {
-  // 用 placeholder 表示未選詞時的呈現
   const placeholderJa = '<span class="placeholder">◯◯</span>';
   const placeholderZh = '<span class="placeholder">◯◯</span>';
   const patternJaHtml = parseRuby(g.pattern_ja).replace('{X}', placeholderJa);
@@ -430,33 +439,22 @@ function renderGroupCard(g) {
          data-pattern-zh="${escapeHTML(g.pattern_zh)}">
       <div class="group-head">
         <span class="group-cat">${escapeHTML(g.category)}</span>
-        <button class="icon-btn play-pattern" title="朗讀整句（會用第一個或剛點的詞）">🔊</button>
+        <button class="icon-btn play-pattern" title="朗讀整句">🔊</button>
       </div>
       <div class="pattern-display">
         <div class="pattern-ja">${patternJaHtml}</div>
         <div class="pattern-zh">${patternZhHtml}</div>
       </div>
       <div class="item-chips">
-        ${g.items.map(it => {
-          const isKnown = state.progress.known.includes(it.id);
-          const isWeak = state.progress.weak.includes(it.id);
-          const masteryCls = isKnown ? 'known' : (isWeak ? 'weak' : '');
-          return `
-            <div class="chip-wrap">
-              <button class="item-chip ${masteryCls}" data-id="${it.id}"
-                      data-ja="${escapeHTML(it.ja)}"
-                      data-kana="${escapeHTML(it.kana)}"
-                      data-zh="${escapeHTML(it.zh)}">
-                <div class="chip-ja">${parseRuby(it.ja)}</div>
-                <div class="chip-zh">${escapeHTML(it.zh)}</div>
-              </button>
-              <div class="chip-mastery">
-                <button class="mastery-btn known ${isKnown?'active':''}" data-id="${it.id}" data-mark="known" title="已會">✓</button>
-                <button class="mastery-btn weak ${isWeak?'active':''}" data-id="${it.id}" data-mark="weak" title="待加強">✗</button>
-              </div>
-            </div>
-          `;
-        }).join('')}
+        ${g.items.map(it => `
+          <button class="item-chip" data-id="${it.id}"
+                  data-ja="${escapeHTML(it.ja)}"
+                  data-kana="${escapeHTML(it.kana)}"
+                  data-zh="${escapeHTML(it.zh)}">
+            <div class="chip-ja">${parseRuby(it.ja)}</div>
+            <div class="chip-zh">${escapeHTML(it.zh)}</div>
+          </button>
+        `).join('')}
       </div>
     </div>
   `;
@@ -473,24 +471,18 @@ function attachGroupHandlers(root) {
       const itemKana = chip.dataset.kana;
       const itemZh = chip.dataset.zh;
 
-      // 替換並渲染
       const filledJa = patternJa.replace('{X}', itemJa);
-      const filledZh = patternZh.replace('{X}', itemZh);
       const filledKana = patternKana.replace('{X}', itemKana);
 
       groupCard.querySelector('.pattern-ja').innerHTML = parseRuby(filledJa);
       groupCard.querySelector('.pattern-zh').innerHTML =
         escapeHTML(patternZh).replace('{X}', `<span class="filled">${escapeHTML(itemZh)}</span>`);
 
-      // 暫存當前選擇（給 play-pattern 用）
       groupCard.dataset.currentKana = filledKana;
-      groupCard.dataset.currentJa = filledJa;
 
-      // TTS
       if (state.ttsAvailable) tts.speak(filledKana);
       else toast('此瀏覽器無日語 TTS');
 
-      // 視覺 flash
       groupCard.querySelectorAll('.item-chip.selected').forEach(c => c.classList.remove('selected'));
       chip.classList.add('selected');
       chip.classList.add('flash');
@@ -503,7 +495,6 @@ function attachGroupHandlers(root) {
       const card = b.closest('.group-card');
       let toSpeak = card.dataset.currentKana;
       if (!toSpeak) {
-        // 預設用第一個 item 念
         const firstChip = card.querySelector('.item-chip');
         if (firstChip) {
           firstChip.click();
@@ -514,32 +505,6 @@ function attachGroupHandlers(root) {
       else if (!state.ttsAvailable) toast('此瀏覽器無日語 TTS');
     });
   });
-
-  root.querySelectorAll('.mastery-btn').forEach(b => {
-    b.addEventListener('click', e => {
-      e.stopPropagation();
-      const id = b.dataset.id;
-      const mark = b.dataset.mark;
-      if (mark === 'known') {
-        toggleListItem(state.progress.known, id);
-        removeFromList(state.progress.weak, id);
-      } else {
-        toggleListItem(state.progress.weak, id);
-        removeFromList(state.progress.known, id);
-      }
-      saveState();
-      renderVocabView();
-    });
-  });
-}
-
-function toggleListItem(arr, id) {
-  const i = arr.indexOf(id);
-  if (i >= 0) arr.splice(i, 1); else arr.push(id);
-}
-function removeFromList(arr, id) {
-  const i = arr.indexOf(id);
-  if (i >= 0) arr.splice(i, 1);
 }
 
 /* ---------- Tab 3: 測驗 ---------- */
@@ -602,11 +567,11 @@ function renderQuizSetup(root) {
       <button class="btn-primary" id="start-quiz" style="flex:1;">開始測驗</button>
     </div>
 
-    ${state.progress.quizHistory.length ? `
+    ${state.history.length ? `
       <div class="quiz-setup-card" style="margin-top:14px;">
         <h3>歷史紀錄</h3>
         <ul style="display:flex;flex-direction:column;gap:6px;">
-          ${state.progress.quizHistory.slice(-5).reverse().map(h => `
+          ${state.history.slice(-5).reverse().map(h => `
             <li class="muted small" style="display:flex;justify-content:space-between;">
               <span>${formatTime(h.ts)} · ${quizTypeLabel(h.type)} · ${scopeLabel(h.scope)}</span>
               <span style="color:var(--c-shu);font-weight:600;">${h.score}/${h.total}</span>
@@ -647,32 +612,16 @@ function formatTime(ts) {
 
 function startQuiz({ type, scope, count }) {
   const scenarios = scope === 'all' ? state.scenarios : [state.byId.get(scope)].filter(Boolean);
-  // 收集所有 items + 對應 group（給 fill 用）
   const allItems = [];
   scenarios.forEach(sc => {
     sc.groups.forEach(g => g.items.forEach(it => allItems.push({ item: it, group: g, scenario: sc })));
   });
   if (allItems.length === 0) { toast('題庫不足'); return; }
 
-  // 加權：weak 三倍、known 半數
-  const weighted = allItems.flatMap(rec => {
-    const id = rec.item.id;
-    if (state.progress.weak.includes(id)) return [rec, rec, rec];
-    if (state.progress.known.includes(id)) return Math.random() < 0.5 ? [rec] : [];
-    return [rec];
-  });
-  const finalPool = weighted.length >= count ? weighted : allItems;
-
-  const qs = [];
-  const usedIds = new Set();
-  let safety = 0;
-  while (qs.length < count && safety < count * 10) {
-    safety++;
-    const rec = finalPool[Math.floor(Math.random() * finalPool.length)];
-    if (usedIds.has(rec.item.id)) continue;
-    usedIds.add(rec.item.id);
-    qs.push(buildQuestion(type, rec, allItems));
-  }
+  // 純隨機（無加權）
+  const shuffled = shuffle(allItems.slice());
+  const picks = shuffled.slice(0, count);
+  const qs = picks.map(rec => buildQuestion(type, rec, allItems));
 
   state.quizActive = { type, scope, qs, idx: 0, score: 0, errors: [] };
   renderQuizView();
@@ -689,7 +638,7 @@ function buildQuestion(type, rec, allItems) {
   if (type === 'listen') {
     promptLabel = '請聽：';
     prompt = '';
-    ttsText = correct.ja;  // {漢字|讀音} 標記版 → tts.speak 內 extractKana
+    ttsText = correct.ja;
     const opts = shuffle([correct, ...distractors]);
     choices = opts.map(it => ({ text: it.zh, isJa: false, id: it.id }));
     correctIdx = opts.findIndex(it => it.id === correct.id);
@@ -700,7 +649,6 @@ function buildQuestion(type, rec, allItems) {
     choices = opts.map(it => ({ text: parseRuby(it.ja), isJa: true, id: it.id }));
     correctIdx = opts.findIndex(it => it.id === correct.id);
   } else {
-    // fill: 用 group 的 pattern 挖空
     const g = rec.group;
     const promptHTML = parseRuby(g.pattern_ja).replace('{X}',
       '<span class="blank">＿＿＿</span>');
@@ -777,12 +725,9 @@ function renderQuizQuestion(root) {
       });
       if (correct) {
         q.score++;
-        removeFromList(state.progress.weak, cur.correctItem.id);
       } else {
         q.errors.push({ q: cur, picked: i });
-        if (!state.progress.weak.includes(cur.correctItem.id)) state.progress.weak.push(cur.correctItem.id);
       }
-      saveState();
 
       const fb = root.querySelector('#quiz-feedback');
       fb.classList.remove('hidden');
@@ -810,10 +755,10 @@ function confirmQuitQuiz() {
 
 function renderQuizResult(root) {
   const q = state.quizActive;
-  state.progress.quizHistory.push({
+  state.history.push({
     ts: Date.now(), type: q.type, scope: q.scope, score: q.score, total: q.qs.length
   });
-  if (state.progress.quizHistory.length > 50) state.progress.quizHistory.splice(0, state.progress.quizHistory.length - 50);
+  if (state.history.length > 50) state.history.splice(0, state.history.length - 50);
   saveState();
   const pct = Math.round((q.score / q.qs.length) * 100);
   root.innerHTML = `
@@ -912,6 +857,9 @@ async function init() {
     state.prefs.theme = isDarkNow ? 'light' : 'dark';
     saveState(); applyTheme();
   });
+  document.getElementById('refresh-btn')?.addEventListener('click', () => {
+    if (confirm('強制重新整理？會清掉 cache 並抓最新版本。')) forceRefresh();
+  });
 
   document.querySelectorAll('input[name="theme"]').forEach(r => {
     r.addEventListener('change', () => {
@@ -933,16 +881,14 @@ async function init() {
     if (!state.ttsAvailable) { toast('此瀏覽器無日語 TTS'); return; }
     tts.speak('こんにちは、{今日|きょう}もいい{天気|てんき}ですね。');
   });
-  document.getElementById('reset-progress').addEventListener('click', () => {
-    if (!confirm('要清掉「已會」「待加強」標記跟測驗歷史嗎？')) return;
-    state.progress = { known: [], weak: [], quizHistory: [] };
+  document.getElementById('clear-history')?.addEventListener('click', () => {
+    if (!confirm('清掉測驗歷史紀錄？')) return;
+    state.history = [];
     saveState();
-    toast('已重置');
-    if (state.currentTab === 'tab-vocab') renderVocabView();
+    toast('已清空歷史');
     if (state.currentTab === 'tab-quiz') renderQuizView();
   });
 
-  // Esc 鍵：測驗中退出 / 關設定
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       if (!document.getElementById('settings-modal').classList.contains('hidden')) {
@@ -953,7 +899,6 @@ async function init() {
     }
   });
 
-  // beforeunload：測驗中提示
   window.addEventListener('beforeunload', e => {
     if (state.quizActive) {
       e.preventDefault();

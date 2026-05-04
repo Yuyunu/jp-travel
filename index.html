@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
   <title>日本旅遊日語</title>
 </head>
 <body>
@@ -32,6 +32,7 @@
           <span class="theme-icon-light">☀</span>
           <span class="theme-icon-dark">🌙</span>
         </button>
+        <button id="refresh-btn" class="header-btn" title="重新整理（清 cache）" aria-label="重新整理">↻</button>
         <button id="settings-btn" class="header-btn" title="設定" aria-label="設定">⚙</button>
       </div>
     </div>
@@ -95,9 +96,9 @@
       <div class="settings-section">
         <div class="settings-section-title">資料</div>
         <div class="btn-row">
-          <button id="reset-progress" class="btn-danger">重置學習進度</button>
+          <button id="clear-history" class="btn-danger">清空測驗歷史</button>
         </div>
-        <p class="hint">會清掉「已會」「待加強」標記、測驗歷史。對話跟單字本身不會動到。</p>
+        <p class="hint">只清測驗紀錄，對話跟單字本身不會動到。</p>
       </div>
 
       <div class="settings-section">
@@ -122,6 +123,6 @@
     </button>
   </nav>
 
-  <script src="app.js?v=3"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>

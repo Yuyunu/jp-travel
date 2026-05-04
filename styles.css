@@ -621,6 +621,21 @@ ruby rt {
   border-bottom: 2px solid var(--c-shu);
   padding: 0 8px;
 }
+.quiz-prompt .prompt-zh-hint {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--c-text);
+  font-weight: 500;
+}
+.quiz-prompt .prompt-zh-hint .filled {
+  display: inline-block;
+  color: var(--c-shu);
+  font-weight: 700;
+  background: rgba(197, 48, 43, 0.12);
+  border-radius: 6px;
+  padding: 1px 8px;
+  margin: 0 2px;
+}
 
 /* === 🍣 寿司流れクイズ === */
 .sushi-game {

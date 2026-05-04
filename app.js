@@ -667,34 +667,61 @@ function startQuiz({ type, scope, count }) {
 
 function buildQuestion(type, rec, allItems) {
   const correct = rec.item;
-  const distractorPool = allItems.filter(r => r.item.id !== correct.id).map(r => r.item);
-  shuffle(distractorPool);
-  const distractors = distractorPool.slice(0, 3);
 
   let prompt, choices, correctIdx, promptLabel, isJaPrompt = false, ttsText = null;
 
-  if (type === 'listen') {
-    promptLabel = '請聽：';
-    prompt = '';
-    ttsText = correct.ja;
-    const opts = shuffle([correct, ...distractors]);
-    choices = opts.map(it => ({ text: it.zh, isJa: false, id: it.id }));
-    correctIdx = opts.findIndex(it => it.id === correct.id);
-  } else if (type === 'read') {
-    promptLabel = '中文：';
-    prompt = correct.zh;
+  if (type === 'fill') {
+    // 填空題：擾亂選項從同 group（同句型）抽，玩家靠中文提示挑正解
+    const g = rec.group;
+    let pool = shuffle(g.items.filter(it => it.id !== correct.id));
+    if (pool.length < 3) {
+      const sameSc = [];
+      rec.scenario.groups.forEach(gg => {
+        if (gg.id === g.id) return;
+        gg.items.forEach(it => {
+          if (it.id !== correct.id && !pool.find(p => p.id === it.id)) sameSc.push(it);
+        });
+      });
+      pool = pool.concat(shuffle(sameSc));
+    }
+    if (pool.length < 3) {
+      const extra = allItems
+        .filter(r => r.item.id !== correct.id && !pool.find(p => p.id === r.item.id))
+        .map(r => r.item);
+      pool = pool.concat(shuffle(extra));
+    }
+    const distractors = pool.slice(0, 3);
+
+    const jaBlank = parseRuby(g.pattern_ja).replace('{X}',
+      '<span class="blank">＿＿＿</span>');
+    const zhFilled = escapeHTML(g.pattern_zh).replace('{X}',
+      `<span class="filled">${escapeHTML(correct.zh)}</span>`);
+    prompt = `${jaBlank}<div class="prompt-zh-hint">${zhFilled}</div>`;
+    isJaPrompt = true;
+    promptLabel = '填空：';
     const opts = shuffle([correct, ...distractors]);
     choices = opts.map(it => ({ text: parseRuby(it.ja), isJa: true, id: it.id }));
     correctIdx = opts.findIndex(it => it.id === correct.id);
   } else {
-    const g = rec.group;
-    const promptHTML = parseRuby(g.pattern_ja).replace('{X}',
-      '<span class="blank">＿＿＿</span>');
-    prompt = promptHTML;
-    isJaPrompt = true;
-    const opts = shuffle([correct, ...distractors]);
-    choices = opts.map(it => ({ text: parseRuby(it.ja), isJa: true, id: it.id }));
-    correctIdx = opts.findIndex(it => it.id === correct.id);
+    // listen / read：擾亂從全題庫抽（不同 zh / ja 一定不衝突）
+    const distractorPool = allItems.filter(r => r.item.id !== correct.id).map(r => r.item);
+    shuffle(distractorPool);
+    const distractors = distractorPool.slice(0, 3);
+
+    if (type === 'listen') {
+      promptLabel = '請聽：';
+      prompt = '';
+      ttsText = correct.ja;
+      const opts = shuffle([correct, ...distractors]);
+      choices = opts.map(it => ({ text: it.zh, isJa: false, id: it.id }));
+      correctIdx = opts.findIndex(it => it.id === correct.id);
+    } else { // read
+      promptLabel = '中文：';
+      prompt = correct.zh;
+      const opts = shuffle([correct, ...distractors]);
+      choices = opts.map(it => ({ text: parseRuby(it.ja), isJa: true, id: it.id }));
+      correctIdx = opts.findIndex(it => it.id === correct.id);
+    }
   }
   return { type, promptLabel, prompt, isJaPrompt, ttsText, choices, correctIdx, correctItem: correct };
 }

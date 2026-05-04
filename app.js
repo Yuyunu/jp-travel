@@ -7,7 +7,7 @@
    - 右上角強制重整按鈕（清 SW cache + reload）
    ============================================================= */
 
-const APP_VERSION = 'v0.3.2';
+const APP_VERSION = 'v0.3.3';
 const LS_KEY = 'jpt_state_v4';
 
 const state = {
@@ -471,10 +471,17 @@ function attachGroupHandlers(root) {
       const itemKana = chip.dataset.kana;
       const itemZh = chip.dataset.zh;
 
-      const filledJa = patternJa.replace('{X}', itemJa);
       const filledKana = patternKana.replace('{X}', itemKana);
 
-      groupCard.querySelector('.pattern-ja').innerHTML = parseRuby(filledJa);
+      // ja 側：先 parseRuby pattern（ {X} 因為沒 | 不會被 ruby regex match，保留），再把 {X} 替換成包好的 item html
+      const itemJaHtml = parseRuby(itemJa);
+      const patternJaHtml = parseRuby(patternJa).replace(
+        '{X}',
+        `<span class="filled">${itemJaHtml}</span>`
+      );
+      groupCard.querySelector('.pattern-ja').innerHTML = patternJaHtml;
+
+      // zh 側
       groupCard.querySelector('.pattern-zh').innerHTML =
         escapeHTML(patternZh).replace('{X}', `<span class="filled">${escapeHTML(itemZh)}</span>`);
 

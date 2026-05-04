@@ -196,9 +196,9 @@
     {
       "id": "hotel-broken",
       "category": "客訴（壞掉／不通）",
-      "pattern_ja": "{X}が{効|き}きません。",
-      "pattern_kana": "{X}がききません。",
-      "pattern_zh": "{X} 不通／壞了。",
+      "pattern_ja": "{X}が{壊|こわ}れています。",
+      "pattern_kana": "{X}がこわれています。",
+      "pattern_zh": "{X} 壞了。",
       "items": [
         {
           "id": "ht-i8",

@@ -472,9 +472,16 @@ ruby rt {
   display: inline-block;
   color: var(--c-shu);
   font-weight: 700;
-  background: rgba(197, 48, 43, 0.10);
-  padding: 0 6px;
-  border-radius: 4px;
+  background: rgba(197, 48, 43, 0.14);
+  padding: 1px 8px 2px;
+  border-radius: 6px;
+  border-bottom: 2px solid var(--c-shu);
+  margin: 0 2px;
+}
+/* ja 句型的 ruby rt 顏色：替換進去那段也要染色 */
+.pattern-display .filled ruby rt {
+  color: var(--c-shu);
+  opacity: 0.75;
 }
 .item-chips {
   display: grid;

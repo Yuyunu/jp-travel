@@ -1,0 +1,92 @@
+{
+  "id": "station",
+  "name_zh": "車站",
+  "name_ja": "駅",
+  "emoji": "🚉",
+  "dialogues": [
+    {
+      "id": "station-shinkansen",
+      "title_zh": "買新幹線票",
+      "title_ja": "新幹線の切符を買う",
+      "turns": [
+        { "role": "A", "ja": "{京都|きょうと}まで{大人|おとな}{二枚|にまい}ください。", "zh": "請給我兩張到京都的大人票。" },
+        { "role": "B", "ja": "{指定席|していせき}か{自由席|じゆうせき}か、どちらになさいますか。", "zh": "要對號座還是自由座？" },
+        { "role": "A", "ja": "{指定席|していせき}でお{願|ねが}いします。", "zh": "對號座，麻煩你。" },
+        { "role": "B", "ja": "{窓側|まどがわ}と{通路側|つうろがわ}、どちらがよろしいですか。", "zh": "要靠窗還是走道？" },
+        { "role": "A", "ja": "{窓側|まどがわ}でお{願|ねが}いします。", "zh": "靠窗，麻煩你。" },
+        { "role": "B", "ja": "{次|つぎ}の{のぞみ|のぞみ}は10{時|じ}30{分|ぷん}{発|はつ}です。", "zh": "下一班 Nozomi 是 10 點 30 分發車。" },
+        { "role": "A", "ja": "{何番線|なんばんせん}ですか。", "zh": "是第幾月台？" },
+        { "role": "B", "ja": "{14番線|じゅうよんばんせん}です。", "zh": "14 號月台。" }
+      ]
+    },
+    {
+      "id": "station-transfer",
+      "title_zh": "問轉乘",
+      "title_ja": "乗り換えを聞く",
+      "turns": [
+        { "role": "A", "ja": "すみません、{渋谷|しぶや}までどう{行|い}けばいいですか。", "zh": "不好意思，到澀谷怎麼走？" },
+        { "role": "B", "ja": "{山手線|やまのてせん}に{乗|の}って、{次|つぎ}が{渋谷|しぶや}です。", "zh": "搭山手線，下一站就是澀谷。" },
+        { "role": "A", "ja": "{何番線|なんばんせん}ですか。", "zh": "幾號月台？" },
+        { "role": "B", "ja": "{2番線|にばんせん}です。{改札|かいさつ}を{出|で}て{右|みぎ}です。", "zh": "2 號月台，出剪票口右轉。" },
+        { "role": "A", "ja": "{所要時間|しょよう じかん}はどれくらいですか。", "zh": "大概要多久？" },
+        { "role": "B", "ja": "{10分|じゅっぷん}くらいです。", "zh": "大概 10 分鐘。" },
+        { "role": "A", "ja": "ありがとうございます。", "zh": "謝謝。" }
+      ]
+    },
+    {
+      "id": "station-ic",
+      "title_zh": "IC 卡儲值",
+      "title_ja": "ICカードのチャージ",
+      "turns": [
+        { "role": "A", "ja": "すみません、Suicaにチャージしたいです。", "zh": "不好意思，我想幫 Suica 加值。" },
+        { "role": "B", "ja": "あちらの{券売機|けんばいき}でできます。", "zh": "在那邊的售票機可以加值。" },
+        { "role": "A", "ja": "{現金|げんきん}しか{使|つか}えませんか。", "zh": "只能用現金嗎？" },
+        { "role": "B", "ja": "はい、{現金|げんきん}のみです。", "zh": "對，只能用現金。" },
+        { "role": "A", "ja": "{千円|せんえん}{札|さつ}は{使|つか}えますか。", "zh": "千元紙鈔可以用嗎？" },
+        { "role": "B", "ja": "はい、{使|つか}えます。", "zh": "可以用。" }
+      ]
+    }
+  ],
+  "vocab": [
+    { "id": "st-v1", "ja": "{駅|えき}", "kana": "えき", "zh": "車站", "pos": "名詞", "example_id": "station-transfer" },
+    { "id": "st-v2", "ja": "{切符|きっぷ}", "kana": "きっぷ", "zh": "票", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v3", "ja": "{新幹線|しんかんせん}", "kana": "しんかんせん", "zh": "新幹線", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v4", "ja": "{在来線|ざいらいせん}", "kana": "ざいらいせん", "zh": "在來線（普通線）", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v5", "ja": "{特急|とっきゅう}", "kana": "とっきゅう", "zh": "特急（列車）", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v6", "ja": "{指定席|していせき}", "kana": "していせき", "zh": "對號座（指定席）", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v7", "ja": "{自由席|じゆうせき}", "kana": "じゆうせき", "zh": "自由座", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v8", "ja": "グリーン{車|しゃ}", "kana": "ぐりーんしゃ", "zh": "綠色車廂（頭等）", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v9", "ja": "{大人|おとな}", "kana": "おとな", "zh": "大人", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v10", "ja": "{子供|こども}", "kana": "こども", "zh": "小孩", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v11", "ja": "{一枚|いちまい}", "kana": "いちまい", "zh": "一張（票、紙）", "pos": "量詞", "example_id": "station-shinkansen" },
+    { "id": "st-v12", "ja": "{二枚|にまい}", "kana": "にまい", "zh": "兩張", "pos": "量詞", "example_id": "station-shinkansen" },
+    { "id": "st-v13", "ja": "{窓側|まどがわ}", "kana": "まどがわ", "zh": "靠窗", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v14", "ja": "{通路側|つうろがわ}", "kana": "つうろがわ", "zh": "靠走道", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v15", "ja": "{何番線|なんばんせん}", "kana": "なんばんせん", "zh": "幾號月台", "pos": "疑問詞", "example_id": "station-shinkansen" },
+    { "id": "st-v16", "ja": "ホーム", "kana": "ほーむ", "zh": "月台", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v17", "ja": "{改札|かいさつ}", "kana": "かいさつ", "zh": "剪票口", "pos": "名詞", "example_id": "station-transfer" },
+    { "id": "st-v18", "ja": "{乗|の}り{換|か}え", "kana": "のりかえ", "zh": "轉乘、換車", "pos": "名詞", "example_id": "station-transfer" },
+    { "id": "st-v19", "ja": "{山手線|やまのてせん}", "kana": "やまのてせん", "zh": "山手線", "pos": "名詞", "example_id": "station-transfer" },
+    { "id": "st-v20", "ja": "{地下鉄|ちかてつ}", "kana": "ちかてつ", "zh": "地下鐵", "pos": "名詞", "example_id": "station-transfer" },
+    { "id": "st-v21", "ja": "{所要時間|しょようじかん}", "kana": "しょようじかん", "zh": "所需時間", "pos": "名詞", "example_id": "station-transfer" },
+    { "id": "st-v22", "ja": "Suica", "kana": "すいか", "zh": "Suica IC 卡", "pos": "名詞", "example_id": "station-ic" },
+    { "id": "st-v23", "ja": "Pasmo", "kana": "ぱすも", "zh": "Pasmo IC 卡", "pos": "名詞", "example_id": "station-ic" },
+    { "id": "st-v24", "ja": "ICカード", "kana": "あいしーかーど", "zh": "IC 卡", "pos": "名詞", "example_id": "station-ic" },
+    { "id": "st-v25", "ja": "チャージ", "kana": "ちゃーじ", "zh": "加值、儲值", "pos": "名詞／他動詞", "example_id": "station-ic" },
+    { "id": "st-v26", "ja": "{券売機|けんばいき}", "kana": "けんばいき", "zh": "售票機", "pos": "名詞", "example_id": "station-ic" },
+    { "id": "st-v27", "ja": "{現金|げんきん}", "kana": "げんきん", "zh": "現金", "pos": "名詞", "example_id": "station-ic" },
+    { "id": "st-v28", "ja": "{千円|せんえん}{札|さつ}", "kana": "せんえんさつ", "zh": "千元紙鈔", "pos": "名詞", "example_id": "station-ic" },
+    { "id": "st-v29", "ja": "{片道|かたみち}", "kana": "かたみち", "zh": "單程", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v30", "ja": "{往復|おうふく}", "kana": "おうふく", "zh": "來回", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v31", "ja": "{始発|しはつ}", "kana": "しはつ", "zh": "首班車、起站", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v32", "ja": "{終電|しゅうでん}", "kana": "しゅうでん", "zh": "末班車", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v33", "ja": "JR{パス|ぱす}", "kana": "じぇいあーるぱす", "zh": "JR Pass（周遊券）", "pos": "名詞", "example_id": "station-shinkansen" },
+    { "id": "st-v34", "ja": "{出口|でぐち}", "kana": "でぐち", "zh": "出口", "pos": "名詞", "example_id": "station-transfer" },
+    { "id": "st-v35", "ja": "{入口|いりぐち}", "kana": "いりぐち", "zh": "入口", "pos": "名詞", "example_id": "station-transfer" },
+    { "id": "st-v36", "ja": "{右|みぎ}", "kana": "みぎ", "zh": "右", "pos": "名詞", "example_id": "station-transfer" },
+    { "id": "st-v37", "ja": "{左|ひだり}", "kana": "ひだり", "zh": "左", "pos": "名詞", "example_id": "station-transfer" },
+    { "id": "st-v38", "ja": "{真|ま}っすぐ", "kana": "まっすぐ", "zh": "直走", "pos": "副詞", "example_id": "station-transfer" },
+    { "id": "st-v39", "ja": "{次|つぎ}の{駅|えき}", "kana": "つぎのえき", "zh": "下一站", "pos": "名詞", "example_id": "station-transfer" },
+    { "id": "st-v40", "ja": "{反対側|はんたいがわ}", "kana": "はんたいがわ", "zh": "對面（月台）", "pos": "名詞", "example_id": "station-transfer" }
+  ]
+}

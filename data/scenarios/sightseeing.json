@@ -1,0 +1,96 @@
+{
+  "id": "sightseeing",
+  "name_zh": "觀光景點",
+  "name_ja": "観光地",
+  "emoji": "📸",
+  "dialogues": [
+    {
+      "id": "sight-ticket",
+      "title_zh": "買票",
+      "title_ja": "チケットを買う",
+      "turns": [
+        { "role": "A", "ja": "すみません、{大人|おとな}{二枚|にまい}と{子供|こども}{一枚|いちまい}ください。", "zh": "不好意思，大人 2 張、小孩 1 張。" },
+        { "role": "B", "ja": "{合計|ごうけい}{2400円|にせんよんひゃくえん}です。", "zh": "總計 2,400 日圓。" },
+        { "role": "A", "ja": "{学生|がくせい}{割引|わりびき}はありますか。", "zh": "有學生優惠嗎？" },
+        { "role": "B", "ja": "{学生証|がくせいしょう}があれば{200円|にひゃくえん}{引|び}きになります。", "zh": "有學生證的話折 200 日圓。" },
+        { "role": "A", "ja": "{何時|なんじ}まで{入|はい}れますか。", "zh": "幾點之前可以進去？" },
+        { "role": "B", "ja": "{最終|さいしゅう}{入場|にゅうじょう}は{16時半|じゅうろくじはん}です。", "zh": "最後入場是 16:30。" }
+      ]
+    },
+    {
+      "id": "sight-locker",
+      "title_zh": "寄物 + 拍照",
+      "title_ja": "コインロッカー・写真",
+      "turns": [
+        { "role": "A", "ja": "コインロッカーはどこですか。", "zh": "投幣置物櫃在哪裡？" },
+        { "role": "B", "ja": "{入口|いりぐち}の{右側|みぎがわ}にございます。", "zh": "在入口的右邊。" },
+        { "role": "A", "ja": "{大|おお}きい{荷物|にもつ}も{入|はい}りますか。", "zh": "大行李也放得進去嗎？" },
+        { "role": "B", "ja": "{大型|おおがた}ロッカーは{500円|ごひゃくえん}です。", "zh": "大型置物櫃 500 日圓。" },
+        { "role": "A", "ja": "すみません、{写真|しゃしん}を{撮|と}ってもいいですか。", "zh": "不好意思，可以拍照嗎？" },
+        { "role": "B", "ja": "はい、フラッシュは{使|つか}わないでください。", "zh": "可以，請不要用閃光燈。" },
+        { "role": "A", "ja": "{一緒|いっしょ}に{撮|と}っていただけますか。", "zh": "可以幫我們合照嗎？" },
+        { "role": "B", "ja": "もちろんです。", "zh": "當然可以。" }
+      ]
+    },
+    {
+      "id": "sight-toilet",
+      "title_zh": "問廁所 / 觀光巴士",
+      "title_ja": "トイレ・観光バス",
+      "turns": [
+        { "role": "A", "ja": "すみません、お{手洗|てあら}いはどこですか。", "zh": "不好意思，洗手間在哪裡？" },
+        { "role": "B", "ja": "あちらの{階段|かいだん}を{下|お}りた{所|ところ}にございます。", "zh": "在那邊樓梯下去的地方。" },
+        { "role": "A", "ja": "{観光|かんこう}バスは{何時|なんじ}{発|はつ}ですか。", "zh": "觀光巴士幾點發車？" },
+        { "role": "B", "ja": "{次|つぎ}は{15時|じゅうごじ}{発|はつ}、{所要|しょよう}{2時間|にじかん}です。", "zh": "下一班 15 點發車，全程 2 小時。" },
+        { "role": "A", "ja": "{中国語|ちゅうごくご}の{案内|あんない}はありますか。", "zh": "有中文導覽嗎？" },
+        { "role": "B", "ja": "{音声|おんせい}ガイドがございます。", "zh": "有語音導覽。" }
+      ]
+    }
+  ],
+  "vocab": [
+    { "id": "sg-v1", "ja": "{観光|かんこう}{地|ち}", "kana": "かんこうち", "zh": "觀光地、景點", "pos": "名詞", "example_id": "sight-ticket" },
+    { "id": "sg-v2", "ja": "チケット", "kana": "ちけっと", "zh": "票", "pos": "名詞", "example_id": "sight-ticket" },
+    { "id": "sg-v3", "ja": "{入場券|にゅうじょうけん}", "kana": "にゅうじょうけん", "zh": "入場券", "pos": "名詞", "example_id": "sight-ticket" },
+    { "id": "sg-v4", "ja": "{入場料|にゅうじょうりょう}", "kana": "にゅうじょうりょう", "zh": "入場費", "pos": "名詞", "example_id": "sight-ticket" },
+    { "id": "sg-v5", "ja": "{大人|おとな}", "kana": "おとな", "zh": "大人", "pos": "名詞", "example_id": "sight-ticket" },
+    { "id": "sg-v6", "ja": "{子供|こども}", "kana": "こども", "zh": "小孩", "pos": "名詞", "example_id": "sight-ticket" },
+    { "id": "sg-v7", "ja": "{学生|がくせい}", "kana": "がくせい", "zh": "學生", "pos": "名詞", "example_id": "sight-ticket" },
+    { "id": "sg-v8", "ja": "{学生証|がくせいしょう}", "kana": "がくせいしょう", "zh": "學生證", "pos": "名詞", "example_id": "sight-ticket" },
+    { "id": "sg-v9", "ja": "シニア", "kana": "しにあ", "zh": "敬老（長者）", "pos": "名詞", "example_id": "sight-ticket" },
+    { "id": "sg-v10", "ja": "{割引|わりびき}", "kana": "わりびき", "zh": "折扣", "pos": "名詞", "example_id": "sight-ticket" },
+    { "id": "sg-v11", "ja": "{最終|さいしゅう}{入場|にゅうじょう}", "kana": "さいしゅうにゅうじょう", "zh": "最後入場時間", "pos": "名詞", "example_id": "sight-ticket" },
+    { "id": "sg-v12", "ja": "{開館|かいかん}{時間|じかん}", "kana": "かいかんじかん", "zh": "開館時間", "pos": "名詞", "example_id": "sight-ticket" },
+    { "id": "sg-v13", "ja": "{閉館|へいかん}{時間|じかん}", "kana": "へいかんじかん", "zh": "閉館時間", "pos": "名詞", "example_id": "sight-ticket" },
+    { "id": "sg-v14", "ja": "コインロッカー", "kana": "こいんろっかー", "zh": "投幣式置物櫃", "pos": "名詞", "example_id": "sight-locker" },
+    { "id": "sg-v15", "ja": "{大型|おおがた}", "kana": "おおがた", "zh": "大型", "pos": "名詞", "example_id": "sight-locker" },
+    { "id": "sg-v16", "ja": "{小型|こがた}", "kana": "こがた", "zh": "小型", "pos": "名詞", "example_id": "sight-locker" },
+    { "id": "sg-v17", "ja": "{小銭|こぜに}", "kana": "こぜに", "zh": "零錢", "pos": "名詞", "example_id": "sight-locker" },
+    { "id": "sg-v18", "ja": "{両替機|りょうがえき}", "kana": "りょうがえき", "zh": "換零錢機", "pos": "名詞", "example_id": "sight-locker" },
+    { "id": "sg-v19", "ja": "{写真|しゃしん}", "kana": "しゃしん", "zh": "照片", "pos": "名詞", "example_id": "sight-locker" },
+    { "id": "sg-v20", "ja": "{撮|と}る", "kana": "とる", "zh": "拍（照）", "pos": "他動詞", "example_id": "sight-locker" },
+    { "id": "sg-v21", "ja": "フラッシュ", "kana": "ふらっしゅ", "zh": "閃光燈", "pos": "名詞", "example_id": "sight-locker" },
+    { "id": "sg-v22", "ja": "{三脚|さんきゃく}", "kana": "さんきゃく", "zh": "三腳架", "pos": "名詞", "example_id": "sight-locker" },
+    { "id": "sg-v23", "ja": "{自撮|じど}り{棒|ぼう}", "kana": "じどりぼう", "zh": "自拍棒", "pos": "名詞", "example_id": "sight-locker" },
+    { "id": "sg-v24", "ja": "{撮影|さつえい}{禁止|きんし}", "kana": "さつえいきんし", "zh": "禁止攝影", "pos": "名詞", "example_id": "sight-locker" },
+    { "id": "sg-v25", "ja": "お{手洗|てあら}い", "kana": "おてあらい", "zh": "洗手間（敬語）", "pos": "名詞", "example_id": "sight-toilet" },
+    { "id": "sg-v26", "ja": "トイレ", "kana": "といれ", "zh": "廁所", "pos": "名詞", "example_id": "sight-toilet" },
+    { "id": "sg-v27", "ja": "{男子|だんし}", "kana": "だんし", "zh": "男（廁所）", "pos": "名詞", "example_id": "sight-toilet" },
+    { "id": "sg-v28", "ja": "{女子|じょし}", "kana": "じょし", "zh": "女（廁所）", "pos": "名詞", "example_id": "sight-toilet" },
+    { "id": "sg-v29", "ja": "{多目的|たもくてき}トイレ", "kana": "たもくてきといれ", "zh": "無障礙廁所", "pos": "名詞", "example_id": "sight-toilet" },
+    { "id": "sg-v30", "ja": "{階段|かいだん}", "kana": "かいだん", "zh": "樓梯", "pos": "名詞", "example_id": "sight-toilet" },
+    { "id": "sg-v31", "ja": "エレベーター", "kana": "えれべーたー", "zh": "電梯", "pos": "名詞", "example_id": "sight-toilet" },
+    { "id": "sg-v32", "ja": "エスカレーター", "kana": "えすかれーたー", "zh": "電扶梯", "pos": "名詞", "example_id": "sight-toilet" },
+    { "id": "sg-v33", "ja": "{観光|かんこう}バス", "kana": "かんこうばす", "zh": "觀光巴士", "pos": "名詞", "example_id": "sight-toilet" },
+    { "id": "sg-v34", "ja": "{案内|あんない}", "kana": "あんない", "zh": "導覽、引導", "pos": "名詞", "example_id": "sight-toilet" },
+    { "id": "sg-v35", "ja": "{音声|おんせい}ガイド", "kana": "おんせいがいど", "zh": "語音導覽", "pos": "名詞", "example_id": "sight-toilet" },
+    { "id": "sg-v36", "ja": "{中国語|ちゅうごくご}", "kana": "ちゅうごくご", "zh": "中文", "pos": "名詞", "example_id": "sight-toilet" },
+    { "id": "sg-v37", "ja": "{英語|えいご}", "kana": "えいご", "zh": "英文", "pos": "名詞", "example_id": "sight-toilet" },
+    { "id": "sg-v38", "ja": "{地図|ちず}", "kana": "ちず", "zh": "地圖", "pos": "名詞", "example_id": "sight-toilet" },
+    { "id": "sg-v39", "ja": "パンフレット", "kana": "ぱんふれっと", "zh": "簡介、手冊", "pos": "名詞", "example_id": "sight-toilet" },
+    { "id": "sg-v40", "ja": "お{土産|みやげ}", "kana": "おみやげ", "zh": "伴手禮", "pos": "名詞", "example_id": "sight-locker" },
+    { "id": "sg-v41", "ja": "{順路|じゅんろ}", "kana": "じゅんろ", "zh": "參觀順序", "pos": "名詞", "example_id": "sight-locker" },
+    { "id": "sg-v42", "ja": "{出口|でぐち}", "kana": "でぐち", "zh": "出口", "pos": "名詞", "example_id": "sight-locker" },
+    { "id": "sg-v43", "ja": "{入口|いりぐち}", "kana": "いりぐち", "zh": "入口", "pos": "名詞", "example_id": "sight-locker" },
+    { "id": "sg-v44", "ja": "{所要|しょよう}", "kana": "しょよう", "zh": "所需（時間）", "pos": "名詞", "example_id": "sight-toilet" },
+    { "id": "sg-v45", "ja": "{2時間|にじかん}", "kana": "にじかん", "zh": "2 小時", "pos": "名詞", "example_id": "sight-toilet" }
+  ]
+}

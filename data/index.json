@@ -1,4 +1,15 @@
 {
-  "version": "0.1.0",
-  "scenarios": ["airport", "restaurant", "hotel"]
+  "version": "0.2.0",
+  "scenarios": [
+    "airport",
+    "flight",
+    "station",
+    "hotel",
+    "restaurant",
+    "ramen",
+    "izakaya",
+    "conbini",
+    "sightseeing",
+    "emergency"
+  ]
 }

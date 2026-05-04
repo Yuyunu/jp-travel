@@ -1,0 +1,91 @@
+{
+  "id": "ramen",
+  "name_zh": "拉麵店",
+  "name_ja": "ラーメン屋",
+  "emoji": "🍜",
+  "dialogues": [
+    {
+      "id": "ramen-order",
+      "title_zh": "點麵（味／硬度／濃淡）",
+      "title_ja": "ラーメンの注文",
+      "turns": [
+        { "role": "B", "ja": "いらっしゃいませ。ご{注文|ちゅうもん}は。", "zh": "歡迎光臨，請問要點什麼？" },
+        { "role": "A", "ja": "{豚骨|とんこつ}ラーメン{一|ひと}つください。", "zh": "請給我一碗豚骨拉麵。" },
+        { "role": "B", "ja": "{麺|めん}の{硬|かた}さはいかがしますか。", "zh": "麵的硬度要怎麼樣？" },
+        { "role": "A", "ja": "{硬|かた}めでお{願|ねが}いします。", "zh": "硬一點，麻煩你。" },
+        { "role": "B", "ja": "{味|あじ}の{濃|こ}さは。", "zh": "口味濃淡呢？" },
+        { "role": "A", "ja": "{普通|ふつう}でお{願|ねが}いします。", "zh": "普通就好，麻煩你。" },
+        { "role": "B", "ja": "{脂|あぶら}の{量|りょう}は。", "zh": "油的量呢？" },
+        { "role": "A", "ja": "{少|すく}なめでお{願|ねが}いします。", "zh": "少一點，麻煩你。" },
+        { "role": "B", "ja": "かしこまりました。", "zh": "好的。" }
+      ]
+    },
+    {
+      "id": "ramen-topping",
+      "title_zh": "加點 + 替玉",
+      "title_ja": "トッピング・替玉",
+      "turns": [
+        { "role": "A", "ja": "すみません、トッピングをお{願|ねが}いします。", "zh": "不好意思，我要加配料。" },
+        { "role": "B", "ja": "はい、{何|なに}になさいますか。", "zh": "好的，要點什麼？" },
+        { "role": "A", "ja": "{煮卵|にたまご}と{海苔|のり}をお{願|ねが}いします。", "zh": "溏心蛋跟海苔，麻煩你。" },
+        { "role": "B", "ja": "かしこまりました。", "zh": "好的。" },
+        { "role": "A", "ja": "{替玉|かえだま}もください。", "zh": "也要加麵。" },
+        { "role": "B", "ja": "{硬|かた}さはどうしますか。", "zh": "硬度怎麼樣？" },
+        { "role": "A", "ja": "バリカタでお{願|ねが}いします。", "zh": "硬麵（バリカタ），麻煩你。" }
+      ]
+    },
+    {
+      "id": "ramen-set",
+      "title_zh": "套餐 + 結帳",
+      "title_ja": "セット・お会計",
+      "turns": [
+        { "role": "A", "ja": "{餃子|ぎょうざ}セットはありますか。", "zh": "有餃子套餐嗎？" },
+        { "role": "B", "ja": "はい、ラーメンに{餃子|ぎょうざ}{五個|ごこ}と{半|はん}ライスがついて{300円|さんびゃくえん}{追加|ついか}です。", "zh": "有，拉麵加 5 顆餃子跟半碗飯，加 300 日圓。" },
+        { "role": "A", "ja": "じゃあ、それでお{願|ねが}いします。", "zh": "那就來這個，麻煩你。" },
+        { "role": "A", "ja": "お{会計|かいけい}お{願|ねが}いします。", "zh": "麻煩結帳。" },
+        { "role": "B", "ja": "{食券|しょっけん}は{先|さき}に{券売機|けんばいき}でお{買|か}い{求|もと}めください。", "zh": "餐券請先在售票機買。" },
+        { "role": "A", "ja": "あ、すみません、{知|し}りませんでした。", "zh": "啊，不好意思，我不知道。" }
+      ]
+    }
+  ],
+  "vocab": [
+    { "id": "rm-v1", "ja": "ラーメン", "kana": "らーめん", "zh": "拉麵", "pos": "名詞", "example_id": "ramen-order" },
+    { "id": "rm-v2", "ja": "{豚骨|とんこつ}", "kana": "とんこつ", "zh": "豚骨（湯底）", "pos": "名詞", "example_id": "ramen-order" },
+    { "id": "rm-v3", "ja": "{醤油|しょうゆ}", "kana": "しょうゆ", "zh": "醬油（湯底）", "pos": "名詞", "example_id": "ramen-order" },
+    { "id": "rm-v4", "ja": "{味噌|みそ}", "kana": "みそ", "zh": "味噌（湯底）", "pos": "名詞", "example_id": "ramen-order" },
+    { "id": "rm-v5", "ja": "{塩|しお}", "kana": "しお", "zh": "鹽味（湯底）", "pos": "名詞", "example_id": "ramen-order" },
+    { "id": "rm-v6", "ja": "{麺|めん}", "kana": "めん", "zh": "麵", "pos": "名詞", "example_id": "ramen-order" },
+    { "id": "rm-v7", "ja": "{硬|かた}め", "kana": "かため", "zh": "硬一點（麵）", "pos": "名詞", "example_id": "ramen-order" },
+    { "id": "rm-v8", "ja": "{普通|ふつう}", "kana": "ふつう", "zh": "普通（程度）", "pos": "名詞", "example_id": "ramen-order" },
+    { "id": "rm-v9", "ja": "{柔|やわ}らかめ", "kana": "やわらかめ", "zh": "軟一點（麵）", "pos": "名詞", "example_id": "ramen-order" },
+    { "id": "rm-v10", "ja": "バリカタ", "kana": "ばりかた", "zh": "超硬麵（拉麵術語）", "pos": "名詞", "example_id": "ramen-topping" },
+    { "id": "rm-v11", "ja": "{味|あじ}", "kana": "あじ", "zh": "味道", "pos": "名詞", "example_id": "ramen-order" },
+    { "id": "rm-v12", "ja": "{濃|こ}いめ", "kana": "こいめ", "zh": "濃一點", "pos": "名詞", "example_id": "ramen-order" },
+    { "id": "rm-v13", "ja": "{薄|うす}め", "kana": "うすめ", "zh": "淡一點", "pos": "名詞", "example_id": "ramen-order" },
+    { "id": "rm-v14", "ja": "{脂|あぶら}", "kana": "あぶら", "zh": "（湯的）油", "pos": "名詞", "example_id": "ramen-order" },
+    { "id": "rm-v15", "ja": "{多|おお}め", "kana": "おおめ", "zh": "多一點", "pos": "名詞", "example_id": "ramen-order" },
+    { "id": "rm-v16", "ja": "{少|すく}なめ", "kana": "すくなめ", "zh": "少一點", "pos": "名詞", "example_id": "ramen-order" },
+    { "id": "rm-v17", "ja": "{替玉|かえだま}", "kana": "かえだま", "zh": "加麵（替玉）", "pos": "名詞", "example_id": "ramen-topping" },
+    { "id": "rm-v18", "ja": "トッピング", "kana": "とっぴんぐ", "zh": "配料、加料", "pos": "名詞", "example_id": "ramen-topping" },
+    { "id": "rm-v19", "ja": "チャーシュー", "kana": "ちゃーしゅー", "zh": "叉燒", "pos": "名詞", "example_id": "ramen-topping" },
+    { "id": "rm-v20", "ja": "{煮卵|にたまご}", "kana": "にたまご", "zh": "溏心蛋", "pos": "名詞", "example_id": "ramen-topping" },
+    { "id": "rm-v21", "ja": "{海苔|のり}", "kana": "のり", "zh": "海苔", "pos": "名詞", "example_id": "ramen-topping" },
+    { "id": "rm-v22", "ja": "メンマ", "kana": "めんま", "zh": "筍乾（拉麵配料）", "pos": "名詞", "example_id": "ramen-topping" },
+    { "id": "rm-v23", "ja": "ねぎ", "kana": "ねぎ", "zh": "蔥", "pos": "名詞", "example_id": "ramen-topping" },
+    { "id": "rm-v24", "ja": "もやし", "kana": "もやし", "zh": "豆芽", "pos": "名詞", "example_id": "ramen-topping" },
+    { "id": "rm-v25", "ja": "コーン", "kana": "こーん", "zh": "玉米粒", "pos": "名詞", "example_id": "ramen-topping" },
+    { "id": "rm-v26", "ja": "バター", "kana": "ばたー", "zh": "奶油", "pos": "名詞", "example_id": "ramen-topping" },
+    { "id": "rm-v27", "ja": "{餃子|ぎょうざ}", "kana": "ぎょうざ", "zh": "煎餃", "pos": "名詞", "example_id": "ramen-set" },
+    { "id": "rm-v28", "ja": "セット", "kana": "せっと", "zh": "套餐", "pos": "名詞", "example_id": "ramen-set" },
+    { "id": "rm-v29", "ja": "{半|はん}ライス", "kana": "はんらいす", "zh": "半碗飯", "pos": "名詞", "example_id": "ramen-set" },
+    { "id": "rm-v30", "ja": "{大盛|おおも}り", "kana": "おおもり", "zh": "大碗、加大", "pos": "名詞", "example_id": "ramen-set" },
+    { "id": "rm-v31", "ja": "{小盛|こも}り", "kana": "こもり", "zh": "小碗", "pos": "名詞", "example_id": "ramen-set" },
+    { "id": "rm-v32", "ja": "{追加|ついか}", "kana": "ついか", "zh": "加點、追加", "pos": "名詞／他動詞", "example_id": "ramen-set" },
+    { "id": "rm-v33", "ja": "{食券|しょっけん}", "kana": "しょっけん", "zh": "餐券", "pos": "名詞", "example_id": "ramen-set" },
+    { "id": "rm-v34", "ja": "{券売機|けんばいき}", "kana": "けんばいき", "zh": "點餐機（售券機）", "pos": "名詞", "example_id": "ramen-set" },
+    { "id": "rm-v35", "ja": "{一|ひと}つ", "kana": "ひとつ", "zh": "一個（通用）", "pos": "量詞", "example_id": "ramen-order" },
+    { "id": "rm-v36", "ja": "{二|ふた}つ", "kana": "ふたつ", "zh": "兩個", "pos": "量詞", "example_id": "ramen-order" },
+    { "id": "rm-v37", "ja": "{五個|ごこ}", "kana": "ごこ", "zh": "5 個（小東西）", "pos": "量詞", "example_id": "ramen-set" },
+    { "id": "rm-v38", "ja": "{単品|たんぴん}", "kana": "たんぴん", "zh": "單點", "pos": "名詞", "example_id": "ramen-set" }
+  ]
+}

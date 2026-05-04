@@ -2,7 +2,7 @@
    日本旅遊日語 PWA — app.js
    ============================================================= */
 
-const APP_VERSION = 'v0.1.0';
+const APP_VERSION = 'v0.2.0';
 const LS_KEY = 'jpt_state_v1';
 
 /* ---------- State ---------- */

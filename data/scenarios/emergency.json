@@ -1,0 +1,95 @@
+{
+  "id": "emergency",
+  "name_zh": "緊急狀況",
+  "name_ja": "緊急時",
+  "emoji": "🆘",
+  "dialogues": [
+    {
+      "id": "emg-lost",
+      "title_zh": "迷路 / 問路",
+      "title_ja": "道に迷う・道を聞く",
+      "turns": [
+        { "role": "A", "ja": "すみません、{道|みち}に{迷|まよ}いました。", "zh": "不好意思，我迷路了。" },
+        { "role": "A", "ja": "ここはどこですか。", "zh": "這裡是哪裡？" },
+        { "role": "B", "ja": "{地図|ちず}を{見|み}せていただけますか。", "zh": "可以給我看地圖嗎？" },
+        { "role": "A", "ja": "ホテルに{戻|もど}りたいです。", "zh": "我想回飯店。" },
+        { "role": "B", "ja": "ホテルの{名前|なまえ}は。", "zh": "飯店叫什麼？" },
+        { "role": "A", "ja": "{新宿|しんじゅく}プリンスホテルです。", "zh": "新宿王子飯店。" },
+        { "role": "B", "ja": "{次|つぎ}の{角|かど}を{右|みぎ}に{曲|ま}がって、{真|ま}っすぐです。", "zh": "下個轉角右轉，然後直走。" },
+        { "role": "A", "ja": "ありがとうございます。{助|たす}かりました。", "zh": "謝謝，幫了大忙。" }
+      ]
+    },
+    {
+      "id": "emg-sick",
+      "title_zh": "生病 / 看醫生",
+      "title_ja": "体調不良・病院",
+      "turns": [
+        { "role": "A", "ja": "すみません、{気分|きぶん}が{悪|わる}いです。", "zh": "不好意思，我不舒服。" },
+        { "role": "B", "ja": "どうされましたか。", "zh": "怎麼了？" },
+        { "role": "A", "ja": "{頭|あたま}が{痛|いた}いです。{熱|ねつ}もあります。", "zh": "頭痛，也有發燒。" },
+        { "role": "B", "ja": "{病院|びょういん}にお{連|つ}れしましょうか。", "zh": "我帶您去醫院好嗎？" },
+        { "role": "A", "ja": "お{願|ねが}いします。", "zh": "麻煩你了。" },
+        { "role": "A", "ja": "{薬|くすり}にアレルギーがあります。", "zh": "我對藥有過敏。" },
+        { "role": "B", "ja": "{何|なに}のアレルギーですか。", "zh": "對什麼過敏？" },
+        { "role": "A", "ja": "ペニシリンです。", "zh": "盤尼西林。" }
+      ]
+    },
+    {
+      "id": "emg-lost-item",
+      "title_zh": "丟東西 / 找警察",
+      "title_ja": "落とし物・交番",
+      "turns": [
+        { "role": "A", "ja": "すみません、{財布|さいふ}を{落|お}としました。", "zh": "不好意思，我錢包掉了。" },
+        { "role": "B", "ja": "どこで{落|お}としましたか。", "zh": "在哪裡掉的？" },
+        { "role": "A", "ja": "{多分|たぶん}{電車|でんしゃ}の{中|なか}です。", "zh": "大概在電車裡。" },
+        { "role": "B", "ja": "{交番|こうばん}で{紛失届|ふんしつとどけ}を{出|だ}してください。", "zh": "請去派出所報失。" },
+        { "role": "A", "ja": "パスポートも{失|な}くしました。", "zh": "護照也丟了。" },
+        { "role": "B", "ja": "{大使館|たいしかん}にも{連絡|れんらく}が{必要|ひつよう}です。", "zh": "也要聯絡大使館。" },
+        { "role": "A", "ja": "{中国語|ちゅうごくご}が{話|はな}せる{方|かた}はいますか。", "zh": "有會說中文的人嗎？" },
+        { "role": "B", "ja": "{通訳|つうやく}を{呼|よ}びますので、{少々|しょうしょう}お{待|ま}ちください。", "zh": "我幫您叫翻譯，請稍等。" }
+      ]
+    }
+  ],
+  "vocab": [
+    { "id": "em-v1", "ja": "{助|たす}けて", "kana": "たすけて", "zh": "救命、幫幫我", "pos": "片語", "example_id": "emg-lost" },
+    { "id": "em-v2", "ja": "{警察|けいさつ}", "kana": "けいさつ", "zh": "警察", "pos": "名詞", "example_id": "emg-lost-item" },
+    { "id": "em-v3", "ja": "{救急車|きゅうきゅうしゃ}", "kana": "きゅうきゅうしゃ", "zh": "救護車", "pos": "名詞", "example_id": "emg-sick" },
+    { "id": "em-v4", "ja": "{消防車|しょうぼうしゃ}", "kana": "しょうぼうしゃ", "zh": "消防車", "pos": "名詞", "example_id": "emg-sick" },
+    { "id": "em-v5", "ja": "{病院|びょういん}", "kana": "びょういん", "zh": "醫院", "pos": "名詞", "example_id": "emg-sick" },
+    { "id": "em-v6", "ja": "{医者|いしゃ}", "kana": "いしゃ", "zh": "醫生", "pos": "名詞", "example_id": "emg-sick" },
+    { "id": "em-v7", "ja": "{交番|こうばん}", "kana": "こうばん", "zh": "派出所", "pos": "名詞", "example_id": "emg-lost-item" },
+    { "id": "em-v8", "ja": "{大使館|たいしかん}", "kana": "たいしかん", "zh": "大使館", "pos": "名詞", "example_id": "emg-lost-item" },
+    { "id": "em-v9", "ja": "{頭|あたま}", "kana": "あたま", "zh": "頭", "pos": "名詞", "example_id": "emg-sick" },
+    { "id": "em-v10", "ja": "お{腹|なか}", "kana": "おなか", "zh": "肚子", "pos": "名詞", "example_id": "emg-sick" },
+    { "id": "em-v11", "ja": "{喉|のど}", "kana": "のど", "zh": "喉嚨", "pos": "名詞", "example_id": "emg-sick" },
+    { "id": "em-v12", "ja": "{歯|は}", "kana": "は", "zh": "牙齒", "pos": "名詞", "example_id": "emg-sick" },
+    { "id": "em-v13", "ja": "{痛|いた}い", "kana": "いたい", "zh": "痛", "pos": "い形容詞", "example_id": "emg-sick" },
+    { "id": "em-v14", "ja": "{熱|ねつ}", "kana": "ねつ", "zh": "發燒（體溫高）", "pos": "名詞", "example_id": "emg-sick" },
+    { "id": "em-v15", "ja": "{吐|は}き{気|け}", "kana": "はきけ", "zh": "想吐", "pos": "名詞", "example_id": "emg-sick" },
+    { "id": "em-v16", "ja": "{下痢|げり}", "kana": "げり", "zh": "拉肚子", "pos": "名詞", "example_id": "emg-sick" },
+    { "id": "em-v17", "ja": "めまい", "kana": "めまい", "zh": "頭暈", "pos": "名詞", "example_id": "emg-sick" },
+    { "id": "em-v18", "ja": "{咳|せき}", "kana": "せき", "zh": "咳嗽", "pos": "名詞", "example_id": "emg-sick" },
+    { "id": "em-v19", "ja": "アレルギー", "kana": "あれるぎー", "zh": "過敏", "pos": "名詞", "example_id": "emg-sick" },
+    { "id": "em-v20", "ja": "{保険|ほけん}", "kana": "ほけん", "zh": "保險", "pos": "名詞", "example_id": "emg-sick" },
+    { "id": "em-v21", "ja": "{道|みち}に{迷|まよ}う", "kana": "みちにまよう", "zh": "迷路", "pos": "片語", "example_id": "emg-lost" },
+    { "id": "em-v22", "ja": "{角|かど}", "kana": "かど", "zh": "轉角", "pos": "名詞", "example_id": "emg-lost" },
+    { "id": "em-v23", "ja": "{曲|ま}がる", "kana": "まがる", "zh": "轉彎", "pos": "自動詞", "example_id": "emg-lost" },
+    { "id": "em-v24", "ja": "{真|ま}っすぐ", "kana": "まっすぐ", "zh": "直走", "pos": "副詞", "example_id": "emg-lost" },
+    { "id": "em-v25", "ja": "{戻|もど}る", "kana": "もどる", "zh": "返回", "pos": "自動詞", "example_id": "emg-lost" },
+    { "id": "em-v26", "ja": "{助|たす}かりました", "kana": "たすかりました", "zh": "幫了大忙、得救了", "pos": "片語", "example_id": "emg-lost" },
+    { "id": "em-v27", "ja": "{落|お}とす", "kana": "おとす", "zh": "弄掉、遺失", "pos": "他動詞", "example_id": "emg-lost-item" },
+    { "id": "em-v28", "ja": "{失|な}くす", "kana": "なくす", "zh": "弄丟", "pos": "他動詞", "example_id": "emg-lost-item" },
+    { "id": "em-v29", "ja": "{盗|ぬす}まれる", "kana": "ぬすまれる", "zh": "被偷", "pos": "動詞被動", "example_id": "emg-lost-item" },
+    { "id": "em-v30", "ja": "{財布|さいふ}", "kana": "さいふ", "zh": "錢包", "pos": "名詞", "example_id": "emg-lost-item" },
+    { "id": "em-v31", "ja": "スマホ", "kana": "すまほ", "zh": "智慧型手機", "pos": "名詞", "example_id": "emg-lost-item" },
+    { "id": "em-v32", "ja": "{鞄|かばん}", "kana": "かばん", "zh": "包包", "pos": "名詞", "example_id": "emg-lost-item" },
+    { "id": "em-v33", "ja": "{紛失届|ふんしつとどけ}", "kana": "ふんしつとどけ", "zh": "遺失申報", "pos": "名詞", "example_id": "emg-lost-item" },
+    { "id": "em-v34", "ja": "{連絡|れんらく}", "kana": "れんらく", "zh": "聯絡", "pos": "名詞／他動詞", "example_id": "emg-lost-item" },
+    { "id": "em-v35", "ja": "{通訳|つうやく}", "kana": "つうやく", "zh": "翻譯（人）", "pos": "名詞", "example_id": "emg-lost-item" },
+    { "id": "em-v36", "ja": "{電話|でんわ}", "kana": "でんわ", "zh": "電話", "pos": "名詞", "example_id": "emg-lost-item" },
+    { "id": "em-v37", "ja": "{連絡先|れんらくさき}", "kana": "れんらくさき", "zh": "聯絡方式", "pos": "名詞", "example_id": "emg-lost-item" },
+    { "id": "em-v38", "ja": "{多分|たぶん}", "kana": "たぶん", "zh": "大概、可能", "pos": "副詞", "example_id": "emg-lost-item" },
+    { "id": "em-v39", "ja": "{電車|でんしゃ}", "kana": "でんしゃ", "zh": "電車", "pos": "名詞", "example_id": "emg-lost-item" },
+    { "id": "em-v40", "ja": "タクシー", "kana": "たくしー", "zh": "計程車", "pos": "名詞", "example_id": "emg-lost" }
+  ]
+}

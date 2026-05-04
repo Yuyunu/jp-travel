@@ -1,0 +1,88 @@
+{
+  "id": "flight",
+  "name_zh": "飛機上",
+  "name_ja": "機内",
+  "emoji": "💺",
+  "dialogues": [
+    {
+      "id": "flight-service",
+      "title_zh": "要毛毯／飲料",
+      "title_ja": "ブランケット・飲み物",
+      "turns": [
+        { "role": "A", "ja": "すみません、{毛布|もうふ}をください。", "zh": "不好意思，請給我一條毛毯。" },
+        { "role": "B", "ja": "はい、{少々|しょうしょう}お{待|ま}ちください。", "zh": "好的，請稍等。" },
+        { "role": "A", "ja": "それと、お{水|みず}もお{願|ねが}いします。", "zh": "還有，也請給我水。" },
+        { "role": "B", "ja": "{冷|つめ}たいお{水|みず}でよろしいですか。", "zh": "冰水可以嗎？" },
+        { "role": "A", "ja": "はい、お{願|ねが}いします。", "zh": "好，麻煩你。" },
+        { "role": "B", "ja": "お{飲|の}み{物|もの}は{何|なに}になさいますか。", "zh": "請問飲料要點什麼？" },
+        { "role": "A", "ja": "りんごジュースをください。", "zh": "請給我蘋果汁。" }
+      ]
+    },
+    {
+      "id": "flight-meal",
+      "title_zh": "機內餐",
+      "title_ja": "機内食",
+      "turns": [
+        { "role": "B", "ja": "{機内食|きないしょく}は{牛肉|ぎゅうにく}か{鶏肉|とりにく}、どちらになさいますか。", "zh": "機內餐是牛肉或雞肉，您選哪一個？" },
+        { "role": "A", "ja": "{鶏肉|とりにく}でお{願|ねが}いします。", "zh": "麻煩雞肉。" },
+        { "role": "B", "ja": "パンとライスはどちらに。", "zh": "麵包跟飯選哪個？" },
+        { "role": "A", "ja": "ライスをください。", "zh": "我要飯。" },
+        { "role": "A", "ja": "すみません、トレイを{下|さ}げてください。", "zh": "不好意思，請收一下托盤。" },
+        { "role": "B", "ja": "かしこまりました。", "zh": "好的。" },
+        { "role": "A", "ja": "{気分|きぶん}が{悪|わる}いです。", "zh": "我有點不舒服。" },
+        { "role": "B", "ja": "エチケット{袋|ぶくろ}はこちらにございます。", "zh": "嘔吐袋在這裡。" }
+      ]
+    },
+    {
+      "id": "flight-form",
+      "title_zh": "問入境表格",
+      "title_ja": "入国カードについて",
+      "turns": [
+        { "role": "A", "ja": "すみません、{入国|にゅうこく}カードを{一枚|いちまい}ください。", "zh": "不好意思，請給我一張入境卡。" },
+        { "role": "B", "ja": "はい、ペンも{要|い}りますか。", "zh": "好的，需要筆嗎？" },
+        { "role": "A", "ja": "はい、お{願|ねが}いします。", "zh": "好，麻煩你。" },
+        { "role": "A", "ja": "{書|か}き{方|かた}が{分|わ}かりません。", "zh": "我不知道怎麼填。" },
+        { "role": "B", "ja": "{見本|みほん}をお{持|も}ちします。", "zh": "我幫您拿範本來。" },
+        { "role": "A", "ja": "ありがとうございます。", "zh": "謝謝。" }
+      ]
+    }
+  ],
+  "vocab": [
+    { "id": "fl-v1", "ja": "{機内|きない}", "kana": "きない", "zh": "機內", "pos": "名詞", "example_id": "flight-service" },
+    { "id": "fl-v2", "ja": "{毛布|もうふ}", "kana": "もうふ", "zh": "毛毯", "pos": "名詞", "example_id": "flight-service" },
+    { "id": "fl-v3", "ja": "{枕|まくら}", "kana": "まくら", "zh": "枕頭", "pos": "名詞", "example_id": "flight-service" },
+    { "id": "fl-v4", "ja": "アイマスク", "kana": "あいますく", "zh": "眼罩", "pos": "名詞", "example_id": "flight-service" },
+    { "id": "fl-v5", "ja": "イヤホン", "kana": "いやほん", "zh": "耳機", "pos": "名詞", "example_id": "flight-service" },
+    { "id": "fl-v6", "ja": "お{水|みず}", "kana": "おみず", "zh": "水", "pos": "名詞", "example_id": "flight-service" },
+    { "id": "fl-v7", "ja": "お{茶|ちゃ}", "kana": "おちゃ", "zh": "茶", "pos": "名詞", "example_id": "flight-service" },
+    { "id": "fl-v8", "ja": "コーヒー", "kana": "こーひー", "zh": "咖啡", "pos": "名詞", "example_id": "flight-service" },
+    { "id": "fl-v9", "ja": "りんごジュース", "kana": "りんごじゅーす", "zh": "蘋果汁", "pos": "名詞", "example_id": "flight-service" },
+    { "id": "fl-v10", "ja": "オレンジジュース", "kana": "おれんじじゅーす", "zh": "柳橙汁", "pos": "名詞", "example_id": "flight-service" },
+    { "id": "fl-v11", "ja": "{冷|つめ}たい", "kana": "つめたい", "zh": "冰的、冷的", "pos": "い形容詞", "example_id": "flight-service" },
+    { "id": "fl-v12", "ja": "{温|あたた}かい", "kana": "あたたかい", "zh": "溫的", "pos": "い形容詞", "example_id": "flight-service" },
+    { "id": "fl-v13", "ja": "{機内食|きないしょく}", "kana": "きないしょく", "zh": "機內餐", "pos": "名詞", "example_id": "flight-meal" },
+    { "id": "fl-v14", "ja": "{牛肉|ぎゅうにく}", "kana": "ぎゅうにく", "zh": "牛肉", "pos": "名詞", "example_id": "flight-meal" },
+    { "id": "fl-v15", "ja": "{鶏肉|とりにく}", "kana": "とりにく", "zh": "雞肉", "pos": "名詞", "example_id": "flight-meal" },
+    { "id": "fl-v16", "ja": "{豚肉|ぶたにく}", "kana": "ぶたにく", "zh": "豬肉", "pos": "名詞", "example_id": "flight-meal" },
+    { "id": "fl-v17", "ja": "{魚|さかな}", "kana": "さかな", "zh": "魚", "pos": "名詞", "example_id": "flight-meal" },
+    { "id": "fl-v18", "ja": "パン", "kana": "ぱん", "zh": "麵包", "pos": "名詞", "example_id": "flight-meal" },
+    { "id": "fl-v19", "ja": "ライス", "kana": "らいす", "zh": "飯", "pos": "名詞", "example_id": "flight-meal" },
+    { "id": "fl-v20", "ja": "トレイ", "kana": "とれい", "zh": "餐盤、托盤", "pos": "名詞", "example_id": "flight-meal" },
+    { "id": "fl-v21", "ja": "{下|さ}げる", "kana": "さげる", "zh": "收走、放下", "pos": "他動詞", "example_id": "flight-meal" },
+    { "id": "fl-v22", "ja": "{気分|きぶん}が{悪|わる}い", "kana": "きぶんがわるい", "zh": "不舒服", "pos": "片語", "example_id": "flight-meal" },
+    { "id": "fl-v23", "ja": "エチケット{袋|ぶくろ}", "kana": "えちけっとぶくろ", "zh": "嘔吐袋", "pos": "名詞", "example_id": "flight-meal" },
+    { "id": "fl-v24", "ja": "{入国|にゅうこく}カード", "kana": "にゅうこくかーど", "zh": "入境卡", "pos": "名詞", "example_id": "flight-form" },
+    { "id": "fl-v25", "ja": "ペン", "kana": "ぺん", "zh": "筆", "pos": "名詞", "example_id": "flight-form" },
+    { "id": "fl-v26", "ja": "{一枚|いちまい}", "kana": "いちまい", "zh": "一張（紙、卡）", "pos": "量詞", "example_id": "flight-form" },
+    { "id": "fl-v27", "ja": "{二枚|にまい}", "kana": "にまい", "zh": "兩張", "pos": "量詞", "example_id": "flight-form" },
+    { "id": "fl-v28", "ja": "{書|か}き{方|かた}", "kana": "かきかた", "zh": "寫法、怎麼寫", "pos": "名詞", "example_id": "flight-form" },
+    { "id": "fl-v29", "ja": "{分|わ}かりません", "kana": "わかりません", "zh": "不知道、不懂", "pos": "片語", "example_id": "flight-form" },
+    { "id": "fl-v30", "ja": "{見本|みほん}", "kana": "みほん", "zh": "範本、樣本", "pos": "名詞", "example_id": "flight-form" },
+    { "id": "fl-v31", "ja": "{座席|ざせき}", "kana": "ざせき", "zh": "座位", "pos": "名詞", "example_id": "flight-service" },
+    { "id": "fl-v32", "ja": "{窓側|まどがわ}", "kana": "まどがわ", "zh": "靠窗", "pos": "名詞", "example_id": "flight-service" },
+    { "id": "fl-v33", "ja": "{通路側|つうろがわ}", "kana": "つうろがわ", "zh": "靠走道", "pos": "名詞", "example_id": "flight-service" },
+    { "id": "fl-v34", "ja": "シートベルト", "kana": "しーとべると", "zh": "安全帶", "pos": "名詞", "example_id": "flight-service" },
+    { "id": "fl-v35", "ja": "{乗|の}り{換|か}え", "kana": "のりかえ", "zh": "轉機、換乘", "pos": "名詞", "example_id": "flight-service" },
+    { "id": "fl-v36", "ja": "{遅|おく}れる", "kana": "おくれる", "zh": "誤點、遲到", "pos": "自動詞", "example_id": "flight-service" }
+  ]
+}

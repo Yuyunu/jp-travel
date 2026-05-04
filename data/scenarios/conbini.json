@@ -1,0 +1,101 @@
+{
+  "id": "conbini",
+  "name_zh": "便利店／藥妝",
+  "name_ja": "コンビニ・ドラッグストア",
+  "emoji": "🏪",
+  "dialogues": [
+    {
+      "id": "conbini-checkout",
+      "title_zh": "便利店結帳",
+      "title_ja": "コンビニのレジ",
+      "turns": [
+        { "role": "B", "ja": "いらっしゃいませ。", "zh": "歡迎光臨。" },
+        { "role": "B", "ja": "{袋|ふくろ}はご{利用|りよう}ですか。", "zh": "需要袋子嗎？" },
+        { "role": "A", "ja": "はい、お{願|ねが}いします。{大|おお}きい{袋|ふくろ}でお{願|ねが}いします。", "zh": "要，麻煩給我大袋子。" },
+        { "role": "B", "ja": "{袋|ふくろ}は{5円|ごえん}になります。", "zh": "袋子要 5 日圓。" },
+        { "role": "A", "ja": "{大丈夫|だいじょうぶ}です。", "zh": "沒關係。" },
+        { "role": "B", "ja": "お{弁当|べんとう}は{温|あたた}めますか。", "zh": "便當要加熱嗎？" },
+        { "role": "A", "ja": "はい、お{願|ねが}いします。", "zh": "好，麻煩你。" },
+        { "role": "B", "ja": "お{箸|はし}はお{付|つ}けしますか。", "zh": "需要筷子嗎？" },
+        { "role": "A", "ja": "{二膳|にぜん}お{願|ねが}いします。", "zh": "兩雙，麻煩你。" },
+        { "role": "B", "ja": "{合計|ごうけい}{1080円|せんはちじゅうえん}でございます。", "zh": "總計 1,080 日圓。" }
+      ]
+    },
+    {
+      "id": "conbini-medicine",
+      "title_zh": "藥妝找藥",
+      "title_ja": "ドラッグストアで薬を探す",
+      "turns": [
+        { "role": "A", "ja": "すみません、{頭痛薬|ずつうやく}はどこですか。", "zh": "不好意思，頭痛藥在哪裡？" },
+        { "role": "B", "ja": "{2番|にばん}{通路|つうろ}の{右側|みぎがわ}にございます。", "zh": "在 2 號走道的右邊。" },
+        { "role": "A", "ja": "{風邪薬|かぜぐすり}もありますか。", "zh": "也有感冒藥嗎？" },
+        { "role": "B", "ja": "はい、{同|おな}じ{棚|たな}にあります。", "zh": "有，同一個架上。" },
+        { "role": "A", "ja": "{生理用品|せいりようひん}は。", "zh": "生理用品呢？" },
+        { "role": "B", "ja": "{奥|おく}の{方|ほう}、{左側|ひだりがわ}です。", "zh": "在裡面，左邊。" },
+        { "role": "A", "ja": "ありがとうございます。", "zh": "謝謝。" }
+      ]
+    },
+    {
+      "id": "conbini-tax-free",
+      "title_zh": "退稅",
+      "title_ja": "免税",
+      "turns": [
+        { "role": "A", "ja": "{免税|めんぜい}でお{願|ねが}いします。", "zh": "請幫我辦免稅。" },
+        { "role": "B", "ja": "パスポートをお{願|ねが}いします。", "zh": "請給我護照。" },
+        { "role": "A", "ja": "はい、どうぞ。", "zh": "好，請。" },
+        { "role": "B", "ja": "{合計|ごうけい}{5500円|ごせんごひゃくえん}、{税抜|ぜいぬ}き{5000円|ごせんえん}です。", "zh": "總計 5,500 日圓，未稅 5,000 日圓。" },
+        { "role": "B", "ja": "{袋|ふくろ}は{出国|しゅっこく}まで{開|あ}けないでください。", "zh": "袋子請在出境前不要打開。" },
+        { "role": "A", "ja": "はい、{分|わ}かりました。", "zh": "好的，我知道了。" }
+      ]
+    }
+  ],
+  "vocab": [
+    { "id": "cb-v1", "ja": "コンビニ", "kana": "こんびに", "zh": "便利商店", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v2", "ja": "ドラッグストア", "kana": "どらっぐすとあ", "zh": "藥妝店", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v3", "ja": "レジ", "kana": "れじ", "zh": "收銀台", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v4", "ja": "{袋|ふくろ}", "kana": "ふくろ", "zh": "袋子", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v5", "ja": "おにぎり", "kana": "おにぎり", "zh": "飯糰", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v6", "ja": "お{弁当|べんとう}", "kana": "おべんとう", "zh": "便當", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v7", "ja": "サンドイッチ", "kana": "さんどいっち", "zh": "三明治", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v8", "ja": "おでん", "kana": "おでん", "zh": "關東煮", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v9", "ja": "{肉|にく}まん", "kana": "にくまん", "zh": "肉包", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v10", "ja": "{中華|ちゅうか}まん", "kana": "ちゅうかまん", "zh": "中華包子（總稱）", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v11", "ja": "カップラーメン", "kana": "かっぷらーめん", "zh": "杯麵", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v12", "ja": "お{菓子|かし}", "kana": "おかし", "zh": "零食", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v13", "ja": "お{茶|ちゃ}", "kana": "おちゃ", "zh": "茶（瓶裝）", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v14", "ja": "{緑茶|りょくちゃ}", "kana": "りょくちゃ", "zh": "綠茶", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v15", "ja": "{麦茶|むぎちゃ}", "kana": "むぎちゃ", "zh": "麥茶", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v16", "ja": "ジュース", "kana": "じゅーす", "zh": "果汁", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v17", "ja": "{温|あたた}める", "kana": "あたためる", "zh": "（用微波）加熱", "pos": "他動詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v18", "ja": "お{箸|はし}", "kana": "おはし", "zh": "筷子", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v19", "ja": "スプーン", "kana": "すぷーん", "zh": "湯匙", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v20", "ja": "ストロー", "kana": "すとろー", "zh": "吸管", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v21", "ja": "{二膳|にぜん}", "kana": "にぜん", "zh": "兩雙（筷子）", "pos": "量詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v22", "ja": "{一個|いっこ}", "kana": "いっこ", "zh": "一個（小東西）", "pos": "量詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v23", "ja": "{二個|にこ}", "kana": "にこ", "zh": "兩個", "pos": "量詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v24", "ja": "{薬|くすり}", "kana": "くすり", "zh": "藥", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v25", "ja": "{頭痛薬|ずつうやく}", "kana": "ずつうやく", "zh": "頭痛藥", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v26", "ja": "{風邪薬|かぜぐすり}", "kana": "かぜぐすり", "zh": "感冒藥", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v27", "ja": "{胃薬|いぐすり}", "kana": "いぐすり", "zh": "胃藥", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v28", "ja": "{解熱剤|げねつざい}", "kana": "げねつざい", "zh": "退燒藥", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v29", "ja": "{咳止|せきど}め", "kana": "せきどめ", "zh": "止咳藥", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v30", "ja": "のど{飴|あめ}", "kana": "のどあめ", "zh": "喉糖", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v31", "ja": "{絆創膏|ばんそうこう}", "kana": "ばんそうこう", "zh": "OK 繃", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v32", "ja": "マスク", "kana": "ますく", "zh": "口罩", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v33", "ja": "{生理用品|せいりようひん}", "kana": "せいりようひん", "zh": "生理用品", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v34", "ja": "ナプキン", "kana": "なぷきん", "zh": "衛生棉", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v35", "ja": "タンポン", "kana": "たんぽん", "zh": "棉條", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v36", "ja": "シャンプー", "kana": "しゃんぷー", "zh": "洗髮精", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v37", "ja": "リンス", "kana": "りんす", "zh": "潤髮乳", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v38", "ja": "{歯|は}{磨|みが}き{粉|こ}", "kana": "はみがきこ", "zh": "牙膏", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v39", "ja": "{日焼|ひや}け{止|ど}め", "kana": "ひやけどめ", "zh": "防曬乳", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v40", "ja": "{通路|つうろ}", "kana": "つうろ", "zh": "走道", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v41", "ja": "{棚|たな}", "kana": "たな", "zh": "貨架", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v42", "ja": "{奥|おく}", "kana": "おく", "zh": "（店）裡面", "pos": "名詞", "example_id": "conbini-medicine" },
+    { "id": "cb-v43", "ja": "{免税|めんぜい}", "kana": "めんぜい", "zh": "免稅", "pos": "名詞", "example_id": "conbini-tax-free" },
+    { "id": "cb-v44", "ja": "{税抜|ぜいぬ}き", "kana": "ぜいぬき", "zh": "未含稅", "pos": "名詞", "example_id": "conbini-tax-free" },
+    { "id": "cb-v45", "ja": "{税込|ぜいこ}み", "kana": "ぜいこみ", "zh": "含稅", "pos": "名詞", "example_id": "conbini-tax-free" },
+    { "id": "cb-v46", "ja": "レシート", "kana": "れしーと", "zh": "發票、收據", "pos": "名詞", "example_id": "conbini-checkout" },
+    { "id": "cb-v47", "ja": "{大丈夫|だいじょうぶ}", "kana": "だいじょうぶ", "zh": "沒關係、不用了", "pos": "な形容詞", "example_id": "conbini-checkout" }
+  ]
+}

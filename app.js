@@ -7,18 +7,40 @@
    - 右上角強制重整按鈕（清 SW cache + reload）
    ============================================================= */
 
-const APP_VERSION = 'v0.4.1';
+const APP_VERSION = 'v0.5.0';
 
 /* ---------- Sushi game assets ---------- */
 const SUSHI_NORMAL = ['maguro', 'sake', 'ebi', 'tamago', 'inari'];
 const SUSHI_PREMIUM = ['uni', 'ikura', 'tekka', 'ootoro'];
 const PLATES = ['plate_white','plate_white','plate_white','plate_white','plate_white','plate_white','plate_red','plate_red','plate_red','plate_gold'];
 const PLATE_MULT = { plate_white: 1, plate_red: 2, plate_gold: 3 };
+
+/* ---------- Scenario carrier: each scenario has its own visual ---------- */
+const SCENARIO_CARRIERS = {
+  airport:      'airport_suitcase',
+  flight:       'flight_tray',
+  station:      'station_ekiben',
+  hotel:        'hotel_tray',
+  restaurant:   'restaurant_plate',
+  ramen:        'ramen_bowl',
+  izakaya:      'izakaya_yakitori',
+  conbini:      'convenience_basket',
+  sightseeing:  'sightseeing_souvenir',
+  // emergency: 沒有 PNG，用 SVG fallback
+};
+function getCarrierForScope(scope) {
+  if (scope === 'all') return null;          // 全部混合 → 用壽司流
+  if (SCENARIO_CARRIERS[scope]) return `assets/scenes/${SCENARIO_CARRIERS[scope]}.png`;
+  return 'svg-emergency';                     // emergency 等沒圖的場景
+}
+
 const PRELOAD = [
   'cat_idle','cat_happy','cat_sad','cat_surprised','cat_pro','cat_asleep'
 ].map(n => `assets/cat/${n}.png`).concat(
   SUSHI_NORMAL.concat(SUSHI_PREMIUM).map(n => `assets/sushi/${n}.png`),
-  ['plate_white','plate_red','plate_gold'].map(n => `assets/plate/${n}.png`)
+  ['plate_white','plate_red','plate_gold'].map(n => `assets/plate/${n}.png`),
+  Object.values(SCENARIO_CARRIERS).map(n => `assets/scenes/${n}.png`),
+  ['sakura_petal','mini_torii','cloud','hanko_stamp'].map(n => `assets/decor/${n}.png`)
 );
 function preloadGameAssets() {
   PRELOAD.forEach(p => { const im = new Image(); im.src = p; });
@@ -927,6 +949,7 @@ function renderSushiQuiz() {
     return renderSushiResult(root);
   }
   const cur = q.qs[q.qIdx];
+  const carrier = getCarrierForScope(q.scope);  // null=壽司, 路徑=場景圖, 'svg-emergency'=救護SVG
   // pre-pick visuals so re-render keeps them
   if (!cur._visuals) {
     cur._visuals = cur.items.map(() => ({
@@ -967,13 +990,41 @@ function renderSushiQuiz() {
           <div class="conveyor-wrapper" id="conveyor-wrapper" style="--duration: ${duration}ms">
             ${cur.items.map((it, i) => {
               const v = cur._visuals[i];
-              return `
-                <button class="plate-btn" data-i="${i}">
-                  <div class="plate-label">${escapeHTML(it.kana || stripRuby(it.ja))}</div>
-                  <img class="sushi-img" src="assets/sushi/${v.sushi}.png" alt="">
-                  <img class="plate-img" src="assets/plate/${v.plate}.png" alt="">
-                </button>
-              `;
+              const bonusClass = v.plate === 'plate_gold' ? 'bonus-gold'
+                              : v.plate === 'plate_red'  ? 'bonus-red' : '';
+              if (carrier === null) {
+                // 全部混合 → 用壽司流（既有行為）
+                return `
+                  <button class="plate-btn" data-i="${i}">
+                    <div class="plate-label">${escapeHTML(it.kana || stripRuby(it.ja))}</div>
+                    <img class="sushi-img" src="assets/sushi/${v.sushi}.png" alt="">
+                    <img class="plate-img" src="assets/plate/${v.plate}.png" alt="">
+                  </button>
+                `;
+              } else if (carrier === 'svg-emergency') {
+                // emergency 用 SVG 救護箱
+                return `
+                  <button class="plate-btn carrier-mode ${bonusClass}" data-i="${i}">
+                    <div class="plate-label">${escapeHTML(it.kana || stripRuby(it.ja))}</div>
+                    <div class="carrier-svg">
+                      <svg viewBox="0 0 64 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect x="6" y="12" width="52" height="32" rx="4" fill="#fff" stroke="#333" stroke-width="2"/>
+                        <rect x="22" y="6" width="20" height="8" rx="1" fill="#fff" stroke="#333" stroke-width="2"/>
+                        <rect x="28" y="22" width="8" height="14" fill="#C5302B"/>
+                        <rect x="22" y="26" width="20" height="6" fill="#C5302B"/>
+                      </svg>
+                    </div>
+                  </button>
+                `;
+              } else {
+                // 場景化載體
+                return `
+                  <button class="plate-btn carrier-mode ${bonusClass}" data-i="${i}">
+                    <div class="plate-label">${escapeHTML(it.kana || stripRuby(it.ja))}</div>
+                    <img class="carrier-img" src="${carrier}" alt="">
+                  </button>
+                `;
+              }
             }).join('')}
           </div>
         </div>
@@ -1054,6 +1105,8 @@ function handleSushiAnswer(correct, plateType, missed, btnEl) {
     q.correctCount++;
     catState = 'happy';
     if (btnEl) btnEl.classList.add('plate-correct');
+    // 連對 ≥3 → 撒櫻花慶祝
+    if (q.streak >= 3) spawnSakuraBurst(q.streak >= 5 ? 10 : 6);
     if (q.streak >= 5 && !q.proMode) {
       q.proMode = true;
       catState = 'pro';
@@ -1111,18 +1164,36 @@ function renderSushiResult(root) {
     ts: Date.now(), type: 'sushi', scope: q.scope, score: q.score, total: q.qs.length
   });
   if (state.history.length > 50) state.history.splice(0, state.history.length - 50);
+
+  // 通關記錄：每個 scenario 達到 1 星以上就記下，方便地圖頁解鎖
+  const stars = q.score >= 200 ? 3 : q.score >= 100 ? 2 : q.score >= 30 ? 1 : 0;
+  if (stars >= 1 && q.scope !== 'all') {
+    const unlockKey = `jpt_unlock_${q.scope}`;
+    const prev = parseInt(localStorage.getItem(unlockKey) || '0', 10);
+    if (stars > prev) {
+      try { localStorage.setItem(unlockKey, String(stars)); } catch (_) {}
+    }
+  }
   saveState();
 
-  const stars = q.score >= 200 ? 3 : q.score >= 100 ? 2 : q.score >= 30 ? 1 : 0;
-  const stamps = '✓'.repeat(stars) + '・'.repeat(3 - stars);
+  const scopeName = q.scope === 'all' ? '全部混合' : (state.byId.get(q.scope)?.name_zh || q.scope);
+  const starsHtml = Array.from({length: 3}, (_, i) =>
+    `<span class="result-star ${i < stars ? 'on' : ''}">★</span>`
+  ).join('');
 
   root.innerHTML = `
     <div class="quiz-question-card sushi-result">
+      <div class="hanko-area">
+        <img class="hanko-stamp ${won && stars >= 2 ? 'stamped' : 'half'}" src="assets/decor/hanko_stamp.png" alt="御朱印">
+        <div class="hanko-scope-label">${escapeHTML(scopeName)}</div>
+      </div>
       <div style="text-align:center;">
-        <div style="font-size:60px;margin-bottom:6px;">${won ? '🎴' : '😴'}</div>
+        <div class="result-cat" style="margin-top:10px;">
+          <img src="assets/cat/cat_${won ? 'happy' : 'asleep'}.png" alt="" style="width:90px;height:90px;">
+        </div>
         <div class="score" style="font-size:48px;color:var(--c-shu);font-weight:700;">${q.score}</div>
         <div class="score-label">${won ? '🎉 全部過關！' : `第 ${q.qIdx + 1} 題 game over`}</div>
-        <div class="ochrenpyo">${stamps}</div>
+        <div class="result-stars">${starsHtml}</div>
         <div class="muted small" style="margin-top:6px;">
           答對 ${q.correctCount} / ${q.qs.length} 題
           ${newBest ? '<span style="color:var(--c-shu);font-weight:600;"> · 新紀錄！</span>' : ` · 最佳 ${best}`}
@@ -1136,7 +1207,6 @@ function renderSushiResult(root) {
   `;
 
   // Cleanup state but keep scope for re-try
-  const lastScope = q.scope;
   state.sushiQuiz = null;
   state.quizActive = null;
 
@@ -1147,6 +1217,36 @@ function renderSushiResult(root) {
     const setup = state._quizSetup;
     startSushiQuiz(setup);
   });
+
+  // 蓋章音效模擬：稍微 delay 觸發 stamp 動畫（CSS animation 會自己跑，這只是視覺再震一下）
+  if (won && stars >= 1) {
+    setTimeout(() => {
+      const stamp = root.querySelector('.hanko-stamp');
+      if (stamp) stamp.classList.add('thump');
+    }, 500);
+  }
+}
+
+/* 連對 sakura 飄落 */
+function spawnSakuraBurst(count = 6) {
+  const layer = document.getElementById('sakura-layer') || (() => {
+    const l = document.createElement('div');
+    l.id = 'sakura-layer';
+    l.className = 'sakura-layer';
+    document.body.appendChild(l);
+    return l;
+  })();
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('img');
+    p.className = 'sakura-petal';
+    p.src = 'assets/decor/sakura_petal.png';
+    p.style.left = (10 + Math.random() * 80) + 'vw';
+    p.style.animationDelay = (Math.random() * 0.6) + 's';
+    p.style.animationDuration = (2.5 + Math.random() * 1.5) + 's';
+    p.style.transform = `rotate(${Math.random()*360}deg)`;
+    layer.appendChild(p);
+    setTimeout(() => p.remove(), 4500);
+  }
 }
 
 /* ---------- Settings modal ---------- */

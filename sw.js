@@ -3,7 +3,7 @@
    - data/scenarios/*.json：stale-while-revalidate
 */
 
-const CACHE_VERSION = 'jpt-v0.4.7';
+const CACHE_VERSION = 'jpt-v0.5.0';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -47,6 +47,21 @@ const STATIC_ASSETS = [
   './assets/plate/plate_white.png',
   './assets/plate/plate_red.png',
   './assets/plate/plate_gold.png',
+  // 🗾 場景化載體
+  './assets/scenes/airport_suitcase.png',
+  './assets/scenes/flight_tray.png',
+  './assets/scenes/station_ekiben.png',
+  './assets/scenes/hotel_tray.png',
+  './assets/scenes/restaurant_plate.png',
+  './assets/scenes/ramen_bowl.png',
+  './assets/scenes/izakaya_yakitori.png',
+  './assets/scenes/convenience_basket.png',
+  './assets/scenes/sightseeing_souvenir.png',
+  // 🌸 裝飾
+  './assets/decor/sakura_petal.png',
+  './assets/decor/mini_torii.png',
+  './assets/decor/cloud.png',
+  './assets/decor/hanko_stamp.png',
 ];
 
 self.addEventListener('install', event => {

@@ -7,7 +7,8 @@
    - 右上角強制重整按鈕（清 SW cache + reload）
    ============================================================= */
 
-const APP_VERSION = 'v0.5.0';
+const APP_VERSION = 'v0.7.6';
+const QUIZ_QUESTION_COUNT = 10;  // 統一 10 題（不讓使用者選）
 
 /* ---------- Sushi game assets ---------- */
 const SUSHI_NORMAL = ['maguro', 'sake', 'ebi', 'tamago', 'inari'];
@@ -713,8 +714,8 @@ function renderMapView(root) {
     b.addEventListener('click', () => {
       const scope = b.dataset.scope;
       state._mapView = false;
-      // 城市旅 = 看假名 → 選漢字（10 題）
-      const setup = { type: 'kanaKanji', scope, count: 10 };
+      // 城市旅 = 看假名 → 選漢字
+      const setup = { type: 'kanaKanji', scope, count: QUIZ_QUESTION_COUNT };
       state._quizSetup = setup;
       startQuiz(setup);
     });
@@ -722,8 +723,9 @@ function renderMapView(root) {
 }
 
 function renderQuizSetup(root) {
-  const setup = state._quizSetup || { type: 'listen', scope: 'all', count: 10 };
+  const setup = state._quizSetup || { type: 'listen', scope: 'all', count: QUIZ_QUESTION_COUNT };
   if (setup.type === 'fill') setup.type = 'listen';  // 填空題已下架，自動轉聽選中
+  setup.count = QUIZ_QUESTION_COUNT;  // 強制統一題數
   state._quizSetup = setup;
 
   const totalStars = MAP_CITIES.reduce((s, c) => s + getCityStars(c.scenario), 0);
@@ -777,17 +779,8 @@ function renderQuizSetup(root) {
       </div>
     </div>
 
-    <div class="quiz-setup-card">
-      <h3>題數</h3>
-      <div class="option-grid" style="grid-template-columns:repeat(4,1fr);">
-        ${[5,10,15,20].map(n => `
-          <button class="option-pill ${setup.count===n?'active':''}" data-count="${n}">${n}</button>
-        `).join('')}
-      </div>
-    </div>
-
     <div class="btn-row" style="margin-top:14px;">
-      <button class="btn-primary" id="start-quiz" style="flex:1;">開始測驗</button>
+      <button class="btn-primary" id="start-quiz" style="flex:1;">開始測驗（${QUIZ_QUESTION_COUNT} 題）</button>
     </div>
 
     ${state.history.length ? `
@@ -811,10 +804,8 @@ function renderQuizSetup(root) {
   root.querySelectorAll('.scenario-chip[data-scope]').forEach(b => {
     b.addEventListener('click', () => { setup.scope = b.dataset.scope; renderQuizSetup(root); });
   });
-  root.querySelectorAll('.option-pill[data-count]').forEach(b => {
-    b.addEventListener('click', () => { setup.count = parseInt(b.dataset.count, 10); renderQuizSetup(root); });
-  });
   root.querySelector('#start-quiz').addEventListener('click', () => {
+    setup.count = QUIZ_QUESTION_COUNT;  // 統一 10 題
     if (setup.type === 'sushi') startSushiQuiz(setup);
     else startQuiz(setup);
   });

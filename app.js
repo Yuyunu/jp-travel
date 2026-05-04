@@ -537,6 +537,10 @@ function attachGroupHandlers(root) {
 /* ---------- Tab 3: 測驗 ---------- */
 function renderQuizView() {
   const root = document.getElementById('quiz-view');
+  // 🍣 sushi mode: 不同 dispatcher
+  if (state.sushiQuiz) {
+    return renderSushiQuiz();
+  }
   if (state.quizActive) {
     if (state.quizActive.idx >= state.quizActive.qs.length) {
       renderQuizResult(root);

@@ -874,10 +874,10 @@ function buildQuestion(type, rec, allItems) {
       type = 'readJa';
     } else {
       promptLabel = '單位詞：';
-      // 中文句型：物品 + 單位詞都顯示（題目）
+      // 中文句型：完整翻譯純文字（不 highlight）
       const zhFilled = escapeHTML(g.pattern_zh)
-        .replace('{X}', `<span class="filled">${escapeHTML(correct.zh)}</span>`)
-        .replace('{C}', `<span class="counter-mark">${escapeHTML(g.counter_zh)}</span>`);
+        .replace('{X}', escapeHTML(correct.zh))
+        .replace('{C}', escapeHTML(g.counter_zh));
       // 日文句型：物品填入、助數詞挖空（讓玩家從選項挑日文助數詞）
       const jaFilled = parseRuby(g.pattern_ja)
         .replace('{X}', `<span class="filled">${parseRuby(correct.ja)}</span>`)
@@ -1056,7 +1056,8 @@ function renderQuizQuestion(root) {
       tts.speak(cur.ttsText);
     };
     if (playBtn) playBtn.addEventListener('click', speakIt);
-    setTimeout(speakIt, 250);
+    // counter 題不自動播（會洩答案），其他模式自動播
+    if (cur.type !== 'counter') setTimeout(speakIt, 250);
   }
 
   root.querySelectorAll('.quiz-choice').forEach(b => {

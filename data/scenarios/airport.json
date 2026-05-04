@@ -1,0 +1,85 @@
+{
+  "id": "airport",
+  "name_zh": "機場",
+  "name_ja": "空港",
+  "emoji": "✈️",
+  "dialogues": [
+    {
+      "id": "airport-immigration",
+      "title_zh": "入境審查",
+      "title_ja": "入国審査",
+      "turns": [
+        { "role": "B", "ja": "パスポートをお{願|ねが}いします。", "zh": "請給我護照。" },
+        { "role": "A", "ja": "はい、どうぞ。", "zh": "好的，請。" },
+        { "role": "B", "ja": "ご{旅行|りょこう}ですか、お{仕事|しごと}ですか。", "zh": "是來旅行的還是工作的？" },
+        { "role": "A", "ja": "{観光|かんこう}です。", "zh": "觀光。" },
+        { "role": "B", "ja": "{何日間|なんにちかん}{滞在|たいざい}しますか。", "zh": "預計停留幾天？" },
+        { "role": "A", "ja": "{五日間|いつかかん}です。", "zh": "五天。" },
+        { "role": "B", "ja": "どこに{泊|と}まりますか。", "zh": "住在哪裡？" },
+        { "role": "A", "ja": "{新宿|しんじゅく}のホテルです。", "zh": "新宿的飯店。" },
+        { "role": "B", "ja": "ありがとうございます。はい、どうぞ。", "zh": "謝謝，請過。" }
+      ]
+    },
+    {
+      "id": "airport-baggage",
+      "title_zh": "行李沒出來",
+      "title_ja": "荷物が出てこない",
+      "turns": [
+        { "role": "A", "ja": "すみません、{荷物|にもつ}が{出|で}てきません。", "zh": "不好意思，我的行李沒出來。" },
+        { "role": "B", "ja": "{搭乗券|とうじょうけん}を{見|み}せてください。", "zh": "請給我看您的登機證。" },
+        { "role": "A", "ja": "はい、これです。", "zh": "好，這個。" },
+        { "role": "B", "ja": "お{名前|なまえ}と{便名|びんめい}を{確認|かくにん}させてください。", "zh": "麻煩確認您的姓名跟班機號碼。" },
+        { "role": "A", "ja": "{田中|たなか}です。JL〇〇{便|びん}です。", "zh": "我姓田中，JL○○班機。" },
+        { "role": "B", "ja": "{少々|しょうしょう}お{待|ま}ちください。{調|しら}べます。", "zh": "請稍等一下，我幫您查。" },
+        { "role": "A", "ja": "ホテルに{届|とど}けてもらえますか。", "zh": "可以幫我送到飯店嗎？" },
+        { "role": "B", "ja": "はい、ご{住所|じゅうしょ}をお{書|か}きください。", "zh": "好的，請您填寫地址。" }
+      ]
+    },
+    {
+      "id": "airport-bus",
+      "title_zh": "問利木津巴士",
+      "title_ja": "リムジンバスを聞く",
+      "turns": [
+        { "role": "A", "ja": "すみません、{新宿|しんじゅく}{行|ゆ}きのバスはどこですか。", "zh": "不好意思，往新宿的巴士在哪裡？" },
+        { "role": "B", "ja": "リムジンバスでしたら、{3番|さんばん}{乗|の}り{場|ば}です。", "zh": "利木津巴士的話，是 3 號乘車處。" },
+        { "role": "A", "ja": "{切符|きっぷ}はどこで{買|か}えますか。", "zh": "車票在哪裡買？" },
+        { "role": "B", "ja": "あちらの{自動販売機|じどうはんばいき}で{買|か}えます。", "zh": "在那邊的自動售票機可以買。" },
+        { "role": "A", "ja": "{次|つぎ}のバスは{何時|なんじ}ですか。", "zh": "下一班幾點？" },
+        { "role": "B", "ja": "{次|つぎ}は{10時20分|じゅうじにじゅっぷん}{発|はつ}です。", "zh": "下一班 10 點 20 分發車。" },
+        { "role": "A", "ja": "ありがとうございます。", "zh": "謝謝。" }
+      ]
+    }
+  ],
+  "vocab": [
+    { "id": "ap-v1", "ja": "{空港|くうこう}", "kana": "くうこう", "zh": "機場", "pos": "名詞", "example_id": "airport-bus" },
+    { "id": "ap-v2", "ja": "パスポート", "kana": "ぱすぽーと", "zh": "護照", "pos": "名詞", "example_id": "airport-immigration" },
+    { "id": "ap-v3", "ja": "{搭乗券|とうじょうけん}", "kana": "とうじょうけん", "zh": "登機證", "pos": "名詞", "example_id": "airport-baggage" },
+    { "id": "ap-v4", "ja": "{入国審査|にゅうこくしんさ}", "kana": "にゅうこくしんさ", "zh": "入境審查", "pos": "名詞", "example_id": "airport-immigration" },
+    { "id": "ap-v5", "ja": "{観光|かんこう}", "kana": "かんこう", "zh": "觀光", "pos": "名詞", "example_id": "airport-immigration" },
+    { "id": "ap-v6", "ja": "{仕事|しごと}", "kana": "しごと", "zh": "工作", "pos": "名詞", "example_id": "airport-immigration" },
+    { "id": "ap-v7", "ja": "{滞在|たいざい}", "kana": "たいざい", "zh": "停留、住宿", "pos": "名詞／自動詞", "example_id": "airport-immigration" },
+    { "id": "ap-v8", "ja": "{何日間|なんにちかん}", "kana": "なんにちかん", "zh": "幾天（期間）", "pos": "疑問詞", "example_id": "airport-immigration" },
+    { "id": "ap-v9", "ja": "{泊|と}まる", "kana": "とまる", "zh": "住宿、過夜", "pos": "自動詞", "example_id": "airport-immigration" },
+    { "id": "ap-v10", "ja": "{荷物|にもつ}", "kana": "にもつ", "zh": "行李", "pos": "名詞", "example_id": "airport-baggage" },
+    { "id": "ap-v11", "ja": "{名前|なまえ}", "kana": "なまえ", "zh": "姓名", "pos": "名詞", "example_id": "airport-baggage" },
+    { "id": "ap-v12", "ja": "{便名|びんめい}", "kana": "びんめい", "zh": "班機號碼", "pos": "名詞", "example_id": "airport-baggage" },
+    { "id": "ap-v13", "ja": "{確認|かくにん}", "kana": "かくにん", "zh": "確認", "pos": "名詞／他動詞", "example_id": "airport-baggage" },
+    { "id": "ap-v14", "ja": "{少々|しょうしょう}お{待|ま}ちください", "kana": "しょうしょうおまちください", "zh": "請稍等一下（敬語）", "pos": "套語", "example_id": "airport-baggage" },
+    { "id": "ap-v15", "ja": "{調|しら}べる", "kana": "しらべる", "zh": "查、調查", "pos": "他動詞", "example_id": "airport-baggage" },
+    { "id": "ap-v16", "ja": "{住所|じゅうしょ}", "kana": "じゅうしょ", "zh": "地址", "pos": "名詞", "example_id": "airport-baggage" },
+    { "id": "ap-v17", "ja": "{届|とど}ける", "kana": "とどける", "zh": "送達、寄送", "pos": "他動詞", "example_id": "airport-baggage" },
+    { "id": "ap-v18", "ja": "リムジンバス", "kana": "りむじんばす", "zh": "利木津巴士（機場接駁）", "pos": "名詞", "example_id": "airport-bus" },
+    { "id": "ap-v19", "ja": "{乗|の}り{場|ば}", "kana": "のりば", "zh": "乘車（搭乘）處", "pos": "名詞", "example_id": "airport-bus" },
+    { "id": "ap-v20", "ja": "{切符|きっぷ}", "kana": "きっぷ", "zh": "票", "pos": "名詞", "example_id": "airport-bus" },
+    { "id": "ap-v21", "ja": "{自動販売機|じどうはんばいき}", "kana": "じどうはんばいき", "zh": "自動販賣機", "pos": "名詞", "example_id": "airport-bus" },
+    { "id": "ap-v22", "ja": "{次|つぎ}", "kana": "つぎ", "zh": "下一個、下次", "pos": "名詞", "example_id": "airport-bus" },
+    { "id": "ap-v23", "ja": "{何時|なんじ}", "kana": "なんじ", "zh": "幾點", "pos": "疑問詞", "example_id": "airport-bus" },
+    { "id": "ap-v24", "ja": "{発|はつ}", "kana": "はつ", "zh": "出發、發車", "pos": "名詞接尾", "example_id": "airport-bus" },
+    { "id": "ap-v25", "ja": "{両替|りょうがえ}", "kana": "りょうがえ", "zh": "換錢、兌換貨幣", "pos": "名詞／他動詞", "example_id": "airport-bus" },
+    { "id": "ap-v26", "ja": "{案内所|あんないじょ}", "kana": "あんないじょ", "zh": "服務處、詢問處", "pos": "名詞", "example_id": "airport-bus" },
+    { "id": "ap-v27", "ja": "{税関|ぜいかん}", "kana": "ぜいかん", "zh": "海關", "pos": "名詞", "example_id": "airport-immigration" },
+    { "id": "ap-v28", "ja": "{申告|しんこく}", "kana": "しんこく", "zh": "申報（海關）", "pos": "名詞／他動詞", "example_id": "airport-immigration" },
+    { "id": "ap-v29", "ja": "{免税|めんぜい}", "kana": "めんぜい", "zh": "免稅", "pos": "名詞", "example_id": "airport-immigration" },
+    { "id": "ap-v30", "ja": "{手荷物|てにもつ}", "kana": "てにもつ", "zh": "手提行李", "pos": "名詞", "example_id": "airport-baggage" }
+  ]
+}

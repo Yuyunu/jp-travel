@@ -910,10 +910,10 @@ function renderSushiQuiz() {
       plate: pickPlate(),
     }));
   }
-  // duration: 8s → min 4s
-  const baseDur = 8000;
-  const minDur = 4000;
-  const duration = Math.max(minDur, baseDur * Math.pow(0.95, q.qIdx));
+  // duration: 14s → min 8s（讀假名比讀中文慢，給多一點時間）
+  const baseDur = 14000;
+  const minDur = 8000;
+  const duration = Math.max(minDur, baseDur * Math.pow(0.96, q.qIdx));
 
   // 中文句型把答案直接填進去當提示，玩家按出對應的「日文（假名）」盤
   const correctItem = cur.items[cur.correctIdx];

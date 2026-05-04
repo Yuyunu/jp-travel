@@ -725,6 +725,10 @@ function renderQuizSetup(root) {
           👀 看選日
           <span class="desc">給中文 → 選日語</span>
         </button>
+        <button class="option-pill ${setup.type==='readJa'?'active':''}" data-type="readJa">
+          📖 看選中
+          <span class="desc">看日文 → 選中文</span>
+        </button>
         <button class="option-pill ${setup.type==='sushi'?'active':''}" data-type="sushi" style="grid-column:1/-1;background:linear-gradient(135deg, var(--bg-input), rgba(245,194,199,0.15));">
           🍣 流れクイズ
           <span class="desc">迴轉壽司題庫 — 限時點正確的盤子（取代填空題）</span>
